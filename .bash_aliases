@@ -184,7 +184,7 @@ $ $reset"
 #     1) Run and follow the install steps:
 #       $ heroku autocomplete
 
-# CLI copy, paste, copy-to-clipboard, paste-from-clipboard
+# CLI clipboard copy, paste
 function copyAndPaste() {
     if command -v xclip &> /dev/null
     then
