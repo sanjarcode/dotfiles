@@ -183,3 +183,22 @@ $ $reset"
 #   Use our standalone setup:
 #     1) Run and follow the install steps:
 #       $ heroku autocomplete
+
+# CLI copy, paste, copy-to-clipboard, paste-from-clipboard
+function copyAndPaste() {
+    if command -v xclip &> /dev/null
+    then
+        alias c="xclip -selection clipboard"
+        alias v="xclip -o -selection clipboard"
+        # echo "xclip exists"
+        return
+    fi
+
+    # if command -v pbcopy &> /dev/null
+    # then
+    #     alias c="cat | pbcopy"
+    #     alias p="pbpaste"
+    #     # echo "pbcopy exists"
+    #     return
+    # fi
+}

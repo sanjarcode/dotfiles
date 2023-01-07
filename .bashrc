@@ -139,5 +139,8 @@ eval "$(rbenv init -)"
 
 ### custom stuff
 
-# git
+# git highlight
 gitify_prompt
+
+# copy and paste - xclip/pb*
+copyAndPaste
