@@ -10,7 +10,7 @@ alias gcm="git commit -m "
 alias gst="git status"
 
 # gh - GitHub CLI
-alias ghcc="gh browse $(git rev-parse HEAD) -cn" # get "commit" link instead of "tree" link
+alias ghcc="gh browse $(git rev-parse HEAD) -cn" # get "commit" link instead of "tree" link. See: https://github.com/cli/cli/issues/6926
 
 # flip, wait till it completes. Open notebook. Flip without waiting. Close the terminal window(Does not close the kernel).
 alias pyflip='pyenv versions | grep "3" | xargs -I {} pyenv global {} > /dev/null 2>&1'
