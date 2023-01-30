@@ -66,5 +66,5 @@ alias -g gcm="git commit -m "
 alias -g gst="git status"
 
 # gh - GitHub CLI
-alias ghcc='gh browse $(git rev-parse HEAD) -cn' # get "commit" link instead of "tree" link. 
+alias ghcc='gh browse $(git rev-parse HEAD) -cn | tr -d "\n"' # get "commit" link instead of "tree" link. 
 # See: https://github.com/cli/cli/issues/6926. Also using single quotes here.
