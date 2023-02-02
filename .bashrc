@@ -124,7 +124,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# global node modules - added by me
+# enable global 3rd party modules import - added by me
+# CommonJS syntax works, ESM gives error (partially)
 if [ -n "$NVM_BIN" ]; then
     export NODE_PATH="${NVM_BIN/bin/lib/node_modules}"
     export PATH="$PATH:$NODE_PATH"
