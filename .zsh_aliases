@@ -59,8 +59,10 @@ $ $reset"
 #   Use our standalone setup:
 #     1) Run and follow the install steps:
 #       $ heroku autocomplete
+
 alias -g gco="git checkout "
 alias -g ga="git add "
+alias gunadd="git restore --staged"
 alias -g gcan="git commit --amend --no-edit"
 alias -g gcm="git commit -m "
 alias -g gst="git status"

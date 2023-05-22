@@ -5,6 +5,7 @@
 # git
 alias gco="git checkout "
 alias ga="git add "
+alias gunadd="git restore --staged"
 alias gcan="git commit --amend --no-edit"
 alias gcm="git commit -m "
 alias gst="git status"
