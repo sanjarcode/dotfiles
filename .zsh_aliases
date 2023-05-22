@@ -60,12 +60,13 @@ $ $reset"
 #     1) Run and follow the install steps:
 #       $ heroku autocomplete
 
-alias -g gco="git checkout "
-alias -g ga="git add "
+# git
+alias gco="git checkout"
+alias ga="git add"
 alias gunadd="git restore --staged" # Unstage path1 path2...
-alias -g gcan="git commit --amend --no-edit"
-alias -g gcm="git commit -m "
-alias -g gst="git status"
+alias gcan="git commit --amend --no-edit"
+alias gcm="git commit -m"
+alias gst="git status"
 
 # gh - GitHub CLI
 alias ghcc='gh browse $(git rev-parse HEAD) -cn | tr -d "\n"' # get "commit" link instead of "tree" link. 
