@@ -270,9 +270,13 @@ function copyAndPaste() {
 }
 
 # kill process at port
-# Usage: `portkill 3000`
+# Usage:
+# `portkill 3000`
+# `portkill 8301 8302` (multiple arguments supported)
 function portkill() {
-    fuser -k "$1/tcp"
+    for port in "$@"; do
+        fuser -k "$port/tcp"
+    done
 }
 
 # print total number of lines in files at path and all descendants
