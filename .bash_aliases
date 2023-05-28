@@ -196,6 +196,8 @@ $ $reset"
 #       $ heroku autocomplete
 
 # CLI clipboard copy, paste
+# Usage: `someCommand | c` copies the output to the clipboard
+# Examples: `ls | c`, `cat someFile.txt | c`, `cat someFile.txt | grep 'hello' | c`
 function copyAndPaste() {
     if command -v xclip &> /dev/null
     then
