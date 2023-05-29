@@ -11,8 +11,12 @@ alias gcm="git commit -m"
 alias gst="git status"
 
 # gh - GitHub CLI
-alias ghcc='gh browse $(git rev-parse HEAD) -cn | tr -d "\n"' # get "commit" link instead of "tree" link.
-# See: https://github.com/cli/cli/issues/6926. Also using single quotes here.
+# get "commit" link instead of "tree" link.
+alias ghcc='gh browse --no-browser $(git rev-parse HEAD) --repo $(git remote get-url origin | sed -e "s#.*github.com[:/]\(.*\)\.git#\1#") | tr -d "\n"'
+# See: https://github.com/cli/cli/issues/7502
+# Note: the --repo option is needed since `gh` doesn't work well when the repo is part of a fork chain
+# the `git remote get-url` with `sed` is needed to get the value for `--repo`. `gh` doesn't have a way to get the repo name, yes, weird.
+# the `git remote get-url` with `sed` works in all cases - cloned with git (SSH, HTTPS) or with `gh repo clone`
 
 # flip, wait till it completes. Open notebook. Flip without waiting. Close the terminal window(Does not close the kernel).
 alias pyflip='pyenv versions | grep "3" | xargs -I {} pyenv global {} > /dev/null 2>&1'
