@@ -209,9 +209,15 @@ function copyAndPaste() {
 # Usage:
 # `portkill 3000`
 # `portkill 8301 8302` (multiple arguments supported)
-function portkill() {
+portkill() {
     for port in "$@"; do
-        fuser -k "$port/tcp"
+        pids=$(lsof -ti tcp:"$port")
+        if [ -n "$pids" ]; then
+            echo "Killing process using port $port"
+            echo "$pids" | xargs kill
+        else
+            echo "No processes found using port $port."
+        fi
     done
 }
 
