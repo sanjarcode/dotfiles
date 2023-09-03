@@ -250,3 +250,5 @@ compctl -K _completemarks jump
 compctl -K _completemarks unmark
 
 ## bookmark setup END
+
+source ~/.my-scripts/*.sh > /dev/null 2>&1 # safely add my scripts, for home-controller

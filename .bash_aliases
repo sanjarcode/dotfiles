@@ -262,3 +262,5 @@ _completemarks() {
 complete -F _completemarks jump unmark
 
 ## bookmark setup END
+
+source ~/.my-scripts/*.sh > /dev/null 2>&1 # safely add my scripts
