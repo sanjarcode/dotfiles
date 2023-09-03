@@ -251,6 +251,9 @@ function unmark {
 function marks {
     ls -l "$MARKPATH" | sed 's/  / /g' | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
 }
+function getmark {
+    echo $(realpath "$MARKPATH/$1") || echo "No such mark: $1"
+}
 
 _completemarks() {
   local curw=${COMP_WORDS[COMP_CWORD]}
@@ -259,7 +262,7 @@ _completemarks() {
   return 0
 }
 
-complete -F _completemarks jump unmark
+complete -F _completemarks jump unmark getmark
 
 ## bookmark setup END
 
