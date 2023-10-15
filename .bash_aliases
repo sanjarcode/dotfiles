@@ -264,6 +264,13 @@ _completemarks() {
 
 complete -F _completemarks jump unmark getmark
 
+# make shorter aliases for these
+alias jp="jump"
+alias mk="mark"
+alias um="unmark"
+alias mks="marks"
+alias gmk="getmark"
+
 ## bookmark setup END
 
 source ~/.my-scripts/*.sh > /dev/null 2>&1 # safely add my scripts

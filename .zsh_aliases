@@ -253,6 +253,13 @@ compctl -K _completemarks jump
 compctl -K _completemarks unmark
 compctl -K _completemarks getmark
 
+# make shorter aliases for these
+alias jp="jump"
+alias mk="mark"
+alias um="unmark"
+alias mks="marks"
+alias gmk="getmark"
+
 ## bookmark setup END
 
 source ~/.my-scripts/*.sh > /dev/null 2>&1 # safely add my scripts, for home-controller
