@@ -24,9 +24,15 @@ confirm() {
     done
 }
 
-# Example usage:
-# `aido "print hello"`
+## Use LLM to generate commands to be run in terminal
+## `llm` set up: https://github.com/simonw/llm#installation
+## Multi line responses if given by the LLM work just fine (example - bash function definition)
+
+# Usage:
+# First step:  Run `source llm_stuff.sh`
+# Second step: Run `aido "print hello"`
 # this will show a command to be run in the terminal, and prompt the user to confirm
+# note: have to do manual source since `llm` command isn't available when `.bashrc` is initialized. will solve this later.
 
 ## Realistic example (below)
 # aido "show non-hidden files greater than 1kb in current folder"
@@ -35,10 +41,6 @@ confirm() {
 # -rw-r--r--@ 1 muhammad  staff  1338 Oct 15 18:56 home-controller.sh
 # -rw-r--r--@ 1 muhammad  staff  1372 Oct 24 19:54 llm_stuff.sh
 # -rw-r--r--@ 1 muhammad  staff   507 Oct 24 19:44 utils.sh
-
-## Use LLM to generate commands to be run in terminal
-## `llm` set up: https://github.com/simonw/llm#installation
-## Btw, multiple responses if given by the LLM work just fine (example - bash function definition with call)
 aido() {
     # Check if a command is provided
     if [ -z "$1" ]; then
