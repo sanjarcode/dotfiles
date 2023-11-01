@@ -100,14 +100,13 @@ cleanEmptyFolders() {
 
         # echo "Dir: $dir"
 
-
         # echo "Exploring: $dir"
         cleanEmptyFolders "$dir" "$_hidden"
 
         if [[ ! $(ls -A "$dir") ]]; then
             # echo "After check dir: $dir"
             rmdir "$dir"
-            # echo "Empty folder '$dir' deleted."
+            echo "Empty folder '$dir' deleted."
         fi
     done
 }
