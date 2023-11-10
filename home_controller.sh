@@ -11,7 +11,7 @@ _discover_url() {
     # DEBUG_MODE="x" # true
 
     url=""
-    for i in {1..9}; do
+    for i in {0..9}; do
         url="http://192.168.0.10$i:4000"
 
         # curl $url -m 1 >/dev/null 2>&1
