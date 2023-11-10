@@ -138,17 +138,20 @@ else
 fi
 
 ## pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+if type pyenv &>/dev/null; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
 
-# Load pyenv-virtualenv automatically by adding
-eval "$(pyenv virtualenv-init -)"
+    # Load pyenv-virtualenv automatically by adding
+    eval "$(pyenv virtualenv-init -)"
+fi
 
 ## rbenv, ruby
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-
+if type rbenv &>/dev/null; then
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    eval "$(rbenv init -)"
+fi
 
 ### custom stuff
 

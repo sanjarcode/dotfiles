@@ -38,14 +38,17 @@ custom_prompt
 # copy and paste - xclip/pb*
 copyAndPaste
 
-eval "$(pyenv init -)"
+if type pyenv &>/dev/null; then
+    eval "$(pyenv init -)"
+fi
 
 #postgreSQL
 export PATH="/Applications/Postgres.app/Contents/Versions/13/bin:$PATH"
 
 
-
-eval "$(rbenv init -)" # rbenv, added manually
+if type rbenv &>/dev/null; then
+    eval "$(rbenv init -)" # rbenv, added manually
+fi
 
 if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
