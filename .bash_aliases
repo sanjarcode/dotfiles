@@ -273,4 +273,19 @@ alias gmk="getmark"
 
 ## bookmark setup END
 
-source ~/.my-scripts/*.sh > /dev/null 2>&1 # safely add my scripts
+# import function (run all top level files at path)
+run_files_in_dir() {
+    local directory="$1"
+
+    if [ -d "$directory" ]; then
+        for file in "$directory"/*.sh; do
+            [ -e "$file" ] && source "$file"
+        done
+    else
+        # commented out - remains silent
+        # echo "Error: Directory not found - $directory"
+    fi
+}
+
+# safely add my scripts, for home-controller
+run_files_in_dir ~/.my-scripts
