@@ -5,7 +5,7 @@
 # setup: add as computer startup script
 # works on macos, linux
 function startShutdownServer() {
-    jump hc # home controller
-    PORT=4001 node app.js
-    cd -
+    hc_path=$(getmark hc)
+    hc_script_path="$hc_path/app.js"
+    PORT=4001 node $hc_script_path
 }
