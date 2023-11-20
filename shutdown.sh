@@ -5,7 +5,7 @@
 # setup: add as computer startup script
 # works on macos, linux
 function startShutdownServer() {
-    jump home-controller
+    jump hc # home controller
     PORT=4001 node app.js
     cd -
 }
