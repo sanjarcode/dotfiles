@@ -84,3 +84,4 @@ aab_to_apk() {
 
 # Why this? Because `expo prebuild` is not working for me. Tried `https://github.com/expo/eas-cli/issues/1300#issuecomment-1834275766`
 # Exact code I ran: `npx expo prebuild --platform android && cd android && ./gradlew assembleRelease`
+# Turns out EAS build is new way to build on Expo, and prebuild is a legacy way to build.
