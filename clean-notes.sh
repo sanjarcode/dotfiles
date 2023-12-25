@@ -48,7 +48,7 @@ Blanks_fileHasCreated_test() {
 
     for file in "$location"/**/*.md; do
         if [[ -f $file ]]; then
-            if fileHasCreated "$file"; then
+            if Blanks_fileHasCreated "$file"; then
                 echo "File $file has 'Created' in the second line."
             else
                 echo "File $file does not meet the condition."
@@ -63,7 +63,7 @@ Blanks_deleteFilesThatHaveCreatedTextOnly() {
 
     for file in "$location"/**/*.md; do
         if [[ -f $file ]]; then
-            if fileHasCreated "$file"; then
+            if Blanks_fileHasCreated "$file"; then
                 rm "$file"
                 echo "File $file deleted."
             fi
