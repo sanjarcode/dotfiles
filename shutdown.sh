@@ -15,6 +15,7 @@ function startShutdownServer() {
 function getProblematicPids() {
     # hcpid=$(lsof -i -P -n | grep 4001 | awk '{print $2}')
     # not needed, background jobs cannot affect shutdown
+    PROMPT_EOL_MARK='' # removes zsh's stupid EOL
     pgrep -i -a 'iterm|qemu' | tr '\n' ' '
 }
 
