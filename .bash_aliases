@@ -2,7 +2,12 @@
 
 # CUSTOM Aliases #####################
 
+#ls
+alias l='ls -lah --color'
+alias ls='ls --color'
+
 # git
+alias g='git'
 alias gco="git checkout"
 alias ga="git add"
 alias gunadd="git restore --staged" # Unstage path1 path2...
