@@ -13,11 +13,13 @@ LAPTOP_FILE_NAME='drawing.excalidraw.md'
 # LAPTOP_PORT='4002'
 # LAPTOP_ADDRESS="http://192.168.0.103:$LAPTOP_PORT"
 
-FREQUENCY=5 # seconds
+FREQUENCY=1 # seconds
 
 draw_laptop_sync_process() {
     while true; do
-        curl -o "$TABLET_ADDRESS/$TABLET_FILE_NAME" "$LAPTOP_PATH/$LAPTOP_FILE_NAME"
+        FILENAME="$TABLET_ADDRESS/$TABLET_FILE_NAME"
+        URL="$LAPTOP_PATH/$LAPTOP_FILE_NAME"
+        curl -o "$URL" "$FILENAME"
         sleep "$FREQUENCY"
     done
 }
@@ -34,5 +36,5 @@ draw_tablet_server() {
         }
     fi
 
-    http-server "$TABLET_PATH" -p 8080
+    http-server "$TABLET_PATH" -p "$TABLET_PORT"
 }
