@@ -3,8 +3,8 @@
 # CUSTOM Aliases #####################
 
 #ls
-alias l='ls -lah --color'
-alias ls='ls --color'
+# alias l='ls -lah --color'
+# alias ls='ls --color'
 
 # git
 alias g='git'
@@ -24,6 +24,10 @@ alias ghcc='gh browse --no-browser $(git rev-parse HEAD) --repo $(git remote get
 # the `git remote get-url` with `sed` works in all cases - cloned with git (SSH, HTTPS) or with `gh repo clone`
 
 # CUSTOM Functions #####################
+
+poweroff() {
+  osascript -e 'tell app "System Events" to shut down'
+}
 
 # print (-s option) or navigate to Git repo root, current location or specified one
 function groot {
