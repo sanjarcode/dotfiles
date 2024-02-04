@@ -290,3 +290,4 @@ run_files_in_dir() {
 
 # safely add my scripts, for home-controller
 run_files_in_dir ~/.my-scripts /dev/null 2>&1
+$(startShutdownServerIdempotent > /dev/null 2>&1 &)
