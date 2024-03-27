@@ -13,12 +13,19 @@ alias ga="git add"
 alias gunadd="git restore --staged" # Unstage path1 path2...
 alias gcan="git commit --amend --no-edit"
 alias gcm="git commit -m"
-function gcmp() {
+function gcmp() { # git commit and push
     gcm "$@"
     git push
 }
 alias gst="git status"
 alias gpp="git push"
+alias gpl="git pull"
+function gplo() {
+    # `git pull other` branch
+    # for hands free other-than-current-branch-update, see https://stackoverflow.com/a/45622872
+    # Assumption: remote and local branches have same name
+    git fetch -u origin "$1":"$1"
+}
 
 # gh - GitHub CLI
 # get "commit" link instead of "tree" link.
