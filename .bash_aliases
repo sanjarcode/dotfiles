@@ -13,7 +13,12 @@ alias ga="git add"
 alias gunadd="git restore --staged" # Unstage path1 path2...
 alias gcan="git commit --amend --no-edit"
 alias gcm="git commit -m"
+function gcmp() {
+    gcm "$@"
+    git push
+}
 alias gst="git status"
+alias gpp="git push"
 
 # gh - GitHub CLI
 # get "commit" link instead of "tree" link.
