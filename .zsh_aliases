@@ -24,9 +24,18 @@ function gplo() {
     # `git pull other` branch
     # for hands free other-than-current-branch-update, see https://stackoverflow.com/a/45622872
     # Assumption: remote and local branches have same name
-    git fetch -u origin "$1":"$1"
-}
+    # Todo, figure out remote branch name even if different and pull, so command always succeeds
+    local_branch="$1"
+    remote_branch="origin/$1"
 
+    if [[ "$(git rev-parse --abbrev-ref $remote_branch)" == "origin/$local_branch" ]]; then
+        # Perform the pull operation
+        git fetch -u origin "$local_branch":"$local_branch"
+    else
+        echo "Error: Remote branch '$remote_branch' doesn't match local branch '$local_branch'"
+        echo "No action performed."
+    fi
+}
 # gh - GitHub CLI
 # get "commit" link instead of "tree" link.
 alias ghcc='gh browse --no-browser $(git rev-parse HEAD) --repo $(git remote get-url origin | sed -e "s#.*github.com[:/]\(.*\)\.git#\1#") | tr -d "\n"'
