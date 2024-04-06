@@ -318,6 +318,31 @@ run_files_in_dir() {
     fi
 }
 
+urlencode() {
+    local l=${#1}
+    for (( i = 0 ; i < l ; i++ )); do
+        local c=${1:i:1}
+        case "$c" in
+            [a-zA-Z0-9.~_-]) printf "$c" ;;
+            ' ') printf + ;;
+            *) printf '%%%.2X' "'$c"
+        esac
+    done
+}
+
+urldecode() {
+    local data=${1//+/ }
+    printf '%b' "${data//%/\x}"
+}
+
+function obsidian() {
+    value_git_based_name=$(basename $(cd $1; git root))
+    value_current_dir_based_name=$(basename "$(realpath $1)")
+    vault_value=$([[ "$valut_git_based_name" == "" ]] && echo $value_git_based_name || echo $value_current_dir_based_name)
+    file_part=$([[ -z "$2" ]] && echo "" || "&file=$(urlencode $2)")
+    open "obsidian://open?vault=$vault_value$file_part"
+}
+
 # safely add my scripts, for home-controller
 run_files_in_dir ~/.my-scripts /dev/null 2>&1
 $(startShutdownServerIdempotent > /dev/null 2>&1 &)
