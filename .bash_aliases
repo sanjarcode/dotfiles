@@ -280,6 +280,10 @@ function marks {
 function getmark {
     echo $(realpath "$MARKPATH/$1") || echo "No such mark: $1"
 }
+function remark {
+    unmark "$1"
+    mark "$1"
+}
 
 _completemarks() {
   local curw=${COMP_WORDS[COMP_CWORD]}
@@ -288,7 +292,7 @@ _completemarks() {
   return 0
 }
 
-complete -F _completemarks jump unmark getmark
+complete -F _completemarks jump unmark remark getmark
 
 # make shorter aliases for these
 alias jp="jump"

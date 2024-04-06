@@ -276,6 +276,10 @@ function marks {
 function getmark {
     echo $(realpath "$MARKPATH/$1") || echo "No such mark: $1"
 }
+function remark {
+    unmark "$1"
+    mark "$1"
+}
 
 function _completemarks {
   reply=($(ls $MARKPATH))
@@ -283,6 +287,7 @@ function _completemarks {
 
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
+compctl -K _completemarks remark
 compctl -K _completemarks getmark
 
 # make shorter aliases for these
