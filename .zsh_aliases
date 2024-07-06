@@ -2,6 +2,9 @@
 
 # CUSTOM Aliases #####################
 
+## https://apple.stackexchange.com/a/343629/458488
+alias afk="osascript -e 'tell application \"System Events\" to keystroke \"q\" using {command down,control down}'"
+
 #ls
 # alias l='ls -lah --color'
 # alias ls='ls --color'
