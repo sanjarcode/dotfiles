@@ -117,7 +117,7 @@ if ! shopt -oq posix; then
 fi
 
 
-### dev stuff
+## ================== Post install variables
 
 ## nvm, node
 export NVM_DIR="$HOME/.nvm"
@@ -153,14 +153,6 @@ if type rbenv &>/dev/null; then
     eval "$(rbenv init -)"
 fi
 
-### custom stuff
-
-# git highlight
-gitify_prompt
-
-# copy and paste - xclip/pb*
-copyAndPaste
-
 # pnpm start
 export PNPM_HOME="/home/sanjar/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
@@ -170,3 +162,54 @@ export PATH="$PNPM_HOME:$PATH"
 export ANDROID_SDK_ROOT=$HOME/.devTools/Android/Sdk
 export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+
+# pnpm
+export PNPM_HOME="/Users/muhammad/Library/pnpm"
+case ":$PATH:" in
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+load-nvmrc() {
+  local nvmrc_path
+  nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version
+    nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+      nvm use --silent
+    fi
+  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default --silent
+  fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+$(startShutdownServerIdempotent > /dev/null 2>&1 &)
+
+export PATH="$HOME/.cargo/bin:$PATH" # for Rust
+
+## ================== OWN scripts
+# git highlight
+# gitify_prompt()
+custom_prompt
+
+# copy and paste - xclip/pb*
+copyAndPaste
+
+$(startShutdownServerIdempotent > /dev/null 2>&1 &)
