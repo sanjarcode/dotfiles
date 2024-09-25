@@ -349,9 +349,13 @@ function obsidian() {
 # Example: `generate_patch` (patches w.r.t main)
 # Example: `generate_patch parent-branch-name` (patches w.r.t parent-branch-name)
 generate_patch() {
-    # Use parameter expansion to set default branch to 'main'
     local parent_branch="${1:-main}"  # Default to 'main' if no argument is given
-    local patch_file="changes.patch"
+    local current_branch=$(git rev-parse --abbrev-ref HEAD)  # Get the current branch name
+
+    # Replace slashes with hyphens
+    current_branch="${current_branch//\//-}"
+
+    local patch_file="${current_branch}.patch"  # Name the patch file after the current branch
 
     # Get the base commit from the parent branch
     local base_commit
@@ -362,6 +366,7 @@ generate_patch() {
 
     echo "Patch generated: $patch_file"
 }
+
 
 _generate_patch() {
     local branches
