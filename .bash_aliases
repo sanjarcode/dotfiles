@@ -2,10 +2,6 @@
 
 # CUSTOM Aliases #####################
 
-#ls
-alias l='ls -lah --color'
-alias ls='ls --color'
-
 # git
 alias g='git'
 alias gco="git checkout"
@@ -348,6 +344,32 @@ function obsidian() {
     # echo "value_git_based_name:$value_git_based_name value_current_dir_based_name:$value_current_dir_based_name vault_value:$vault_value file_part$file_part"
     xdg-open "obsidian://open?vault=$vault_value$file_part" >/dev/null 2>&1 &
 }
+
+# https://www.notion.so/sanjarcode/Serialize-Git-commits-for-storing-notes-procedures-10c20b93200480a4aa65f0ab22c7e2ac?pvs=4
+# Example: `generate_patch` (patches w.r.t main)
+# Example: `generate_patch parent-branch-name` (patches w.r.t parent-branch-name)
+generate_patch() {
+    # Use parameter expansion to set default branch to 'main'
+    local parent_branch="${1:-main}"  # Default to 'main' if no argument is given
+    local patch_file="changes.patch"
+
+    # Get the base commit from the parent branch
+    local base_commit
+    base_commit=$(git merge-base "$parent_branch" HEAD)
+
+    # Generate the patch
+    git log -p "$base_commit..HEAD" -- ':!./*lock*' > "$patch_file"
+
+    echo "Patch generated: $patch_file"
+}
+
+_generate_patch() {
+    local branches
+    branches=$(git branch --format='%(refname:short)')  # Get all branches
+    COMPREPLY=($(compgen -W "$branches" -- "${COMP_WORDS[1]}"))  # Complete based on branches
+}
+
+complete -F _generate_patch generate_patch
 
 # safely add my scripts, for home-controller
 run_files_in_dir ~/.my-scripts /dev/null 2>&1
