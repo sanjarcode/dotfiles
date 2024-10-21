@@ -34,6 +34,22 @@ function gplo() {
         echo "No action performed."
     fi
 }
+
+function gsave() {
+    git stash save $@
+}
+function gload() {
+    git stash apply "stash^{/$@}"
+}
+_gitstash_autocomplete() {
+    local cur
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(git stash list | sed -nE 's/stash@\{[0-9]+\}: (.*)/\1/p' | grep -i -- "$cur") )
+}
+
+complete -F _gitstash_autocomplete gload
+complete -F _gitstash_autocomplete gsave
+
 # gh - GitHub CLI
 # get "commit" link instead of "tree" link.
 alias ghcc='gh browse --no-browser $(git rev-parse HEAD) --repo $(git remote get-url origin | sed -e "s#.*github.com[:/]\(.*\)\.git#\1#") | tr -d "\n"'
