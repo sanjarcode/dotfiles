@@ -9,6 +9,7 @@ alias afk="osascript -e 'tell application \"System Events\" to keystroke \"q\" u
 # alias l='ls -lah --color'
 # alias ls='ls --color'
 
+# alias ocr='/Applications/OwlOCR.app/Contents/MacOS/OwlOCR --cli '
 # git
 alias gco="git checkout"
 alias ga="git add"
