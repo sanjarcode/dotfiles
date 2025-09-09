@@ -4,7 +4,10 @@
 if [ -f ~/.terminal_tool.sh ]; then
     source ~/.terminal_tool.sh
     source ~/.path_declarations.sh
-    source ~/.env.sh # for AI model files
+    if [ ! -f ~/.env.sh ]; then
+        echo "ENV variables not found" # for AI model files
+        return 1
+    fi
     source ~/.function_declarations.sh
     source ~/.invocations.sh
 fi
