@@ -1,0 +1,3 @@
+The contents of this repo are placed at ~/.dotfiles.
+The idea is to quickly install/uninstall/edit dot files.
+It also contains env files (with the actual values being hidden).
