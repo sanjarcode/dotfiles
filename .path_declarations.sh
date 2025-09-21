@@ -31,7 +31,7 @@ export PATH="/usr/local/bin:/usr/local/sbin:~/bin:$PATH" # for brew path $
 export HOMEBREW_NO_AUTO_UPDATE=1 # disable auto update on each run of brew
 
 # AndroidStudio \w React Native setup docs
-export ANDROID_SDK_ROOT=$HOME/.devTools/Android/Sdk
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 export PATH=~/Library/Android/sdk/tools:$PATH
