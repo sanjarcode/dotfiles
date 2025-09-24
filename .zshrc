@@ -7,6 +7,8 @@ if [ -f ~/.terminal_tool.sh ]; then
     if [ ! -f ~/.env.sh ]; then
         echo "ENV variables not found" # for AI model files
         return 1
+    else
+        source ~/.env.sh
     fi
     source ~/.function_declarations.sh
     source ~/.invocations.sh
