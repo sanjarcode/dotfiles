@@ -205,7 +205,7 @@ function dot_remove {
     rm ~/.function_declarations.sh
     rm ~/.invocations.sh
     rm ~/.zshrc
-    echo "\n All dot files removed"
+    echo "\nAll dot files removed"
 }
 
 function dot_status {
@@ -220,4 +220,10 @@ function dot_status {
 function dot_refresh {
     dot_remove
     source ~/.dotfiles/install.sh
+}
+
+
+function call_phone() {
+  local number="$1"
+  adb shell am start -a android.intent.action.CALL -d tel:"$number"
 }
