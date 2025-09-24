@@ -1,9 +1,19 @@
 ## Usage
 
+### Install
 ```sh
 cd ~ && git clone git@gist.github.com:92aa6a164d16e51c343eed926047fb1f.git ~/.dotfiles && cd - # clone
 source ~/.dofiles/install.sh # install
+```
+
+### Uninstall
+```sh
 source dot_remove # uninstall
+```
+
+also run for cleanup:
+```sh
+rm -rf ~/.dotfiles
 ```
 
 ## What each file does
