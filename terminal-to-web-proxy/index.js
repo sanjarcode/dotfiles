@@ -3,7 +3,6 @@ const cors = require("cors");
 const { exec } = require("child_process");
 
 const app = express();
-export const PORT = 8321;
 
 // Disable CORS restrictions for all origins
 
@@ -33,7 +32,8 @@ app.get("/test", (req, res) => {
   res.json("Works fine");
 });
 
-const PORT = 3000;
+const PORT = 8321;
+
 app.listen(PORT, () => {
   console.log(`Proxy server started on port ${PORT}`);
 });
