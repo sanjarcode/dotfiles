@@ -170,6 +170,11 @@ function countLines() {
 
 # make shorter aliases for `jump`
 
+function getmark {
+    echo $(realpath "$MARKPATH/$1") || echo "No such mark: $1"
+}
+compctl -K _completemarks getmark
+
 alias jp="jump"
 alias mk="mark"
 alias um="unmark"
