@@ -249,6 +249,8 @@ function dial() {
   adb shell am start -a android.intent.action.CALL -d tel:"$number"
 }
 
+export PATH="$HOME/.local/bin:$PATH" # for rails-new
+
 # have written a simpler version using my own for now
 # function shell2http_server() {
 #     # JSON + CORS (works), http://locahost:8080/exec
