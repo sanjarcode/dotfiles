@@ -249,7 +249,8 @@ function dial() {
   adb shell am start -a android.intent.action.CALL -d tel:"$number"
 }
 
-export PATH="$HOME/.local/bin:$PATH" # for rails-new
+export PATH="$HOME/.local/bin:$PATH" # for rails-new https://github.com/rails/rails-new
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH # macports
 
 # have written a simpler version using my own for now
 # function shell2http_server() {
