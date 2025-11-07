@@ -266,3 +266,4 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH # macports
 #     # json + cors + sh + query params
 #     shell2http -cgi /exec 'echo "Access-Control-Allow-Origin: *"; echo "Content-Type: application/javascript\n"; echo "{\"message\": \"works\"}"; zsh -c "source ~/.zshrc && $v_command"'
 # }
+alias activate="source .venv/bin/activate" # python venv activate
