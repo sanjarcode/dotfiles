@@ -267,3 +267,46 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH # macports
 #     shell2http -cgi /exec 'echo "Access-Control-Allow-Origin: *"; echo "Content-Type: application/javascript\n"; echo "{\"message\": \"works\"}"; zsh -c "source ~/.zshrc && $v_command"'
 # }
 alias activate="source .venv/bin/activate" # python venv activate
+
+# ---- Safe auto-naming zip override ----
+zip() {
+  # CASE: zip <folder>  (1 arg, and it's a directory)
+  if [ $# -eq 1 ] && [ -d "$1" ]; then
+    local base="${1%/}"
+    command zip -r "${base}.zip" "$base"
+    return
+  fi
+
+  # CASE: explicit archive name or any flags → passthrough
+  if [[ "$1" == *.zip ]] || [[ "$1" == -* ]]; then
+    command zip "$@"
+    return
+  fi
+
+  # CASE: multiple args → behave normally, not our problem
+  command zip "$@"
+}
+
+
+# ---- Safe auto-folder unzip override ----
+unzip() {
+  # If user explicitly passed -d, respect it and passthrough
+  for arg in "$@"; do
+    if [[ "$arg" == "-d" ]]; then
+      command unzip "$@"
+      return
+    fi
+  done
+
+  # CASE: unzip <file.zip>  (1 arg, ends with .zip)
+  if [ $# -eq 1 ] && [[ "$1" == *.zip ]]; then
+    local file="$1"
+    local base="${file%.zip}"
+    mkdir -p "$base"
+    command unzip -q "$file" -d "$base"
+    return
+  fi
+
+  # DEFAULT passthrough
+  command unzip "$@"
+}
