@@ -1,0 +1,21 @@
+# ~/.gitconfig - the global config
+
+[user]
+    name = Sanjar Afaq
+    email = sanjarcode@gmail.com
+
+[core]
+	editor = code --wait
+[alias]
+	root = rev-parse --show-toplevel
+	recent = branch --sort=-committerdate
+
+[pull]
+	rebase = false
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[init]
+	defaultBranch = main
