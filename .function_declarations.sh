@@ -277,16 +277,6 @@ create-env() {
     pip install --upgrade pip
     echo "Virtual environment created and activated."
 }
-install_dot_files() {
-    if [ -d ".venv" ]; then
-        echo ".venv already exists. To recreate, delete the folder first."
-        return
-    fi
-    python3 -m venv .venv
-    source .venv/bin/activate
-    pip install --upgrade pip
-    echo "Virtual environment created and activated."
-}
 alias cenv="create-env" # python venv deactivate
 
 # ---- Safe auto-naming zip override ----
