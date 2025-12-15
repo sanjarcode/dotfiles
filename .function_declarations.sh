@@ -267,7 +267,7 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH # macports
 #     shell2http -cgi /exec 'echo "Access-Control-Allow-Origin: *"; echo "Content-Type: application/javascript\n"; echo "{\"message\": \"works\"}"; zsh -c "source ~/.zshrc && $v_command"'
 # }
 alias activate="source .venv/bin/activate" # python venv activate
-create-env() {
+create_env() {
     if [ -d ".venv" ]; then
         echo ".venv already exists. To recreate, delete the folder first."
         return
@@ -278,7 +278,7 @@ create-env() {
     pip install --upgrade pip
     echo "Virtual environment created and activated."
 }
-add-keys() {
+install_keys() {
     echo "Installing .env from dotfiles..."
     if [ -f "$DOT_PATH/.env" ]; then
         cp "$DOT_PATH/.env" .env
@@ -288,7 +288,7 @@ add-keys() {
         echo ".env not found"
     fi
 }
-alias cenv="create-env" # python venv deactivate
+alias cenv="create_env" # python venv deactivate
 
 # ---- Safe auto-naming zip override ----
 zip() {
