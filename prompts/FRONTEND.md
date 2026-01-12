@@ -1,4 +1,5 @@
-- Prefer UI libraries like MUI, PrimeVue etc over handcoded core components
+- For UI components: prefer libraries adobe-aria / MUI / PrimeVue etc over handcoded core components
+- For subsystems: like tables, refetching, networking, prefer TanStack
 - :State management: prefer Redux Toolkit
 - :CSS: prefer CSS library
 - :TS: use typescript
