@@ -2,18 +2,14 @@
 
 ### Install
 ```sh
-cd ~ && git clone git@gist.github.com:92aa6a164d16e51c343eed926047fb1f.git ~/.dotfiles && cd - # clone
-source ~/.dofiles/install.sh # install
+git clone git@github.com:sanjarcode/.dotfiles.git
+source ~/.dofiles/install.sh
 ```
 
 ### Uninstall
 ```sh
 source dot_remove # uninstall
-```
-
-also run for cleanup:
-```sh
-rm -rf ~/.dotfiles
+rm -rf ~/.dotfiles # cleanup files
 ```
 
 ## What each file does
