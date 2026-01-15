@@ -1,2 +1,0 @@
-- Define user flows first, before designs
-- Avoid multi-page interactions, try to finish things on one page itself
