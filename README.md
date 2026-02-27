@@ -2,7 +2,7 @@
 
 ### Install
 ```sh
-git clone git@github.com:sanjarcode/.dotfiles.git
+git clone git@github.com:sanjarcode/.dotfiles.git ~/.dotfiles # clone as a hidden folder
 source ~/.dofiles/install.sh
 ```
 
