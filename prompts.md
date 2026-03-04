@@ -4,6 +4,7 @@ Prefer TypeScript, and effect.js ![source](https://www.reddit.com/r/typescript/c
 ## DESIGN/UI DESIGN
 - Define user flows first, before designs
 - Avoid multi-page interactions, try to finish things on one page itself
+- www.godly.website is amazing for inspiration
 
 ## BACKEND
 - Prefer frameworks over low-level libraries like express.js
