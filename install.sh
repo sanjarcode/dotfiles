@@ -4,4 +4,3 @@ echo "\nDot files installed"
 source  ~/.zshrc
 dot_status
 echo "\nDot files initialized"
-
