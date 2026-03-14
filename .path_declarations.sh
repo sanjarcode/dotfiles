@@ -65,3 +65,9 @@ fpath=(/Users/sanjar/.docker/completions $fpath)
 # compinit
 # End of Docker CLI completions
 export PATH="/opt/homebrew/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/sanjar/.antigravity/antigravity/bin:$PATH"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
