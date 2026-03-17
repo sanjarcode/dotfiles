@@ -210,7 +210,6 @@ function dot_remove {
     rm ~/.function_declarations.sh
     rm ~/.invocations.sh
     rm ~/.zshrc
-    rm ~/.zsh_boot.sh
     echo "\nAll dot files removed"
 }
 
@@ -220,7 +219,6 @@ function dot_status {
     ls ~/.function_declarations.sh
     ls ~/.invocations.sh
     ls ~/.zshrc
-    ls ~/.zsh_boot.sh
     echo "\nChecked dot files"
 }
 
