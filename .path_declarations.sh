@@ -6,12 +6,12 @@ export PATH="$PATH:/opt/homebrew/lib/ruby/gems/3.0.0/bin"
 
 ## ================== Post install variables
 
-if command -v pyenv && type pyenv &>/dev/null; then
+if command -v pyenv &> /dev/null && type pyenv &> /dev/null; then
     eval "$(pyenv init -)"
     alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew' # To fix brew doctor's warning ""config" scripts exist outside your system or Homebrew directories" (https://github.com/pyenv/pyenv#:~:text=optional.%20to%20fix%20brew%20doctor's%20warning%20%22%22config)
 fi
 
-if command -v rbenv && type rbenv &>/dev/null; then
+if command -v rbenv &> /dev/null && type rbenv &> /dev/null; then
     eval "$(rbenv init -)" # rbenv, added manually
 fi
 
