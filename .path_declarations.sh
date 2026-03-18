@@ -70,4 +70,7 @@ export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/Users/sanjar/.antigravity/antigravity/bin:$PATH"
 
 # Vite+ bin (https://viteplus.dev)
-. "$HOME/.vite-plus/env"
+if ls "$HOME/.vite-plus/env" &> /dev/null
+then
+    . "$HOME/.vite-plus/env"
+fi
