@@ -16,6 +16,7 @@
 | 3 | Linux /      | Ext4 | 40 GB  |       | Mostly OS stuff, some app installations |
 | 4 | Linux /home  | Ext4 | 140 GB | 50 GB | home_files dir, Android SDK, work files |
 | 5 | Linux /swap  | swap | 10 GB  |       |                                         |
+| 6 | Macos OS files  | ext4 ? | 50 GB  |       | Os stuff |
 
 ### 256 GB - mac
 
