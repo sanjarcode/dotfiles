@@ -81,6 +81,9 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git jump)
 
+if ! ls $ZSH/oh-my-zsh.sh &> /dev/null; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
