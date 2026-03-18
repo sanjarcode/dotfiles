@@ -205,20 +205,26 @@ function nvm_setup {
 }
 
 function dot_remove {
+    rm ~/.zshrc
     rm ~/.terminal_tool.sh
     rm ~/.path_declarations.sh
     rm ~/.function_declarations.sh
     rm ~/.invocations.sh
-    rm ~/.zshrc
+    rm ~/.zshrc_omz.sh
+    ls ~/.env
+
     echo "\nAll dot files removed"
 }
 
 function dot_status {
+    ls ~/.zshrc
     ls ~/.terminal_tool.sh
     ls ~/.path_declarations.sh
     ls ~/.function_declarations.sh
     ls ~/.invocations.sh
-    ls ~/.zshrc
+    ls ~/.zshrc_omz.sh
+    ls ~/.env
+    
     echo "\nChecked dot files"
 }
 
