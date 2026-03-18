@@ -210,7 +210,7 @@ function dot_remove {
     rm ~/.path_declarations.sh
     rm ~/.function_declarations.sh
     rm ~/.invocations.sh
-    rm ~/.zshrc_omz.sh
+    rm ~/.zshrc_omz
     ls ~/.env
 
     echo "\nAll dot files removed"
@@ -222,9 +222,9 @@ function dot_status {
     ls ~/.path_declarations.sh
     ls ~/.function_declarations.sh
     ls ~/.invocations.sh
-    ls ~/.zshrc_omz.sh
+    ls ~/.zshrc_omz
     ls ~/.env
-    
+
     echo "\nChecked dot files"
 }
 
