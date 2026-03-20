@@ -21,10 +21,10 @@ rm -rf ~/.dotfiles # cleanup files
 
 ## AI stuff
 
-### Prompts
+### AI prompts
 Add prompts here. Version them too.
 
-### AI rules harness
+### AI rules
 <details><summary>Why store AI stuff here</summary>
 
 #### Using AI to Skip Low-Level Skill Learning
