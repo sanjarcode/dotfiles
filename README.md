@@ -81,4 +81,13 @@ The trap is becoming dependent without being discerning. What you're describing 
 
 </details>
 
-## MCP list
+### MCP (wip, don't follow strictly)
+? I prefer using Docker as the source of truth when it comes to MCP. It has a lot of MCPs, and there's a clear documentation for installing (one click) and verifying (first company to do so).
+But Claude Desktop themselves is quite proper as they literally made MCP.
+
+1. Docker MCP servers - Open Docker > MCP Toolkit, and add MCP servers.
+2. Docker connect MCP clients - install Claude Desktop, Cursor, Antigravity, Visual Studio Code, and then, go to Docker and connect them.
+3. Potentially redundant - install MCP into Visual Studio Code, Antigravity, Cursor from their own interfaces. But this may not be needed.
+
+- Trust Claude Desktop and Docker MCP https://docs.docker.com/ai/mcp-catalog-and-toolkit/[toolkit/](https://docs.docker.com/ai/mcp-catalog-and-toolkit/toolkit/) for reliable tooling.
+- Docker GenAI stack: https://github.com/docker/genai-stack
