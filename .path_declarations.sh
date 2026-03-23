@@ -74,3 +74,15 @@ if ls "$HOME/.vite-plus/env" &> /dev/null
 then
     . "$HOME/.vite-plus/env"
 fi
+
+# Docker zsh completions
+if command -v docker &> /dev/null
+then
+    # The following lines have been added by Docker Desktop to enable Docker CLI completions.
+    fpath=(/Users/sanjar/.docker/completions $fpath)
+    autoload -Uz compinit
+    compinit
+    # End of Docker CLI completions
+fi
+
+
