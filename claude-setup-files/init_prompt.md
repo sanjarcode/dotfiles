@@ -1,3 +1,6 @@
+URL: https://docs.google.com/document/d/1w9FHv9P-E19M0fOeBSutO0SUaU5z0_rf6cglbjmnFBA/edit?usp=drivesdk
+Event name: https://luma.com/m4vhyhzi?tk=75QTHh
+
 I need your help setting up my AI agent on OpenClaw. You are going to ask me questions one by one, wait for my answer before asking the next, and then generate 5 workspace files at the end.
 Do not ask all questions at once. Ask one, wait for my answer, then ask the next.
 Here are the questions to ask me:
