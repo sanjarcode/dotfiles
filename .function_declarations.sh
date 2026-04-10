@@ -72,6 +72,18 @@ mkpr() {
   open "https://github.com/${remote_url}/compare/${base_branch}...${compare_branch}?expand=1"
 }
 
+# update current branch from upstream
+function gup() {
+  local default_base
+  default_base=$(git config --local --get mkpr.baseBranch || echo "main")
+
+  local base_branch="${1:-$default_base}"
+  echo "Pulling latest $base_branch..."
+  gplo "$base_branch"
+  echo "Merging $base_branch into current branch..."
+  git merge "$base_branch"
+}
+
 function gsave() {
     git stash save $@
 }
