@@ -86,6 +86,8 @@ _gitstash_autocomplete() {
 
 complete -F _gitstash_autocomplete gload
 complete -F _gitstash_autocomplete gsave
+complete -F _gitstash_autocomplete mkpr
+complete -F _gitstash_autocomplete gplo
 
 # gh - GitHub CLI
 # get "commit" link instead of "tree" link.
