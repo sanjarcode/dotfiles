@@ -30,6 +30,48 @@ function gplo() {
     fi
 }
 
+# Open a GitHub PR creation page using the current repo's origin remote
+#
+# Usage:
+#   mkpr                    -> default base...current branch
+#   mkpr main               -> main...current branch
+#   mkpr main my-branch     -> main...my-branch
+#
+# Repo-local defaults can be configured with:
+#
+#   git config --local mkpr.baseBranch qa1_staging
+#   git config --local mkpr.compareBranch develop
+#
+# Read current defaults with:
+#
+#   git config --local --get mkpr.baseBranch
+#   git config --local --get mkpr.compareBranch
+#
+# Remove defaults with:
+#
+#   git config --local --unset mkpr.baseBranch
+#   git config --local --unset mkpr.compareBranch
+#
+mkpr() {
+  local default_base
+  default_base=$(git config --local --get mkpr.baseBranch || echo "main")
+
+  local default_compare
+  default_compare=$(git config --local --get mkpr.compareBranch || git rev-parse --abbrev-ref HEAD)
+
+  local base_branch="${1:-$default_base}"
+  local compare_branch="${2:-$default_compare}"
+
+  local remote_url
+  remote_url=$(git remote get-url origin)
+
+  remote_url="${remote_url#git@github.com:}"
+  remote_url="${remote_url#https://github.com/}"
+  remote_url="${remote_url%.git}"
+
+  open "https://github.com/${remote_url}/compare/${base_branch}...${compare_branch}?expand=1"
+}
+
 function gsave() {
     git stash save $@
 }
