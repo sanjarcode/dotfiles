@@ -29,9 +29,13 @@ rm -rf ~/.dotfiles # cleanup files
 
 ### Claude
 
+Manual below
 - `~/.claude.json` - credentials for Claude Desktop
 - `~/.claude` - rules for Claude Desktop
 - `code  ~/Library/Application\ Support/Claude/claude_desktop_config.json` (stores Docker stuff etc)
+- `.mcp.json` - rules for MCP
+
+Automated backup - https://github.com/SuperClaude-Org/SuperClaude_Plugin
 
 ### AI prompts
 
