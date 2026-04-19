@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": ["mcp", "gateway", "run"]
+    },
+    "android-mcp": {
+      "command": "uvx",
+      "args": ["--python", "3.13", "android-mcp"],
+      "env": {
+        "ANDROID_MCP_CONNECTION": "wifi",
+        "ANDROID_MCP_HOST": "172.16.14.24"
+      }
+    },
+    "android-mcp-sanjar": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/Users/sanjar/home_files/git_dir/Android-MCP",
+        "run",
+        "android-mcp"
+      ],
+      "env": {
+        "ANDROID_MCP_CONNECTION": "wifi",
+        "ANDROID_MCP_HOST": "172.16.14.24:46495",
+        "PATH": "/Users/sanjar/Library/Android/sdk/platform-tools:/usr/bin:/bin"
+      }
+    }
+  },
+  "preferences": {
+    "menuBarEnabled": true,
+    "quickEntryShortcut": "double-tap-option",
+    "quickEntryDictationShortcut": "capslock",
+    "launchPreviewPersistSession": true,
+    "launchPreviewPersistedWorkspaces": ["472679527f2a"],
+    "localAgentModeTrustedFolders": ["/Users/sanjar/Downloads"],
+    "coworkScheduledTasksEnabled": true,
+    "ccdScheduledTasksEnabled": true,
+    "sidebarMode": "chat",
+    "coworkWebSearchEnabled": true,
+    "keepAwakeEnabled": true,
+    "coworkOnboardingResumeStep": null,
+    "chicagoEnabled": true,
+    "floatingAtollActive": true
+  }
+}
