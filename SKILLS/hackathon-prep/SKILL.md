@@ -57,9 +57,18 @@ If an answer is vague, ask one clarifying follow-up before proceeding.
 
 ## Phase 3 — Generate Files
 
-After completing the interview, generate the following files as clearly labeled
-markdown code blocks. Tailor everything to the user's stated skill set — no
-generic content.
+After completing the interview, create a `HACK_PREP/` folder in the current
+working directory and write all files into it. Use the `bash_tool` or
+`create_file` tool to do this — do NOT just output markdown code blocks.
+
+```bash
+mkdir -p HACK_PREP
+```
+
+Then write each file to `HACK_PREP/<filename>`. After all files are written,
+use `present_files` to surface them to the user.
+
+Tailor all content to the user's stated skill set — no generic content.
 
 ### HACKATHON.md
 
@@ -129,7 +138,9 @@ When the hackathon is over and the user wants a retro, ask:
 4. What did you see in other teams' solutions that surprised you?
 5. Did you win, place, or get feedback from judges? What was said?
 
-Then generate a REFLECTION/ folder:
+Then create a `HACK_PREP/REFLECTION/` folder and write all files into it using
+`bash_tool` or `create_file`. Surface them to the user with `present_files`
+after all files are written.
 
 ### RETRO.md
 
