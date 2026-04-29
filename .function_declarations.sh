@@ -392,3 +392,12 @@ unzip() {
   # DEFAULT passthrough
   command unzip "$@"
 }
+
+# solves `claude` command acting as if its unauthenticated on ssh
+claude() {
+  if [ -n "$SSH_CONNECTION" ] && [ -z "$KEYCHAIN_UNLOCKED" ]; then
+    security unlock-keychain ~/Library/Keychains/login.keychain-db
+    export KEYCHAIN_UNLOCKED=true
+  fi
+  command claude "$@"
+}
