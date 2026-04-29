@@ -1,6 +1,6 @@
 # When you have a blank machine
 
-Steps: follow 1, 2, 3 .md files and execute.
+Steps: follow 1, 2, 3 .md files, and execute.
 
 # Usage
 
