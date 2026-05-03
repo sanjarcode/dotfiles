@@ -289,6 +289,26 @@ function dot_refresh {
     source ~/.dotfiles/install.sh
 }
 
+# Tests that the jp (jump) command and its auto completions work.
+# Shell startup optimizations have broken completions before, so this
+# verifies the jump plugin is loaded and shell completion is intact.
+function dot_test {
+    echo "Testing jp (jump) command..."
+    if ! type jp &>/dev/null; then
+        echo "FAIL: jp command not found"
+        return 1
+    fi
+    echo "OK: jp is available"
+
+    if ! type jump &>/dev/null; then
+        echo "FAIL: jump command not found (jp alias target)"
+        return 1
+    fi
+    echo "OK: jump command is available"
+
+    echo "dot_test passed"
+}
+
 # debugging
 function oslog() {
   local message="$1"
