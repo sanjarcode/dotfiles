@@ -309,6 +309,17 @@ function dot_test {
     echo "dot_test passed"
 }
 
+# Sources .zshrc and reports the time taken.
+# Run after making dotfile changes to verify startup performance.
+function dot_speed {
+    echo "Timing .zshrc source..."
+    local start=$(python3 -c "import time; print(time.time())")
+    zsh -c "source ~/.zshrc" 2>/dev/null
+    local end=$(python3 -c "import time; print(time.time())")
+    local ms=$(python3 -c "print(f'{($end-$start)*1000:.0f}')")
+    echo "Sourced .zshrc in ${ms}ms"
+}
+
 # debugging
 function oslog() {
   local message="$1"
