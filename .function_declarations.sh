@@ -432,3 +432,19 @@ claude() {
   fi
   command claude "$@"
 }
+
+env_deepseek() {
+  if [ -z "$DEEPSEEK_API_KEY" ] || [ "${#DEEPSEEK_API_KEY}" -le 10 ]; then
+    echo "DEEPSEEK_API_KEY not configured" >&2
+    return 1
+  fi
+
+  export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+  export ANTHROPIC_AUTH_TOKEN="$DEEPSEEK_API_KEY"
+  export ANTHROPIC_MODEL=deepseek-v4-pro[1m]
+  export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-v4-pro[1m]
+  export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-pro[1m]
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-v4-flash
+  export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash
+  export CLAUDE_CODE_EFFORT_LEVEL=max
+}
