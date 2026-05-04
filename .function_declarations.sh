@@ -433,6 +433,7 @@ claude() {
   command claude "$@"
 }
 
+# Run this when you hit the Claude limit
 env_deepseek() {
   if [ -z "$DEEPSEEK_API_KEY" ] || [ "${#DEEPSEEK_API_KEY}" -le 10 ]; then
     echo "DEEPSEEK_API_KEY not configured" >&2
@@ -449,6 +450,7 @@ env_deepseek() {
   export CLAUDE_CODE_EFFORT_LEVEL=max
 }
 
+# Run this for long running tasks, and when subagents are being used
 env_openrouter() {
   if [ -z "$OPENROUTER_API_KEY" ] || [ "${#OPENROUTER_API_KEY}" -le 10 ]; then
     echo "OPENROUTER_API_KEY not configured" >&2
