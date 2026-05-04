@@ -48,7 +48,13 @@ esac
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+# Lazy-loaded: sdkman init is expensive (~350ms). Only sources on first 'sdk' invocation.
+_sdkman_lazy() {
+    unset -f sdk _sdkman_lazy
+    [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    sdk "$@"
+}
+alias sdk='_sdkman_lazy'
 
 export PATH="$HOME/.cargo/bin:$PATH" # for Rust
 
@@ -80,8 +86,7 @@ if command -v docker &> /dev/null
 then
     # The following lines have been added by Docker Desktop to enable Docker CLI completions.
     fpath=(/Users/sanjar/.docker/completions $fpath)
-    autoload -Uz compinit
-    compinit
+    # compinit is called in terminal_tool.sh after all plugins load
     # End of Docker CLI completions
 fi
 

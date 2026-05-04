@@ -289,6 +289,37 @@ function dot_refresh {
     source ~/.dotfiles/install.sh
 }
 
+# Tests that the jp (jump) command and its auto completions work.
+# Shell startup optimizations have broken completions before, so this
+# verifies the jump plugin is loaded and shell completion is intact.
+function dot_test {
+    echo "Testing jp (jump) command..."
+    if ! type jp &>/dev/null; then
+        echo "FAIL: jp command not found"
+        return 1
+    fi
+    echo "OK: jp is available"
+
+    if ! type jump &>/dev/null; then
+        echo "FAIL: jump command not found (jp alias target)"
+        return 1
+    fi
+    echo "OK: jump command is available"
+
+    echo "dot_test passed"
+}
+
+# Sources .zshrc and reports the time taken.
+# Run after making dotfile changes to verify startup performance.
+function dot_speed {
+    echo "Timing .zshrc source..."
+    local start=$(python3 -c "import time; print(time.time())")
+    zsh -c "source ~/.zshrc" 2>/dev/null
+    local end=$(python3 -c "import time; print(time.time())")
+    local ms=$(python3 -c "print(f'{($end-$start)*1000:.0f}')")
+    echo "Sourced .zshrc in ${ms}ms"
+}
+
 # debugging
 function oslog() {
   local message="$1"
@@ -400,4 +431,38 @@ claude() {
     export KEYCHAIN_UNLOCKED=true
   fi
   command claude "$@"
+}
+
+# Run this when you hit the Claude limit
+env_deepseek() {
+  if [ -z "$DEEPSEEK_API_KEY" ] || [ "${#DEEPSEEK_API_KEY}" -le 10 ]; then
+    echo "DEEPSEEK_API_KEY not configured" >&2
+    return 1
+  fi
+
+  export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+  export ANTHROPIC_AUTH_TOKEN="$DEEPSEEK_API_KEY"
+  export ANTHROPIC_MODEL=deepseek-v4-flash
+  export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-v4-pro[1m]
+  export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-flash
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-v4-flash
+  export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash
+  export CLAUDE_CODE_EFFORT_LEVEL=max
+}
+
+# Run this for long running tasks, and when subagents are being used
+env_openrouter() {
+  if [ -z "$OPENROUTER_API_KEY" ] || [ "${#OPENROUTER_API_KEY}" -le 10 ]; then
+    echo "OPENROUTER_API_KEY not configured" >&2
+    return 1
+  fi
+
+  export ANTHROPIC_BASE_URL=https://openrouter.ai/api/v1/anthropic
+  export ANTHROPIC_AUTH_TOKEN="$OPENROUTER_API_KEY"
+  export ANTHROPIC_MODEL=deepseek/deepseek-v4-flash
+  export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek/deepseek-v4-pro
+  export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek/deepseek-v4-flash
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
+  export CLAUDE_CODE_SUBAGENT_MODEL=deepseek/deepseek-v4-flash
+  export CLAUDE_CODE_EFFORT_LEVEL=max
 }
