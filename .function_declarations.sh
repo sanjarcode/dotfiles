@@ -448,3 +448,19 @@ env_deepseek() {
   export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash
   export CLAUDE_CODE_EFFORT_LEVEL=max
 }
+
+env_openrouter() {
+  if [ -z "$OPENROUTER_API_KEY" ] || [ "${#OPENROUTER_API_KEY}" -le 10 ]; then
+    echo "OPENROUTER_API_KEY not configured" >&2
+    return 1
+  fi
+
+  export ANTHROPIC_BASE_URL=https://openrouter.ai/api/v1/anthropic
+  export ANTHROPIC_AUTH_TOKEN="$OPENROUTER_API_KEY"
+  export ANTHROPIC_MODEL=deepseek/deepseek-v4-flash
+  export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek/deepseek-v4-pro
+  export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek/deepseek-v4-flash
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
+  export CLAUDE_CODE_SUBAGENT_MODEL=deepseek/deepseek-v4-flash
+  export CLAUDE_CODE_EFFORT_LEVEL=max
+}
