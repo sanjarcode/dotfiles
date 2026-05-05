@@ -340,6 +340,21 @@ function dial() {
   adb shell am start -a android.intent.action.CALL -d tel:"$number"
 }
 
+# start android emulator (first AVD), idempotent — no-op if already running
+phone() {
+  if pgrep -f 'qemu-system' > /dev/null 2>&1; then
+    echo "Emulator already running"
+    return
+  fi
+  local first_avd
+  first_avd=$(emulator -list-avds | tail -n 1)
+  if [ -z "$first_avd" ]; then
+    echo "No AVDs found" >&2
+    return 1
+  fi
+  emulator -avd "$first_avd" &
+}
+
 export PATH="$HOME/.local/bin:$PATH" # for rails-new https://github.com/rails/rails-new
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH # macports
 
