@@ -115,6 +115,7 @@ But Claude Desktop themselves is quite proper as they literally made MCP.
 2. Docker connect MCP clients - install Claude Desktop, Cursor, Antigravity, Visual Studio Code, and then, go to Docker and connect them.
 3. Potentially redundant - install MCP into Visual Studio Code, Antigravity, Cursor from their own interfaces. But this may not be needed.
 4. Add Google MCP - https://developers.google.com/workspace/guides/configure-mcp-servers
+5. Google Sheets MCP - https://github.com/xing5/mcp-google-sheets#method-a-service-account-recommended-for-serversautomation-
 
 - Trust Claude Desktop and Docker MCP https://docs.docker.com/ai/mcp-catalog-and-toolkit/[toolkit/](https://docs.docker.com/ai/mcp-catalog-and-toolkit/toolkit/) for reliable tooling.
 - Docker GenAI stack: https://github.com/docker/genai-stack
