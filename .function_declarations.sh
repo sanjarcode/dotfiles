@@ -355,6 +355,57 @@ phone() {
   emulator -avd "$first_avd" &
 }
 
+# ZoomCar k8s — select and exec into a pod by namespace, service, and optional variant
+# Usage:
+#   kpod qa1 admin              # select from regular admin pods in qa1
+#   kpod qa1 admin karafka      # select from admin-karafka pods
+#   kpod prod webapp sidekiq    # select from webapp-sidekiq pods in prod
+kpod() {
+  local namespace="${1:?Usage: kpod <namespace> <service> [variant]}"
+  local service="${2:?Usage: kpod <namespace> <service> [variant]}"
+  local variant="$3"
+
+  namespace=$(echo "$namespace" | tr '[:upper:]' '[:lower:]')
+  service=$(echo "$service" | tr '[:upper:]' '[:lower:]')
+  variant=$(echo "$variant" | tr '[:upper:]' '[:lower:]')
+
+  local pods
+  pods=$(kubectl get pods -n "$namespace" --no-headers 2>/dev/null | grep -iE "${service}")
+
+  if [ -z "$pods" ]; then
+    echo "No pods found for service '$service' in namespace '$namespace'" >&2
+    return 1
+  fi
+
+  local filtered
+  if [ -n "$variant" ]; then
+    # Named variant: ns-svc-<variant>-<hash>-<hash>
+    filtered=$(echo "$pods" | awk -v ns="$namespace" -v svc="$service" -v var="$variant" '
+      $1 ~ "^" ns "-" svc "-" var "-" { print }
+    ')
+  else
+    # Regular pods only: ns-svc-<hash>-<hash> (4 dash-separated segments)
+    filtered=$(echo "$pods" | awk -v ns="$namespace" -v svc="$service" '
+      $1 ~ "^" ns "-" svc "-[a-z0-9]+-[a-z0-9]+$" { print }
+    ')
+  fi
+
+  if [ -z "$filtered" ]; then
+    echo "No matching pods found" >&2
+    return 1
+  fi
+
+  local selected
+  selected=$(echo "$filtered" | fzf --height=15 --select-1 --prompt="Select pod > " | awk '{print $1}')
+
+  if [ -z "$selected" ]; then
+    echo "No pod selected" >&2
+    return 1
+  fi
+
+  kubectl exec -it "$selected" -n "$namespace" -- /bin/sh
+}
+
 export PATH="$HOME/.local/bin:$PATH" # for rails-new https://github.com/rails/rails-new
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH # macports
 
