@@ -410,21 +410,19 @@ kpod() {
 # Usage:
 #   klog qa1 admin                    # tail logs (noise filtered)
 #   klog qa1 admin karafka            # tail logs from a named variant
-#   klog --verbose qa1 admin          # raw logs, no filtering
+#   klog qa1 admin --verbose          # raw logs, no filtering
 klog() {
   local verbose=false
-  local args=()
 
-  for arg in "$@"; do
-    case "$arg" in
-      --verbose) verbose=true ;;
-      *) args+=("$arg") ;;
-    esac
-  done
+  # --verbose must be the last argument (post option)
+  if [ $# -gt 0 ] && [ "${@[-1]}" = "--verbose" ]; then
+    verbose=true
+    set -- "${@:1:$#-1}"
+  fi
 
-  local namespace="${args[0]:?Usage: klog [--verbose] <namespace> <service> [variant]}"
-  local service="${args[1]:?Usage: klog [--verbose] <namespace> <service> [variant]}"
-  local variant="${args[2]}"
+  local namespace="${1:?Usage: klog [--verbose] <namespace> <service> [variant]}"
+  local service="${2:?Usage: klog [--verbose] <namespace> <service> [variant]}"
+  local variant="$3"
 
   namespace=$(echo "$namespace" | tr '[:upper:]' '[:lower:]')
   service=$(echo "$service" | tr '[:upper:]' '[:lower:]')
