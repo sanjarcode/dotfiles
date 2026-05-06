@@ -407,14 +407,24 @@ kpod() {
 }
 
 # ZoomCar k8s — tail logs from a pod by namespace, service, and optional variant
-# Filters out noisy kube-probe /health lines by default.
 # Usage:
-#   klog qa1 admin              # tail logs from a regular admin pod
-#   klog qa1 admin karafka      # tail logs from an admin-karafka pod
+#   klog qa1 admin                    # tail logs (noise filtered)
+#   klog qa1 admin karafka            # tail logs from a named variant
+#   klog --verbose qa1 admin          # raw logs, no filtering
 klog() {
-  local namespace="${1:?Usage: klog <namespace> <service> [variant]}"
-  local service="${2:?Usage: klog <namespace> <service> [variant]}"
-  local variant="$3"
+  local verbose=false
+  local args=()
+
+  for arg in "$@"; do
+    case "$arg" in
+      --verbose) verbose=true ;;
+      *) args+=("$arg") ;;
+    esac
+  done
+
+  local namespace="${args[0]:?Usage: klog [--verbose] <namespace> <service> [variant]}"
+  local service="${args[1]:?Usage: klog [--verbose] <namespace> <service> [variant]}"
+  local variant="${args[2]}"
 
   namespace=$(echo "$namespace" | tr '[:upper:]' '[:lower:]')
   service=$(echo "$service" | tr '[:upper:]' '[:lower:]')
@@ -452,7 +462,21 @@ klog() {
     return 1
   fi
 
-  kubectl logs -f "$selected" -n "$namespace" | grep -vE '"/health".*kube-probe|kube-probe.*"/health"'
+  if [ "$verbose" = true ]; then
+    kubectl logs -f "$selected" -n "$namespace"
+  else
+    kubectl logs -f "$selected" -n "$namespace" | awk '
+      /\/health/ && /kube-probe/ { next }
+      /\/status/ && /kube-probe/ { next }
+      /invalid api_key/ || /\"\/status\"/ || /path=\/status/ || /GET \"\/status\"/ || /status request processing time/ { next }
+      match($0, /\[[a-f0-9-]{36}\]/) {
+        id = substr($0, RSTART+1, RLENGTH-2)
+        if ($0 ~ /#status/) { exclude[id] = 1; next }
+        if (id in exclude) next
+      }
+      { print }
+    '
+  fi
 }
 
 export PATH="$HOME/.local/bin:$PATH" # for rails-new https://github.com/rails/rails-new
