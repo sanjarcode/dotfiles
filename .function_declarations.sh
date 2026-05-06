@@ -406,6 +406,55 @@ kpod() {
   kubectl exec -it "$selected" -n "$namespace" -- /bin/sh
 }
 
+# ZoomCar k8s — tail logs from a pod by namespace, service, and optional variant
+# Filters out noisy kube-probe /health lines by default.
+# Usage:
+#   klog qa1 admin              # tail logs from a regular admin pod
+#   klog qa1 admin karafka      # tail logs from an admin-karafka pod
+klog() {
+  local namespace="${1:?Usage: klog <namespace> <service> [variant]}"
+  local service="${2:?Usage: klog <namespace> <service> [variant]}"
+  local variant="$3"
+
+  namespace=$(echo "$namespace" | tr '[:upper:]' '[:lower:]')
+  service=$(echo "$service" | tr '[:upper:]' '[:lower:]')
+  variant=$(echo "$variant" | tr '[:upper:]' '[:lower:]')
+
+  local pods
+  pods=$(kubectl get pods -n "$namespace" --no-headers 2>/dev/null | grep -iE "${service}")
+
+  if [ -z "$pods" ]; then
+    echo "No pods found for service '$service' in namespace '$namespace'" >&2
+    return 1
+  fi
+
+  local filtered
+  if [ -n "$variant" ]; then
+    filtered=$(echo "$pods" | awk -v ns="$namespace" -v svc="$service" -v var="$variant" '
+      $1 ~ "^" ns "-" svc "-" var "-" { print }
+    ')
+  else
+    filtered=$(echo "$pods" | awk -v ns="$namespace" -v svc="$service" '
+      $1 ~ "^" ns "-" svc "-[a-z0-9]+-[a-z0-9]+$" { print }
+    ')
+  fi
+
+  if [ -z "$filtered" ]; then
+    echo "No matching pods found" >&2
+    return 1
+  fi
+
+  local selected
+  selected=$(echo "$filtered" | fzf --height=15 --select-1 --prompt="Select pod > " | awk '{print $1}')
+
+  if [ -z "$selected" ]; then
+    echo "No pod selected" >&2
+    return 1
+  fi
+
+  kubectl logs -f "$selected" -n "$namespace" | grep -vE '"/health".*kube-probe|kube-probe.*"/health"'
+}
+
 export PATH="$HOME/.local/bin:$PATH" # for rails-new https://github.com/rails/rails-new
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH # macports
 
