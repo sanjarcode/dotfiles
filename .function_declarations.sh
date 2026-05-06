@@ -417,12 +417,21 @@ klog() {
   # --verbose must be the last argument (post option)
   if [ $# -gt 0 ] && [ "${@[-1]}" = "--verbose" ]; then
     verbose=true
-    set -- "${@:1:$#-1}"
   fi
 
-  local namespace="${1:?Usage: klog [--verbose] <namespace> <service> [variant]}"
-  local service="${2:?Usage: klog [--verbose] <namespace> <service> [variant]}"
-  local variant="$3"
+  # Effective arg count without --verbose
+  local argc=$#
+  [ "$verbose" = true ] && argc=$(( argc - 1 ))
+
+  if [ $argc -lt 2 ]; then
+    echo "Usage: klog [--verbose] <namespace> <service> [variant]" >&2
+    return 1
+  fi
+
+  local namespace="$1"
+  local service="$2"
+  local variant=""
+  [ $argc -ge 3 ] && variant="$3"
 
   namespace=$(echo "$namespace" | tr '[:upper:]' '[:lower:]')
   service=$(echo "$service" | tr '[:upper:]' '[:lower:]')
