@@ -284,6 +284,10 @@ function dot_status {
     echo "\nChecked dot files"
 }
 
+function dot_reload {
+    source ~/.zshrc
+}
+
 function dot_refresh {
     dot_remove
     source ~/.dotfiles/install.sh
