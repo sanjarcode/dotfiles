@@ -12,4 +12,5 @@ if [ -f ~/.terminal_tool.sh ]; then
     fi
     source ~/.function_declarations.sh
     source ~/.invocations.sh
+    source ~/.dotfiles/companies/index.sh
 fi
