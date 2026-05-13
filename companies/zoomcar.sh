@@ -149,3 +149,5 @@ klog() {
     '
   fi
 }
+
+alias kauth="gcloud auth login"
