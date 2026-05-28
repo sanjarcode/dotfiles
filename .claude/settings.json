@@ -1,0 +1,76 @@
+{
+  "model": "opus[1m]",
+  "enabledPlugins": {
+    "ruby-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "claude-mem@thedotmack": true
+  },
+  "extraKnownMarketplaces": {
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    }
+  },
+  "permissions": {
+    "allow": [
+      "mcp__tablepro__list_connections",
+      "mcp__tablepro__get_connection_status",
+      "mcp__tablepro__execute_query",
+      "mcp__tablepro__list_databases",
+      "mcp__tablepro__list_tables",
+      "mcp__tablepro__list_schemas",
+      "mcp__tablepro__describe_table",
+      "mcp__tablepro__get_table_ddl",
+      "mcp__tablepro__list_recent_tabs",
+      "mcp__tablepro__search_query_history",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__whoami",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_design",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_design_content",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_design_pages",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_design_thumbnail",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_metadata",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_screenshot",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_variable_defs",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_libraries",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__search_design_system",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_figjam",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_code_connect_map",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_code_connect_suggestions",
+      "mcp__9278cfb4-7972-4801-baea-49b43173db0b__get_context_for_code_connect",
+      "mcp__30c5075c-bbad-4c26-acc5-146958c7ec3a__list_recent_files",
+      "mcp__30c5075c-bbad-4c26-acc5-146958c7ec3a__read_file_content",
+      "mcp__30c5075c-bbad-4c26-acc5-146958c7ec3a__get_file_metadata",
+      "mcp__30c5075c-bbad-4c26-acc5-146958c7ec3a__get_file_permissions",
+      "mcp__30c5075c-bbad-4c26-acc5-146958c7ec3a__search_files",
+      "mcp__30c5075c-bbad-4c26-acc5-146958c7ec3a__download_file_content",
+      "Bash(ls *)",
+      "Bash(ls)",
+      "Bash(cat *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(which *)",
+      "Bash(pwd)",
+      "Bash(whoami)",
+      "Bash(echo *)",
+      "Bash(date *)",
+      "Bash(date)",
+      "Bash(jq *)",
+      "Bash(sort *)",
+      "Bash(uniq *)",
+      "Bash(awk *)",
+      "Bash(sed *)",
+      "Bash(tr *)",
+      "Bash(cut *)",
+      "Bash(xargs *)"
+    ]
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "voiceEnabled": true
+}
