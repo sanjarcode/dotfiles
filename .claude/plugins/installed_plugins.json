@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "plugins": {
+    "ruby-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sanjar.afaq/.claude/plugins/cache/claude-plugins-official/ruby-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-04-07T09:51:14.880Z",
+        "lastUpdated": "2026-04-07T09:51:14.880Z",
+        "gitCommitSha": "104d39be10b7b1380b2ae23a387a11a297b599c3"
+      }
+    ],
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sanjar.afaq/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0",
+        "version": "5.1.0",
+        "installedAt": "2026-05-26T09:43:27.453Z",
+        "lastUpdated": "2026-05-26T09:43:27.453Z",
+        "gitCommitSha": "f2cbfbefebbfef77321e4c9abc9e949826bea9d7"
+      }
+    ],
+    "claude-mem@thedotmack": [
+      {
+        "scope": "user",
+        "installPath": "/Users/sanjar.afaq/.claude/plugins/cache/thedotmack/claude-mem/13.3.0",
+        "version": "13.3.0",
+        "installedAt": "2026-05-26T09:44:26.268Z",
+        "lastUpdated": "2026-05-26T09:44:26.268Z",
+        "gitCommitSha": "c3d2af7c144b886e21e6b4721a9a5e5960482766"
+      }
+    ]
+  }
+}
