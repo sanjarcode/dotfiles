@@ -37,6 +37,52 @@ Manual below
 
 Automated backup - https://github.com/SuperClaude-Org/SuperClaude_Plugin
 
+### Claude Code — `.claude/` backup
+
+The `.claude/` directory in this repo is a partial backup of `~/.claude/` (Claude Code's global config directory).
+
+#### What's backed up
+
+| Path | Contents | Machine-general? |
+|------|----------|-----------------|
+| `settings.json` | Global prefs, permissions, enabled plugins | Mostly yes. MCP permission rules with UUID-based server names (e.g. `mcp__9278cfb4-...`) are tied to how plugins register on this machine — they'll be silently ignored if the UUID differs on another machine, but won't break anything. |
+| `commands/` | Custom slash commands (markdown) | Yes — fully portable |
+| `skills/` | Custom skills (markdown/YAML) | Yes — fully portable |
+| `plans/` | Saved plans (markdown) | Yes — fully portable |
+| `plugins/installed_plugins.json` | List of installed plugins with versions | Mostly yes. The `installPath` field contains absolute paths (`/Users/sanjar.afaq/...`) but Claude Code overwrites these on first run. |
+
+#### What's NOT backed up (and why)
+
+- `projects/` (98 MB) — session transcripts with absolute local paths
+- `plugins/cache/` (44 MB) — downloaded plugin code, re-fetched automatically
+- `sessions/`, `file-history/`, `shell-snapshots/` — ephemeral, machine-local state
+- `history.jsonl`, `mcp-needs-auth-cache.json` — ephemeral
+
+#### Restore on a new machine
+
+```sh
+# After cloning this repo:
+cp -r ~/.dotfiles/.claude/commands ~/.claude/commands
+cp -r ~/.dotfiles/.claude/skills   ~/.claude/skills
+cp -r ~/.dotfiles/.claude/plans    ~/.claude/plans
+cp    ~/.dotfiles/.claude/settings.json ~/.claude/settings.json
+# Then open Claude Code — it will re-install plugins listed in settings.json automatically.
+# If plugins don't auto-install, run: claude plugins install
+```
+
+#### Keep the backup up to date
+
+Run this whenever you add new commands, skills, or change settings:
+
+```sh
+cp ~/.claude/settings.json ~/.dotfiles/.claude/settings.json
+cp -r ~/.claude/commands/. ~/.dotfiles/.claude/commands/
+cp -r ~/.claude/skills/.   ~/.dotfiles/.claude/skills/
+cp -r ~/.claude/plans/.    ~/.dotfiles/.claude/plans/
+cp ~/.claude/plugins/installed_plugins.json ~/.dotfiles/.claude/plugins/installed_plugins.json
+cd ~/.dotfiles && git add .claude/ && git commit -m "Update Claude backup" && git push
+```
+
 ### AI prompts
 
 Add prompts here. Version them too.
