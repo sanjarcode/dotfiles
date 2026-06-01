@@ -1,7 +1,8 @@
 def redis_reverse_search(query)
-  I18N_REDIS.keys("en.*").each do |k|
-    v = I18N_REDIS.get(k)
-    puts "#{k}: #{v}" if v&.downcase&.include?(query.downcase)
+  matches = I18N_REDIS.keys("en.*").select do |k|
+    I18N_REDIS.get(k)&.downcase&.include?(query.downcase)
   end
-end
 
+  matches.each { |k| puts "#{k}: #{I18N_REDIS.get(k)}" }
+  matches.size
+end
