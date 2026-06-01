@@ -29,13 +29,39 @@ rm -rf ~/.dotfiles # cleanup files
 
 ### Claude
 
-Manual below
-- `~/.claude.json` - credentials for Claude Desktop
-- `~/.claude` - rules for Claude Desktop
-- `code  ~/Library/Application\ Support/Claude/claude_desktop_config.json` (stores Docker stuff etc)
-- `.mcp.json` - rules for MCP
+This repo is the backup for your Claude setup. Below is every config file, where it lives, and how it maps to the repo.
 
-Automated backup - https://github.com/SuperClaude-Org/SuperClaude_Plugin
+#### Settings Inventory
+
+| What | System Location | Repo Location | Restore Command | ⚠️ |
+|------|----------------|---------------|-----------------|-----|
+| Claude Desktop config (MCP servers, prefs) | `~/Library/Application Support/Claude/claude_desktop_config.json` | `claude_desktop_config.json` | `cp claude_desktop_config.json ~/Library/Application\ Support/Claude/` | Local paths + device IPs may be stale |
+| Global Claude Code settings (model, plugins, effort) | `~/.claude/settings.json` | `claude-global-settings.json` | `cp claude-global-settings.json ~/.claude/settings.json` | Plugins are auto-installed; versions may drift |
+| Project-level permissions + MCP servers | — | `.claude/settings.local.json` | auto-loaded when cwd is this repo | — |
+| MCP server definitions (comet-bridge) | — | `.mcp.json` | auto-loaded by Claude Code | — |
+| Agent sub-configs | — | `claude-setup-files/.claude/settings.local.json` | copy to agent's `.claude/` | — |
+| Auth & account state (Claude Code) | `~/.claude.json` | `claude-credentials-backup.json` | `cp claude-credentials-backup.json ~/.claude.json` | Email, org UUIDs, project paths, session IDs — machine-specific, not secrets |
+| Custom commands (spec-kitty, etc.) | `~/.claude/commands/*.md` | 🔴 Installed by plugins | Re-install plugins → commands reappear | — |
+
+**Restore everything in one shot:**
+```sh
+cp claude_desktop_config.json ~/Library/Application\ Support/Claude/
+cp claude-global-settings.json ~/.claude/settings.json
+cp claude-credentials-backup.json ~/.claude.json
+source ~/.dotfiles/install.sh
+```
+
+> ⚠️ **Warnings**
+>
+> **Before restore:** Running these `cp` commands **overwrites** your live config. If your current machine has different MCP servers, plugins, or auth state, you'll lose those changes. Only restore onto a blank machine.
+>
+> **claude-credentials-backup.json** contains your Claude Code OAuth session (email, org UUIDs, workspace role, project paths, session IDs). This is not a secret, but it's **machine-specific** — restoring it on a new machine will re-attach your account, so your subscription and projects carry over. It does NOT contain your Anthropic password — you'll still need to re-authenticate if the session expires.
+>
+> **claude_desktop_config.json** contains MCP server definitions — some reference local paths (`/Users/sanjar/...`) and USB/IP addresses (e.g. Android debug bridge IPs). These will be stale on a new machine. Review before restoring.
+>
+> **API keys are deliberately omitted** from this repo — see [Secrets & API Keys](#secrets--api-keys) below.
+
+> Automated backup alternative: https://github.com/SuperClaude-Org/SuperClaude_Plugin
 
 ### Claude Code — `.claude/` backup
 
@@ -82,6 +108,23 @@ cp -r ~/.claude/plans/.    ~/.dotfiles/.claude/plans/
 cp ~/.claude/plugins/installed_plugins.json ~/.dotfiles/.claude/plugins/installed_plugins.json
 cd ~/.dotfiles && git add .claude/ && git commit -m "Update Claude backup" && git push
 ```
+
+> ⚠️ **Before running:** Check that `settings.json` hasn't picked up any API keys or tokens (MCP server configs with hardcoded secrets). If it has, redact them before committing — see [Secrets & API Keys](#secrets--api-keys).
+
+### Secrets & API Keys
+
+Not everything can go in a public repo. Here's what's deliberately excluded:
+
+| Secret | Where It Lives | How To Set On A New Machine |
+|--------|---------------|----------------------------|
+| `HUGGINGFACE_TOKEN`, `OPENAI_API_KEY`, etc. | `~/.dotfiles/.env` (gitignored) | Copy from password manager or `.env.example` |
+| Discord bot token | Set via env var at runtime | Generate a new token in Discord Developer Portal |
+| Google Sheets service account | `~/.dotfiles/.env_dir/*.json` (gitignored) | Download JSON key from GCP console |
+| SSH keys | `~/.ssh/` (private keys not in repo) | `ssh-keygen` or copy from backup |
+| `~/.claude.json` auth session | `claude-credentials-backup.json` (in repo) | Only contains OAuth metadata, not your password. If session is expired, `claude login` will re-auth. |
+| Any MCP token/API key in config | Machine-local env vars | Re-add via Docker MCP Toolkit or Claude Desktop settings |
+
+**Rule of thumb:** If a file contains `token`, `secret`, `key`, or `password` — check before committing. If you're unsure, keep it out and document the setup in a `.env.example` or this table.
 
 ### AI prompts
 
