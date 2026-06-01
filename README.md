@@ -29,13 +29,29 @@ rm -rf ~/.dotfiles # cleanup files
 
 ### Claude
 
-Manual below
-- `~/.claude.json` - credentials for Claude Desktop
-- `~/.claude` - rules for Claude Desktop
-- `code  ~/Library/Application\ Support/Claude/claude_desktop_config.json` (stores Docker stuff etc)
-- `.mcp.json` - rules for MCP
+This repo is the backup for your Claude setup. Below is every config file, where it lives, and how it maps to the repo.
 
-Automated backup - https://github.com/SuperClaude-Org/SuperClaude_Plugin
+#### Settings Inventory
+
+| What | System Location | Repo Location | Restore Command |
+|------|----------------|---------------|-----------------|
+| Claude Desktop config (MCP servers, prefs) | `~/Library/Application Support/Claude/claude_desktop_config.json` | `claude_desktop_config.json` | `cp claude_desktop_config.json ~/Library/Application\ Support/Claude/` |
+| Global Claude Code settings (model, plugins, effort) | `~/.claude/settings.json` | `claude-global-settings.json` | `cp claude-global-settings.json ~/.claude/settings.json` |
+| Project-level permissions + MCP servers | — | `.claude/settings.local.json` | auto-loaded when cwd is this repo |
+| MCP server definitions (comet-bridge) | — | `.mcp.json` | auto-loaded by Claude Code |
+| Agent sub-configs | — | `claude-setup-files/.claude/settings.local.json` | copy to agent's `.claude/` |
+| Auth & account state (Claude Code) | `~/.claude.json` | `claude-credentials-backup.json` | `cp claude-credentials-backup.json ~/.claude.json` — contains email/org UUIDs (machine-specific, not secrets) |
+| Custom commands (spec-kitty, etc.) | `~/.claude/commands/*.md` | 🔴 Installed by plugins | Re-install plugins → commands reappear |
+
+**Restore everything in one shot:**
+```sh
+cp claude_desktop_config.json ~/Library/Application\ Support/Claude/
+cp claude-global-settings.json ~/.claude/settings.json
+cp claude-credentials-backup.json ~/.claude.json
+source ~/.dotfiles/install.sh
+```
+
+> Automated backup alternative: https://github.com/SuperClaude-Org/SuperClaude_Plugin
 
 ### Claude Code — `.claude/` backup
 

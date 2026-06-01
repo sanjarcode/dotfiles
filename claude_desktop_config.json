@@ -2,11 +2,29 @@
   "mcpServers": {
     "MCP_DOCKER": {
       "command": "docker",
-      "args": ["mcp", "gateway", "run"]
+      "args": [
+        "mcp",
+        "gateway",
+        "run"
+      ]
+    },
+    "google-sheets": {
+      "command": "uvx",
+      "args": [
+        "mcp-google-sheets@latest"
+      ],
+      "env": {
+        "SERVICE_ACCOUNT_PATH": "/Users/sanjar/.dotfiles/.env_dir/main-494210-d4e1ef088301.json",
+        "DRIVE_FOLDER_ID": "1-R341Q2E_WPk86QyjR6jlGZn1sHWqufy"
+      }
     },
     "android-mcp": {
       "command": "uvx",
-      "args": ["--python", "3.13", "android-mcp"],
+      "args": [
+        "--python",
+        "3.13",
+        "android-mcp"
+      ],
       "env": {
         "ANDROID_MCP_CONNECTION": "wifi",
         "ANDROID_MCP_HOST": "172.16.14.24"
@@ -25,22 +43,105 @@
         "ANDROID_MCP_HOST": "172.16.14.24:46495",
         "PATH": "/Users/sanjar/Library/Android/sdk/platform-tools:/usr/bin:/bin"
       }
+    },
+    "discord-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e",
+        "DISCORD_TOKEN",
+        "-e",
+        "DISCORD_GUILD_ID",
+        "saseq/discord-mcp:latest"
+      ],
+      "env": {
+        "DISCORD_TOKEN": "<set via env var>",
+        "DISCORD_GUILD_ID": "1495840590410023121"
+      }
+    },
+    "notebooklm": {
+      "command": "npx",
+      "args": [
+        "notebooklm-mcp@latest"
+      ],
+      "env": {}
+    },
+    "linkedin": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-v",
+        "~/.linkedin-mcp:/home/sanjar/.linkedin-mcp",
+        "stickerdaniel/linkedin-mcp-server:latest"
+      ]
+    },
+    "ScraplingServer": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "pyd4vinci/scrapling",
+        "mcp"
+      ]
+    },
+    "tablepro": {
+      "command": "/Applications/TablePro.app/Contents/MacOS/tablepro-mcp"
     }
   },
   "preferences": {
-    "menuBarEnabled": true,
-    "quickEntryShortcut": "double-tap-option",
-    "quickEntryDictationShortcut": "capslock",
+    "menuBarEnabled": false,
+    "chromeExtension": {
+      "pairedDeviceId": "f6cb727c-3c6c-4819-b818-9be6693f7d53",
+      "pairedDeviceName": "Browser 1",
+      "pairedFromDeviceIds": [
+        "f6cb727c-3c6c-4819-b818-9be6693f7d53",
+        "d116610f-b614-4d0f-9c6c-990cc2b809a7"
+      ]
+    },
+    "quickEntryShortcut": "off",
+    "quickEntryDictationShortcut": "off",
     "launchPreviewPersistSession": true,
-    "launchPreviewPersistedWorkspaces": ["472679527f2a"],
-    "localAgentModeTrustedFolders": ["/Users/sanjar/Downloads"],
+    "launchPreviewPersistedWorkspaces": [
+      "472679527f2a"
+    ],
+    "localAgentModeTrustedFolders": [
+      "/Users/sanjar/Downloads"
+    ],
+    "dispatchCodeTasksPermissionMode": "plan",
     "coworkScheduledTasksEnabled": true,
     "ccdScheduledTasksEnabled": true,
     "sidebarMode": "chat",
+    "bypassPermissionsModeEnabled": true,
+    "bypassPermissionsGateByAccount": {
+      "179ac13d-2c41-4e6f-b00b-bccd6b21fa48": false
+    },
+    "dockBounceEnabled": true,
     "coworkWebSearchEnabled": true,
     "keepAwakeEnabled": true,
     "coworkOnboardingResumeStep": null,
     "chicagoEnabled": true,
-    "floatingAtollActive": true
-  }
+    "remoteToolsDeviceName": "sanjars-mbp-local",
+    "ccAutoArchiveOnPrClose": true,
+    "epitaxyPrefs": {
+      "starred-local-code-sessions": [
+        "local_fa099ee9-4b82-4903-8d4f-042c143170a1"
+      ],
+      "starred-cowork-spaces": [],
+      "starred-session-groups": [],
+      "dframe-local-slice": {
+        "pinnedOrder": [
+          "code:local_fa099ee9-4b82-4903-8d4f-042c143170a1"
+        ],
+        "customGroupAssignments": {},
+        "customGroupOrder": {}
+      }
+    },
+    "allowAllBrowserActions": true
+  },
+  "coworkUserFilesPath": "/Users/sanjar/Claude"
 }
