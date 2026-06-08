@@ -490,3 +490,12 @@ env_openrouter() {
   export CLAUDE_CODE_SUBAGENT_MODEL=deepseek/deepseek-v4-flash
   export CLAUDE_CODE_EFFORT_LEVEL=max
 }
+
+dotfiles_changed() {
+    local repo="$HOME/.dotfiles"
+
+    local_commit=$(git -C "$repo" rev-parse HEAD) || return 1
+    remote_commit=$(git -C "$repo" ls-remote origin refs/heads/master | awk '{print $1}') || return 1
+
+    [[ "$local_commit" != "$remote_commit" ]]
+}
