@@ -8,6 +8,8 @@ alias afk="osascript -e 'tell application \"System Events\" to keystroke \"q\" u
 alias ocr='/Applications/OwlOCR.app/Contents/MacOS/OwlOCR --cli '
 
 # git
+alias gpl="git pull"
+alias gps="git push"
 alias gcan="git commit --amend --no-edit"
 alias gcm="git commit -m"
 alias gls="git branch --sort=-committerdate" # git branch ls
