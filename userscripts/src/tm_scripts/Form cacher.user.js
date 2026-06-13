@@ -11,68 +11,70 @@
 // ==/UserScript==
 
 (async function () {
-  'use strict';
+  "use strict";
 
   // ---------- Core handler ----------
   async function handleSubmit(form) {
     try {
-      const fields = [...form.querySelectorAll('input, select, textarea')];
+      const fields = [...form.querySelectorAll("input, select, textarea")];
       const data = {};
 
       for (const f of fields) {
         if (!f.name && !f.id) continue;
         const key = f.name || f.id;
         let val = f.value;
-        if (f.type === 'checkbox') val = f.checked;
-        if (f.type === 'radio' && !f.checked) continue;
+        if (f.type === "checkbox") val = f.checked;
+        if (f.type === "radio" && !f.checked) continue;
         data[key] = val;
       }
 
       const siteKey = location.hostname;
       const storeKey = `form_data_${siteKey}`;
-      const storedLocal = JSON.parse(localStorage.getItem(storeKey) || '{}');
+      const storedLocal = JSON.parse(localStorage.getItem(storeKey) || "{}");
       const merged = { ...storedLocal, ...data };
 
       // Store in localStorage
       localStorage.setItem(storeKey, JSON.stringify(merged));
 
       // Store in TM storage
-      const allTMData = (await GM_getValue('autofillData', {})) || {};
+      const allTMData = (await GM_getValue("autofillData", {})) || {};
       allTMData[siteKey] = merged;
-      await GM_setValue('autofillData', allTMData);
+      await GM_setValue("autofillData", allTMData);
 
       console.log(`✅ Saved form data for ${siteKey}`, merged);
     } catch (err) {
-      console.error('❌ handleSubmit failed:', err);
+      console.error("❌ handleSubmit failed:", err);
     }
   }
 
   // ---------- Hook form submissions ----------
   document.addEventListener(
-    'submit',
+    "submit",
     (e) => {
       handleSubmit(e.target);
     },
-    true
+    true,
   );
 
   // ---------- Hook button clicks ----------
   document.addEventListener(
-    'click',
+    "click",
     (e) => {
-      const btn = e.target.closest('button, input[type="button"], input[type="submit"]');
+      const btn = e.target.closest(
+        'button, input[type="button"], input[type="submit"]',
+      );
       if (!btn) return;
 
-      const text = (btn.innerText || btn.value || '').toLowerCase();
-      const name = (btn.name || '').toLowerCase();
-      if (text.includes('submit') || name.includes('submit')) {
+      const text = (btn.innerText || btn.value || "").toLowerCase();
+      const name = (btn.name || "").toLowerCase();
+      if (text.includes("submit") || name.includes("submit")) {
         // try to find nearest form
-        const form = btn.closest('form');
+        const form = btn.closest("form");
         if (form) handleSubmit(form);
       }
     },
-    true
+    true,
   );
 
-  console.log('🧩 Submission catcher active');
+  console.log("🧩 Submission catcher active");
 })().catch(console.log);

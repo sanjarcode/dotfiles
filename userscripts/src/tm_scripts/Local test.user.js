@@ -49,9 +49,9 @@
           .map((cell, index, { length }) =>
             index + 1 === length
               ? cell.textContent.replaceAll(",", "")
-              : cell.textContent
+              : cell.textContent,
           )
-          .join(",")
+          .join(","),
       );
     });
     const headerLine = Array.from(headers)
@@ -68,7 +68,7 @@
           console.log("Scrolling to top");
           window.scrollTo({ top: 0 });
         }, 300);
-      })
+      }),
     );
   });
 

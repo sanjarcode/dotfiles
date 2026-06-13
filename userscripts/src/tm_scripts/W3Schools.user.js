@@ -10,24 +10,23 @@
 // ==/UserScript==
 
 (function () {
-    'use strict';
-    window.attachGoToButton("#w3-exerciseform", "h1", "exercises"); // div:has(> #mainLeaderboard)
+  "use strict";
+  window.attachGoToButton("#w3-exerciseform", "h1", "exercises"); // div:has(> #mainLeaderboard)
 
-    async function correctSubmitClosePage() {
-        if (!window.location.href.includes("exercise.asp")) return;
+  async function correctSubmitClosePage() {
+    if (!window.location.href.includes("exercise.asp")) return;
 
-        const answerButton = document.querySelector('#answerbutton');
-        answerButton.addEventListener("click", async () => {
-            // check if its correct
-            await window.waitForMilliseconds(0);
+    const answerButton = document.querySelector("#answerbutton");
+    answerButton.addEventListener("click", async () => {
+      // check if its correct
+      await window.waitForMilliseconds(0);
 
-            if (!answerButton.innerText.includes("Try")) {
-                await window.showNotification("Success, closing tab....", 100);
-                window.close();
-            }
-        });
-
-    }
-    correctSubmitClosePage();
-    // Your code here...
+      if (!answerButton.innerText.includes("Try")) {
+        await window.showNotification("Success, closing tab....", 100);
+        window.close();
+      }
+    });
+  }
+  correctSubmitClosePage();
+  // Your code here...
 })();

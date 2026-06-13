@@ -10,23 +10,30 @@
 // ==/UserScript==
 
 (function () {
-    'use strict';
+  "use strict";
 
-    function getCallouts() {
-        return Array.from(document.querySelectorAll(".callout")), (item) => item.getAttribute("class").split(" ").filter(class_ => class_.startsWith("callout-")).map(item => item.textContent);
-    }
+  function getCallouts() {
+    return (
+      Array.from(document.querySelectorAll(".callout")),
+      (item) =>
+        item
+          .getAttribute("class")
+          .split(" ")
+          .filter((class_) => class_.startsWith("callout-"))
+          .map((item) => item.textContent)
+    );
+  }
 
-    function scrollCallouts() {
-        window.position ||= 0;
-        const callOuts = Array.from(document.querySelectorAll(".callout"));
-        callOuts[window.position].scrollIntoView({ block: "start" });
-        window.position += 1;
-        window.position %= callOuts.length;
-    }
+  function scrollCallouts() {
+    window.position ||= 0;
+    const callOuts = Array.from(document.querySelectorAll(".callout"));
+    callOuts[window.position].scrollIntoView({ block: "start" });
+    window.position += 1;
+    window.position %= callOuts.length;
+  }
 
-    window.attachToSanjarWindow(getCallouts, { callOnce: true });
-    window.attachToSanjarWindow(scrollCallouts);
+  window.attachToSanjarWindow(getCallouts, { callOnce: true });
+  window.attachToSanjarWindow(scrollCallouts);
 
-
-    // Your code here...
+  // Your code here...
 })();

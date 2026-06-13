@@ -10,8 +10,8 @@
 // ==/UserScript==
 
 (async function () {
-    'use strict';
-    /*
+  "use strict";
+  /*
     await window.waitForMilliseconds(100);
     const tocContents = document.querySelector("#toc ul").innerHTML;
     const mainBody = document.querySelector("#bodyContent");
@@ -21,38 +21,37 @@
 
     window.hideLinks();*/
 
-    // Save the original attachShadow
-    const _attachShadow = Element.prototype.attachShadow;
+  // Save the original attachShadow
+  const _attachShadow = Element.prototype.attachShadow;
 
-    // Monkey patch
-    Element.prototype.attachShadow = function(init) {
-        // Call original
-        const shadow = _attachShadow.call(this, init);
+  // Monkey patch
+  Element.prototype.attachShadow = function (init) {
+    // Call original
+    const shadow = _attachShadow.call(this, init);
 
-        // Fire your hook
-        try {
-            onShadowCreated(this, shadow, init);
-        } catch (err) {
-            console.error("Shadow hook error:", err);
-        }
-
-        return shadow;
-    };
-
-    // Your callback: runs *only for shadow DOM*
-    function onShadowCreated(host, shadowRoot, init) {
-        console.log("Shadow DOM detected on:", host);
-        console.log("Mode:", init.mode); // "open" or "closed"
-        console.log("Shadow root:", shadowRoot);
-
-        // If you want to skip closed shadows:
-        // if (init.mode === "closed") return;
-
-        // Example: add a marker attribute
-        // host.setAttribute("shadow-patched", "");
-
-        // Example: run logic only on specific components
-        // if (host.tagName === "MY-COMPONENT") { ... }
+    // Fire your hook
+    try {
+      onShadowCreated(this, shadow, init);
+    } catch (err) {
+      console.error("Shadow hook error:", err);
     }
 
+    return shadow;
+  };
+
+  // Your callback: runs *only for shadow DOM*
+  function onShadowCreated(host, shadowRoot, init) {
+    console.log("Shadow DOM detected on:", host);
+    console.log("Mode:", init.mode); // "open" or "closed"
+    console.log("Shadow root:", shadowRoot);
+
+    // If you want to skip closed shadows:
+    // if (init.mode === "closed") return;
+
+    // Example: add a marker attribute
+    // host.setAttribute("shadow-patched", "");
+
+    // Example: run logic only on specific components
+    // if (host.tagName === "MY-COMPONENT") { ... }
+  }
 })();

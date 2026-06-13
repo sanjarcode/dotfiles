@@ -9,11 +9,13 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    document.querySelectorAll(".vertical-mask").forEach(ele => ele.remove())
-    document.querySelectorAll(".h-60.overflow-hidden").forEach(ele => ele.setAttribute("class", "overflow-auto"))
-    document.querySelectorAll("img").forEach(ele => ele.remove())
-    // Your code here...
+  document.querySelectorAll(".vertical-mask").forEach((ele) => ele.remove());
+  document
+    .querySelectorAll(".h-60.overflow-hidden")
+    .forEach((ele) => ele.setAttribute("class", "overflow-auto"));
+  document.querySelectorAll("img").forEach((ele) => ele.remove());
+  // Your code here...
 })();

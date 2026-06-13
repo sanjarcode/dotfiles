@@ -38,18 +38,27 @@
 
       // click see more
       const basicDescriptionExpander = document.querySelector("#poExpander");
-      if (basicDescriptionExpander.querySelectorAll("[data-expanded='false']").length) {
-        basicDescriptionExpander.querySelector('#poToggleButton a').click();
+      if (
+        basicDescriptionExpander.querySelectorAll("[data-expanded='false']")
+          .length
+      ) {
+        basicDescriptionExpander.querySelector("#poToggleButton a").click();
       }
       const seeMoreLink = document.querySelector("#seeMoreDetailsLink");
-      seeMoreLink.onclick = () => { const prodDetails = document.querySelector("#prodDetails");
-        prodDetails.querySelectorAll("a[aria-expanded='false']").forEach(item => item.click());};
+      seeMoreLink.onclick = () => {
+        const prodDetails = document.querySelector("#prodDetails");
+        prodDetails
+          .querySelectorAll("a[aria-expanded='false']")
+          .forEach((item) => item.click());
+      };
       const productDetailsButton = document.createElement("button");
       productDetailsButton.textContent = "Spec";
       productDetailsButton.style.color = "blue";
       productDetailsButton.onclick = () => {
         const prodDetails = document.querySelector("#prodDetails");
-        prodDetails.querySelectorAll("a[aria-expanded='false']").forEach(item => item.click());
+        prodDetails
+          .querySelectorAll("a[aria-expanded='false']")
+          .forEach((item) => item.click());
         prodDetails.scrollIntoView();
         if (!backButton2Added) addBackButton2();
       };
@@ -81,14 +90,17 @@
       // document.querySelector("#product-summary").prepend(backButton);
       document
         .querySelector(
-          "#reviewsMedley > div > div.a-fixed-left-grid-col.a-col-right"
+          "#reviewsMedley > div > div.a-fixed-left-grid-col.a-col-right",
         )
         .prepend(backButton);
       // Your code here...
     }
     function convertCurrency(country = "in", params = {}) {
       debugger;
-      const { defaultCountry = "in", countryCurrencyMap = { "sa": 23.25, "ae": 22.86 } } = params;
+      const {
+        defaultCountry = "in",
+        countryCurrencyMap = { sa: 23.25, ae: 22.86 },
+      } = params;
       if (country === defaultCountry) return;
       const intoINR = countryCurrencyMap[country];
       document.querySelectorAll(".a-price-whole").forEach((ele) => {
@@ -99,7 +111,7 @@
     }
     async function getReturnPolicies({ limit = Infinity } = {}) {
       const listing = Array.from(
-        document.querySelectorAll("[data-cy='title-recipe'] a[href*='/']")
+        document.querySelectorAll("[data-cy='title-recipe'] a[href*='/']"),
       );
 
       // Create a hidden container if it doesn't already exist
@@ -115,7 +127,7 @@
         listing.slice(0, limit).map(async (item, i) => {
           const itemLink = new URL(
             item.getAttribute("href"),
-            window.location.origin
+            window.location.origin,
           ).href;
           const itemPage = await (await fetch(itemLink)).text();
           await window.waitForMilliseconds(100);
@@ -127,7 +139,7 @@
 
           // Query and extract the relevant section
           const relevantContent = offscreenNewDiv.querySelector(
-            ".a-carousel-has-buttons:has([data-name='FREE_DELIVERY'])"
+            ".a-carousel-has-buttons:has([data-name='FREE_DELIVERY'])",
           );
           if (relevantContent) {
             const newDiv = document.createElement("div");
@@ -144,14 +156,17 @@
 
           // Clean up the temporary content in the hidden container
           hiddenContainer.removeChild(offscreenNewDiv);
-        })
+        }),
       );
     }
 
     const IN_LISTING = !!document.querySelector("[id*='refinements']");
     window.attachToSanjarWindow(getReturnPolicies, { callOnce: IN_LISTING });
     window.attachToSanjarWindow(addReviewAndInfo, { callOnce: !IN_LISTING });
-    window.attachToSanjarWindow(convertCurrency, window.location.host.split(".").at(-1));
+    window.attachToSanjarWindow(
+      convertCurrency,
+      window.location.host.split(".").at(-1),
+    );
   }
 
   const interval = setInterval(() => {

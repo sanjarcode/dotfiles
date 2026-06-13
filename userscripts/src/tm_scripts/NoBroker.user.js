@@ -22,7 +22,7 @@
           textBox.value = "Volopa";
           await window.waitForMilliseconds(200);
           const dropdownElement = document.querySelector(
-            "#autocomplete-dropdown-container > [role='option']"
+            "#autocomplete-dropdown-container > [role='option']",
           );
           dropdownElement.click();
         } catch (e) {
@@ -38,8 +38,8 @@
         const tickerDiv = document.createElement("div");
         tickerDiv.appendChild(
           document.createTextNode(
-            window.location.pathname.split("/").at(-2).substring(-6)
-          )
+            window.location.pathname.split("/").at(-2).substring(-6),
+          ),
         );
         tickerDiv.style.color = "red";
         tickerDiv.style.fontWeight = 700;
@@ -60,7 +60,7 @@
         true,
         () => {
           document.querySelector("#getDirection").focus();
-        }
+        },
       );
     }
 

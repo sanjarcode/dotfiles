@@ -10,31 +10,34 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    function saveForm() {
-        document.querySelectorAll("form").forEach(form => {
-            form.addEventListener("submit", (e) => {
-                e.preventDefault(); // optional, block native submit
-                console.log("Form submitted");
+  function saveForm() {
+    document.querySelectorAll("form").forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (e) => {
+          e.preventDefault(); // optional, block native submit
+          console.log("Form submitted");
 
-                // collect form data
-                const fd = new FormData(form);
-                const data = {};
-                for (const [key, value] of fd.entries()) {
-                    data[key] = value;
-                }
+          // collect form data
+          const fd = new FormData(form);
+          const data = {};
+          for (const [key, value] of fd.entries()) {
+            data[key] = value;
+          }
 
-                console.log("Collected data:", data);
-                localStorage.setItem("filledForm", JSON.stringify(data));
+          console.log("Collected data:", data);
+          localStorage.setItem("filledForm", JSON.stringify(data));
 
-                // allow real submission if needed
-                // form.submit();
-            }, true); // capture = true ensures middleware runs first
-        });
-    }
+          // allow real submission if needed
+          // form.submit();
+        },
+        true,
+      ); // capture = true ensures middleware runs first
+    });
+  }
 
-    window.saveForm = saveForm;
-
+  window.saveForm = saveForm;
 })();

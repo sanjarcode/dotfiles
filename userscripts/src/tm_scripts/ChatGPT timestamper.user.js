@@ -20,8 +20,8 @@
   function main() {
     function mutateFetch({
       routePattern = "",
-      preRun = () => { },
-      postRun = () => { },
+      preRun = () => {},
+      postRun = () => {},
     } = {}) {
       const originalFetch = window.fetch;
 
@@ -57,9 +57,12 @@
     // Example usage:
     mutateFetch({
       routePattern: (url) => {
-        const value = url.includes("backend-api/conversation") &&
+        const value =
+          url.includes("backend-api/conversation") &&
           !url.includes("backend-api/conversation/init") &&
-          !url.includes("textdocs"); console.log({ value, url }); return value;
+          !url.includes("textdocs");
+        console.log({ value, url });
+        return value;
       },
       // preRun: async (url, options) => {
       //     // Add any manipulation or logging here before the fetch call
@@ -74,7 +77,7 @@
             if (data?.conversation_id) {
               const bubblesData = data.mapping;
               const bubblesNodes = document.querySelectorAll(
-                "[data-message-id][data-message-author-role]"
+                "[data-message-id][data-message-author-role]",
               );
               let firstTime, lastTime, totalTime;
               bubblesNodes.forEach((bubbleNode, idx, { length }) => {
@@ -84,7 +87,7 @@
 
                 const role = currentData?.message?.author?.role;
                 const createTime = new Date(
-                  currentData?.message?.create_time * 1000 || ""
+                  currentData?.message?.create_time * 1000 || "",
                 );
 
                 const newDiv = document.createElement("div");
@@ -124,10 +127,10 @@
 
               totalTimeDiv.textContent = `${timeDifference(
                 lastTime,
-                firstTime
+                firstTime,
               )} since ${firstTime.toLocaleTimeString()}`; // formatTimeDifference(lastTime, firstTime);
               const switcherNode = document.querySelector(
-                "div:has(> [data-testid='share-chat-button'])"
+                "div:has(> [data-testid='share-chat-button'])",
               );
               switcherNode.prepend(totalTimeDiv);
               totalTimeDiv.style.color = "greenyellow";
@@ -137,14 +140,14 @@
             debugger;
             const payload = JSON.parse(options.body);
             const createTime = new Date(
-              payload.messages[0].create_time * 1000 || ""
+              payload.messages[0].create_time * 1000 || "",
             );
             const bubbleId = payload.messages[0].id;
             const newDiv = document.createElement("div");
             newDiv.textContent = createTime.toLocaleTimeString();
 
             const bubbleNode = document.querySelector(
-              `[data-message-id='${bubbleId}']`
+              `[data-message-id='${bubbleId}']`,
             );
             bubbleNode.prepend(newDiv);
             newDiv.style.color = "green";
@@ -169,12 +172,13 @@
     }
 
     browser.webRequest.onBeforeRequest.addListener(logURL, {
-      urls: ["https://chatgpt.com/backend-api/conversation/9130fb8c-e454-4158-9f35-e3d0367c769f"],
+      urls: [
+        "https://chatgpt.com/backend-api/conversation/9130fb8c-e454-4158-9f35-e3d0367c769f",
+      ],
     });
   }
 
   function httpInterceptor() {
-
     // console.log("GM_info.relaxedCsp: ", GM_info.relaxedCsp);
     // console.log("GM_info.sandboxMode: ", GM_info.sandboxMode)
 
@@ -183,26 +187,31 @@
 
     root.fetch = function (...args) {
       const url = args[0];
-      console.log({url});
+      console.log({ url });
       const options = args[1] || {};
 
-      console.log('Intercepted fetch request:', url, options);
+      console.log("Intercepted fetch request:", url, options);
 
-      return originalFetch.apply(this, args).then(response => {
+      return originalFetch.apply(this, args).then((response) => {
         // Clone the response, as it can only be read once.
         const clonedResponse = response.clone();
 
         // Log the response details.
-        console.log('Fetch response:', clonedResponse);
+        console.log("Fetch response:", clonedResponse);
 
         // If you want to log the JSON content, you'll need to clone and read it.
-        if (clonedResponse.headers.get('Content-Type') && clonedResponse.headers.get('Content-Type').includes('application/json')) {
-          clonedResponse.json().then(json => {
-            console.log('Fetch response JSON:', json);
+        if (
+          clonedResponse.headers.get("Content-Type") &&
+          clonedResponse.headers
+            .get("Content-Type")
+            .includes("application/json")
+        ) {
+          clonedResponse.json().then((json) => {
+            console.log("Fetch response JSON:", json);
           });
         } else {
-          clonedResponse.text().then(text => {
-            console.log('Fetch response text:', text);
+          clonedResponse.text().then((text) => {
+            console.log("Fetch response text:", text);
           });
         }
 
@@ -223,7 +232,7 @@
       // main();
       console.log("Fine");
     } catch (e) {
-      console.log({ e })
+      console.log({ e });
     }
   }, 100);
 })();

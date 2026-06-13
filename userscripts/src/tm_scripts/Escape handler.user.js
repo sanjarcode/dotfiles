@@ -10,11 +10,18 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-
-    function autoClose() { if (Boolean(new URLSearchParams(window.location.search).get("sanjar_close") || window.location.origin == "null")) window.close() };
-    autoClose();
-    // Your code here...
+  function autoClose() {
+    if (
+      Boolean(
+        new URLSearchParams(window.location.search).get("sanjar_close") ||
+        window.location.origin == "null",
+      )
+    )
+      window.close();
+  }
+  autoClose();
+  // Your code here...
 })();

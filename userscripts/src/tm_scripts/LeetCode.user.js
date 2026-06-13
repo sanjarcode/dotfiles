@@ -25,13 +25,21 @@
     function addButtons() {
       const IS_DIFFICULTY_HIDDEN_VARIABLE = `--isDifficultyHidden`;
       function setStyles(isSwitch = false) {
-        const existingValue = localStorage.getItem(IS_DIFFICULTY_HIDDEN_VARIABLE) || "initial";
-        const newValue = isSwitch ? (existingValue == "initial" ? "none" : "initial") : (existingValue);
+        const existingValue =
+          localStorage.getItem(IS_DIFFICULTY_HIDDEN_VARIABLE) || "initial";
+        const newValue = isSwitch
+          ? existingValue == "initial"
+            ? "none"
+            : "initial"
+          : existingValue;
         localStorage.setItem(IS_DIFFICULTY_HIDDEN_VARIABLE, newValue);
         const root = document.documentElement; // Get the root element (html)
 
         // Set a CSS variable
-        root.style.setProperty(IS_DIFFICULTY_HIDDEN_VARIABLE, localStorage.getItem(IS_DIFFICULTY_HIDDEN_VARIABLE));
+        root.style.setProperty(
+          IS_DIFFICULTY_HIDDEN_VARIABLE,
+          localStorage.getItem(IS_DIFFICULTY_HIDDEN_VARIABLE),
+        );
       }
 
       setStyles(false);
@@ -41,7 +49,7 @@
           "border: 1px solid chocolate; padding: 4px; border-radius: 4px; margin-left: auto; margin-right: 4px; background-color: gray;",
         selector: "*[data-track-load='description_content']",
         onClick: () => {
-          setStyles(true)
+          setStyles(true);
         },
       });
 
@@ -52,7 +60,7 @@
         selector: "*[data-track-load='description_content']",
         onClick: () => {
           const problemDescription = document.querySelector(
-            "*[data-track-load='description_content']"
+            "*[data-track-load='description_content']",
           )?.textContent;
           const problemCopyText = `# Problem\n\n${problemDescription}`;
 
@@ -67,7 +75,7 @@
         selector: "*[data-track-load='description_content']",
         onClick: () => {
           const codeSolution = Array.from(
-            document.querySelectorAll("[role='code'] .view-line")
+            document.querySelectorAll("[role='code'] .view-line"),
           )
             .map((lineNode) => lineNode?.textContent)
             .join("\n");
@@ -84,12 +92,12 @@
         selector: "*[data-track-load='description_content']",
         onClick: () => {
           const problemDescription = document.querySelector(
-            "*[data-track-load='description_content']"
+            "*[data-track-load='description_content']",
           )?.textContent;
           const problemCopyText = `# Problem\n\n${problemDescription}`;
 
           const codeSolution = Array.from(
-            document.querySelectorAll("[role='code'] .view-line")
+            document.querySelectorAll("[role='code'] .view-line"),
           )
             .map((lineNode) => lineNode?.textContent)
             .join("\n");
@@ -97,7 +105,7 @@
 
           window.copyToClipboard(
             [problemCopyText, codeCopyText].join("\n\n---\n\n") + "\n---\n",
-            "Both copied"
+            "Both copied",
           );
         },
       });
@@ -107,13 +115,12 @@
           "border: 1px solid yellow; padding: 4px; border-radius: 4px; margin-left: auto; margin-right: 4px; background-color: gray;",
         selector: "*[data-track-load='description_content']",
         onClick: () => {
-          const problemDescription = document.querySelector(
-            ".EasyMDEContainer"
-          )?.textContent;
+          const problemDescription =
+            document.querySelector(".EasyMDEContainer")?.textContent;
           const problemCopyText = `# Problem\n\n${problemDescription}`;
 
           const codeSolution = Array.from(
-            document.querySelectorAll("[role='code'] .view-line")
+            document.querySelectorAll("[role='code'] .view-line"),
           )
             .map((lineNode) => lineNode?.textContent)
             .join("\n");
@@ -121,7 +128,7 @@
 
           window.copyToClipboard(
             [problemCopyText, approachCopyText].join("\n\n---\n\n") + "\n---\n",
-            "Both copied"
+            "Both copied",
           );
         },
       });
@@ -133,7 +140,7 @@
 
       const onFocus = () => {
         const alarmClockElement = document.querySelector(
-          '[data-icon="alarm-clock"]'
+          '[data-icon="alarm-clock"]',
         );
         if (alarmClockElement) {
           alarmClockElement.click(); // Click the alarm clock element
@@ -147,13 +154,22 @@
 
     async function addEditorialSectionLinks() {
       await window.wait(2000);
-      const solutionLinks = Array.from(document.querySelectorAll(`[class*="group/heading"][id*='approach']`)).map(item => `<a href="#${item.id}">${item.textContent}</a>`).join("<br />");
+      const solutionLinks = Array.from(
+        document.querySelectorAll(`[class*="group/heading"][id*='approach']`),
+      )
+        .map((item) => `<a href="#${item.id}">${item.textContent}</a>`)
+        .join("<br />");
       document.querySelector("#solution").innerHTML += "<br />" + solutionLinks;
     }
 
     function addEditorialPageLink() {
-      const div = document.querySelector(`div:has(> * > * > [data-icon="lightbulb"])`);
-      const editorialLink = structuredClone(window.location.href).replace("description", "editorial");
+      const div = document.querySelector(
+        `div:has(> * > * > [data-icon="lightbulb"])`,
+      );
+      const editorialLink = structuredClone(window.location.href).replace(
+        "description",
+        "editorial",
+      );
       div.innerHTML += `<a href="${editorialLink}" target="_blank" style="color: red; text-decoration: underline;">Editorial</a>`;
     }
   }

@@ -10,7 +10,10 @@
 // ==/UserScript==
 
 (function () {
-    'use strict';
+  "use strict";
 
-    window.uploadFile('input#resume', 'http://localhost:8085/sanjar-afaq-resume.pdf');
+  window.uploadFile(
+    "input#resume",
+    "http://localhost:8085/sanjar-afaq-resume.pdf",
+  );
 })();

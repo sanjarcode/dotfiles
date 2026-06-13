@@ -29,8 +29,8 @@
         const tickerDiv = document.createElement("div");
         tickerDiv.appendChild(
           document.createTextNode(
-            window.location.pathname.split("&id=").at(-1).substring(-4)
-          )
+            window.location.pathname.split("&id=").at(-1).substring(-4),
+          ),
         );
         tickerDiv.style.color = "red";
         tickerDiv.style.fontWeight = 700;
@@ -77,7 +77,7 @@
               .filter(
                 (entry) =>
                   entry.initiatorType === "img" &&
-                  entry.name.includes(".staticmb.")
+                  entry.name.includes(".staticmb."),
               )
               .map((entry) => entry.name);
 
@@ -87,7 +87,7 @@
                 window.open(imageUrl, "_blank");
                 console.log(imageUrl);
               });
-          }
+          },
         );
       }, 1000);
     }
@@ -108,7 +108,7 @@
         listing.slice(0, limit).map(async (item, i) => {
           const itemLink = JSON.parse(
             item.querySelector('script[type="application/ld+json"]')
-              ?.textContent || "{}"
+              ?.textContent || "{}",
           )["@id"];
           const itemPage = await (await fetch(itemLink)).text();
           await window.waitForMilliseconds(100);
@@ -137,7 +137,7 @@
 
           // Clean up the temporary content in the hidden container
           hiddenContainer.removeChild(offscreenNewDiv);
-        })
+        }),
       );
     }
 

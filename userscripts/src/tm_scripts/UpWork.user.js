@@ -9,16 +9,20 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    function markRichPeople() {
-        document.querySelectorAll(`[data-test="formatted-amount"]`).forEach(item => item.setAttribute("rich", item.textContent.toLowerCase().includes("k")));
-    }
+  function markRichPeople() {
+    document
+      .querySelectorAll(`[data-test="formatted-amount"]`)
+      .forEach((item) =>
+        item.setAttribute("rich", item.textContent.toLowerCase().includes("k")),
+      );
+  }
 
-    setInterval(markRichPeople, 2*1000);
+  setInterval(markRichPeople, 2 * 1000);
 
-    window.markRichPeople = markRichPeople;
+  window.markRichPeople = markRichPeople;
 
-    // Your code here...
+  // Your code here...
 })();

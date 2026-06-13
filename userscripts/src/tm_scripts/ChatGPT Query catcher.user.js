@@ -10,7 +10,7 @@
 // ==/UserScript==
 
 (function () {
-  'use strict';
+  "use strict";
 
   window.isSiteLoaded(() => {
     const url = new URL(window.location.href);
@@ -30,7 +30,7 @@
         btn.click();
       }
     } else {
-      console.log("No prompt found, nothing to do")
+      console.log("No prompt found, nothing to do");
     }
   });
 })();

@@ -12,17 +12,17 @@
 (function () {
   "use strict";
 
-   const NEGATIVE_FILTERS = [
-      "female",
-      "varthur",
-      "sarjapur",
-      "aecs",
-      "hsr",
-      "bellandur",
-      "Marathahalli",
-      "Thippasandra",
-      "Tippasandra"
-    ].map((item) => item.toLowerCase());
+  const NEGATIVE_FILTERS = [
+    "female",
+    "varthur",
+    "sarjapur",
+    "aecs",
+    "hsr",
+    "bellandur",
+    "Marathahalli",
+    "Thippasandra",
+    "Tippasandra",
+  ].map((item) => item.toLowerCase());
 
   async function post(post) {
     post.classList.add("tm_flash");
@@ -56,7 +56,9 @@
   }
   function processPosts() {
     window.setInterval(() => {
-      Array.from(document.querySelector(`[role="feed"]`).children).forEach(post);
+      Array.from(document.querySelector(`[role="feed"]`).children).forEach(
+        post,
+      );
     }, 1000);
   }
 

@@ -10,16 +10,16 @@
 // ==/UserScript==
 
 (function () {
-    'use strict';
+  "use strict";
 
-    async function close() {
-        if (window.location.search.includes("closeFast")) {
-            await window.wait(1000);
-            window.close();
-        }
+  async function close() {
+    if (window.location.search.includes("closeFast")) {
+      await window.wait(1000);
+      window.close();
     }
+  }
 
-    // close();
+  // close();
 
-    // Your code here...
+  // Your code here...
 })();

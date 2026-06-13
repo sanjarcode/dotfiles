@@ -10,19 +10,18 @@
 // @resource stylebot_data https://drive.google.com/uc?id=1OE_C4lFkOo9yUlryZbEaMjebGjFCVG7q
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
+  function injectStyle(css) {
+    const style = document.createElement("style");
+    style.type = "text/css";
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+  }
 
-    function injectStyle(css) {
-        const style = document.createElement("style");
-        style.type = "text/css";
-        style.appendChild(document.createTextNode(css));
-        document.head.appendChild(style);
-    }
-
-    // Example usage:
-    injectStyle(`
+  // Example usage:
+  injectStyle(`
   body {
     background-color: #111;
     color: #eee;
@@ -32,9 +31,11 @@
   }
 `);
 
-    const jsonText = GM_getResourceText('stylebot_data');
-    const perplexityStyles = Object.entries(JSON.parse(jsonText)).find(([k, v]) => k.includes("perplexity.ai"))?.[1]?.css;
-    injectStyle(perplexityStyles);
-    console.log({perplexityStyles});
-    // Your code here...
+  const jsonText = GM_getResourceText("stylebot_data");
+  const perplexityStyles = Object.entries(JSON.parse(jsonText)).find(([k, v]) =>
+    k.includes("perplexity.ai"),
+  )?.[1]?.css;
+  injectStyle(perplexityStyles);
+  console.log({ perplexityStyles });
+  // Your code here...
 })();
