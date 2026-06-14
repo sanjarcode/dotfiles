@@ -16,7 +16,7 @@
   const FEED_SELECTOR = `[role="feed"]`;
 
 
-  async function getRelevance(post, USE_AI = true, MINIMUM_RELEVANCE = 3) {
+  async function getRelevance(post, USE_AI = false, MINIMUM_RELEVANCE = 3) {
     const NEGATIVE_FILTERS = [
       "female",
       "varthur",
