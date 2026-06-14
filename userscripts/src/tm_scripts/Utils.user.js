@@ -174,7 +174,7 @@
         const resp = await (
           await window.fetch(
             `http://localhost:8321/exec?command=` +
-              window.encodeURIComponent(`dial ${phoneNumber}`),
+            window.encodeURIComponent(`dial ${phoneNumber}`),
           )
         ).json();
         window.showNotification("Dial succesful ✅ ", phoneNumber);
@@ -299,7 +299,7 @@
     selector = "",
     label = "butttton",
     prepend = true,
-    onClick = () => {},
+    onClick = () => { },
     style = "",
   } = {}) {
     const buttonParent = document.querySelectorAll(selector)[0];
@@ -338,7 +338,7 @@
     buttonParentSelector,
     text = "Go to",
     prepend = true,
-    afterOnClick = () => {},
+    afterOnClick = () => { },
   ) {
     const targetView = document.querySelector(targetViewSelector);
 
@@ -380,7 +380,7 @@
     buttonParentSelector,
     text = "Go to",
     prepend = true,
-    onClick = () => {},
+    onClick = () => { },
   ) {
     const targetView = document.querySelector(targetViewSelector);
 
@@ -649,7 +649,7 @@
    * @param {*} freq
    */
   async function isSiteLoaded(
-    f = () => {},
+    f = () => { },
     extraCriteria = () => true,
     timeout = 1000,
     freq = 10,
@@ -1212,6 +1212,79 @@
     element.classList.remove("tm_flash");
   }
 
+  async function ai(
+    prompt,
+    systemPrompt = "",
+    params = {},
+    // JSON Schema for structured output. Common types:
+    //   { type: "boolean" }                          → true / false
+    //   { type: "number" }                           → numeric value
+    //   { type: "string" }                           → plain string
+    //   { type: "string", enum: ["a", "b", "c"] }   → one of a fixed set
+    //   { type: "object", properties: { ... } }      → structured object
+    //   { type: "array", items: { type: "string" } } → list of values
+    schema = { type: "string" },
+  ) {
+    // Check model availability
+    const availability = await LanguageModel.availability({
+      expectedInputs: [{ type: "text", languages: ["en"] }],
+      expectedOutputs: [{ type: "text", languages: ["en"] }],
+    });
+
+    if (availability === "unavailable") {
+      throw new Error("Language model is not available on this device.");
+    }
+
+    // Build session options
+    const sessionOptions = {};
+
+    if (systemPrompt) {
+      sessionOptions.initialPrompts = [
+        { role: "system", content: systemPrompt },
+      ];
+    }
+
+    // Apply optional model parameters (Chrome Extensions / Origin Trial only)
+    if (params.temperature !== undefined)
+      sessionOptions.temperature = params.temperature;
+    if (params.topK !== undefined) sessionOptions.topK = params.topK;
+    if (params.signal !== undefined) sessionOptions.signal = params.signal;
+
+    const session = await LanguageModel.create(sessionOptions);
+
+    // Build prompt options
+    const promptOptions = { responseConstraint: schema };
+    if (params.signal !== undefined) promptOptions.signal = params.signal;
+
+    const result = await session.prompt(prompt, promptOptions);
+    session.destroy();
+    return JSON.parse(result);
+  }
+
+  function aidemo() {
+    // Basic usage
+    const reply = await ai("What is the capital of France?");
+
+    // With a system prompt
+    const reply = await ai("What is the capital of France?", "You are a concise geography tutor.");
+
+    // With parameters (Chrome Extensions / Origin Trial only)
+    const reply = await ai(
+      "Write a creative story opener.",
+      "You are a creative writing assistant.",
+      { temperature: 1.5, topK: 8 }
+    );
+
+    // With structured JSON output
+    const schema = { type: "boolean" };
+    const reply = await ai(
+      "Is this about cooking? 'I grilled some salmon tonight.'",
+      "",
+      { responseConstraint: schema }
+    );
+    console.log(JSON.parse(reply)); // true or false
+  }
+
   window.attachToSanjarWindow(wait);
   window.attachToSanjarWindow(flash);
   window.attachToSanjarWindow(sleep);
@@ -1264,6 +1337,10 @@
   window.attachToSanjarWindow(formatRelativeDate);
   window.attachToSanjarWindow(dateDiff);
   window.attachToSanjarWindow(uploadFile);
+  window.attachToSanjarWindow(setupAI);
+  window.attachToSanjarWindow(useAI);
+  window.attachToSanjarWindow(ai);
   window.showNotification("TM: Utils attached", 500);
+
   // Your code here...
 })();
