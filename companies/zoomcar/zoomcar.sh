@@ -151,3 +151,89 @@ klog() {
 }
 
 alias kauth="gcloud auth login"
+
+jd() {
+    # 1. Help message
+    if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+        echo "Jenkins Deployer (jd) CLI Helper"
+        echo "==============================="
+        echo "Usage (Interactive): jd"
+        echo "Usage (Manual):      jd <service> <environment> <branch> [--bundle]"
+        echo ""
+        echo "Services: api, admin, solomon, console"
+        echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
+        return 0
+    fi
+
+    # 2. Check if required environment variables are already active
+    if [ -z "$ZOOMCAR_JENKINS_USERNAME" ] || [ -z "$ZOOMCAR_JENKINS_PASSWORD" ]; then
+        echo "Error: ZOOMCAR_JENKINS_USERNAME or ZOOMCAR_JENKINS_PASSWORD is not set in your current environment." >&2
+        return 1
+    fi
+
+    # Define menu options for the interactive mode
+    local SERVICES="api\nadmin\nsolomon\nconsole"
+    local ENVIRONMENTS="qa1\nqa2\nqa3\nstaging"
+    local BRANCHES="qa1_staging\nqa2_staging\nqa3_staging\nmaster\ndevelop"
+
+    local SERVICE_KEY="$1"
+    local ENV="$2"
+    local BRANCH="$3"
+    local BUNDLE_ARG="$4"
+
+    # 3. Interactive Mode (invoked if arguments are missing)
+    if [ -z "$SERVICE_KEY" ] || [ -z "$ENV" ] || [ -z "$BRANCH" ]; then
+        if ! command -v fzf &> /dev/null; then
+            echo "Error: 'fzf' is not installed. Provide all arguments manually or install fzf." >&2
+            echo "Usage: jd <service> <environment> <branch> [--bundle]" >&2
+            return 1
+        fi
+
+        echo "--- Interactive Deployment Configurator ---"
+
+        SERVICE_KEY=$(echo -e "$SERVICES" | fzf --prompt="Select Service > " --height=10% --layout=reverse)
+        [ -z "$SERVICE_KEY" ] && { echo "Cancelled."; return 0; }
+
+        ENV=$(echo -e "$ENVIRONMENTS" | fzf --prompt="Select Environment > " --height=10% --layout=reverse)
+        [ -z "$ENV" ] && { echo "Cancelled."; return 0; }
+
+        BRANCH=$(echo -e "$BRANCHES" | fzf --prompt="Select Branch > " --height=12% --layout=reverse)
+        [ -z "$BRANCH" ] && { echo "Cancelled."; return 0; }
+
+        local CHOSE_BUNDLE=$(echo -e "No\nYes" | fzf --prompt="Require Bundle Install? > " --height=8% --layout=reverse)
+        if [[ "$CHOSE_BUNDLE" == "Yes" ]]; then
+            BUNDLE_ARG="--bundle"
+        fi
+    fi
+
+    # 4. Map the service shortcut to the actual Jenkins Job Name
+    local JOB_NAME=""
+    case "$SERVICE_KEY" in
+        api)     JOB_NAME="nonprd-cmn-api-CI" ;;
+        admin)   JOB_NAME="nonprd-cmn-admin-CI" ;;
+        solomon) JOB_NAME="nonprod-solomon-CI" ;;
+        console) JOB_NAME="nonprd-cmn-api-console-CI" ;;
+        *)
+            echo "Error: Unknown service '$SERVICE_KEY'. Run 'jd --help' for options." >&2
+            return 1
+            ;;
+    esac
+
+    # 5. Parse the bundle option
+    local BUNDLE_INSTALL="false"
+    if [[ "$BUNDLE_ARG" == "--bundle" ]]; then
+        BUNDLE_INSTALL="true"
+    fi
+
+    # 6. Execute Jenkins command
+    echo ""
+    echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL]..."
+    echo ""
+
+    java -jar jenkins-cli.jar -s https://nonprod-jenkins.zoomcartest.com/ \
+        -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" \
+        build "$JOB_NAME" \
+        -p ENVIRONMENT="$ENV" \
+        -p BRANCH="$BRANCH" \
+        -p REQUIRE_BUNDLE_INSTALL="$BUNDLE_INSTALL"
+}
