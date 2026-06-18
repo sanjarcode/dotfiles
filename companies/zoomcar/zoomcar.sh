@@ -158,14 +158,30 @@ jd() {
         echo "Jenkins Deployer (jd) CLI Helper"
         echo "==============================="
         echo "Usage (Interactive): jd"
-        echo "Usage (Manual):      jd <service> <environment> <branch> [--bundle]"
+        echo "Usage (Short Form):  jd <service> <environment> [--bundle]"
+        echo "Usage (Long Form):   jd <service> <environment> <env_repeat> <branch> [--bundle]"
         echo ""
         echo "Services: api, admin, solomon, console"
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
         return 0
     fi
 
-    # 2. Check if required environment variables are already active
+    # 2. Check for the Jenkins CLI jar dependency
+    local JAR_PATH="$HOME/.dotfiles/companies/zoomcar/jenkins-cli.jar"
+    if [ ! -f "$JAR_PATH" ]; then
+        echo "Error: jenkins-cli.jar missing at $JAR_PATH" >&2
+        echo "--------------------------------------------------------" >&2
+        echo "To fix this:"
+        echo "1. Log in to your Jenkins dashboard in the browser."
+        echo "2. Head over to: https://nonprod-jenkins.zoomcartest.com/cli"
+        echo "3. Download the 'jenkins-cli.jar' file."
+        echo "4. Create the target directory and move it there:"
+        echo "   mkdir -p ~/.dotfiles/companies/zoomcar/ && mv jenkins-cli.jar $JAR_PATH"
+        echo "--------------------------------------------------------" >&2
+        return 1
+    fi
+
+    # 3. Check if required environment variables are already active
     if [ -z "$ZOOMCAR_JENKINS_USERNAME" ] || [ -z "$ZOOMCAR_JENKINS_PASSWORD" ]; then
         echo "Error: ZOOMCAR_JENKINS_USERNAME or ZOOMCAR_JENKINS_PASSWORD is not set in your current environment." >&2
         return 1
@@ -178,14 +194,14 @@ jd() {
 
     local SERVICE_KEY="$1"
     local ENV="$2"
-    local BRANCH="$3"
-    local BUNDLE_ARG="$4"
+    local BRANCH=""
+    local BUNDLE_ARG=""
 
-    # 3. Interactive Mode (invoked if arguments are missing)
-    if [ -z "$SERVICE_KEY" ] || [ -z "$ENV" ] || [ -z "$BRANCH" ]; then
+    # 4. Interactive Mode (invoked if absolutely no arguments are passed)
+    if [ -z "$SERVICE_KEY" ]; then
         if ! command -v fzf &> /dev/null; then
-            echo "Error: 'fzf' is not installed. Provide all arguments manually or install fzf." >&2
-            echo "Usage: jd <service> <environment> <branch> [--bundle]" >&2
+            echo "Error: 'fzf' is not installed. Provide arguments manually or install fzf." >&2
+            echo "Usage: jd <service> <environment> [--bundle]" >&2
             return 1
         fi
 
@@ -204,9 +220,33 @@ jd() {
         if [[ "$CHOSE_BUNDLE" == "Yes" ]]; then
             BUNDLE_ARG="--bundle"
         fi
+    else
+        # 5. Route Positional Arguments Explicitly
+        if [ -z "$ENV" ]; then
+            echo "Error: Missing environment. Usage: jd <service> <environment> [--bundle]" >&2
+            return 1
+        fi
+
+        if [ -z "$3" ]; then
+            # E.g., jd api qa1
+            BRANCH="${ENV}_staging"
+        elif [[ "$3" == "--bundle" ]]; then
+            # E.g., jd api qa1 --bundle
+            BRANCH="${ENV}_staging"
+            BUNDLE_ARG="--bundle"
+        elif [ -n "$3" ] && [ -n "$4" ]; then
+            # E.g., jd api qa1 qa1 qa1_staging
+            # $3 is the repeated env name, $4 is the explicit branch target
+            BRANCH="$4"
+            BUNDLE_ARG="$5"
+        else
+            echo "Error: Invalid argument layout." >&2
+            echo "Use 'jd api qa1', 'jd api qa1 --bundle', or 'jd api qa1 qa1 qa1_staging'" >&2
+            return 1
+        fi
     fi
 
-    # 4. Map the service shortcut to the actual Jenkins Job Name
+    # 6. Map the service shortcut to the actual Jenkins Job Name
     local JOB_NAME=""
     case "$SERVICE_KEY" in
         api)     JOB_NAME="nonprd-cmn-api-CI" ;;
@@ -219,18 +259,18 @@ jd() {
             ;;
     esac
 
-    # 5. Parse the bundle option
+    # 7. Parse the bundle option
     local BUNDLE_INSTALL="false"
     if [[ "$BUNDLE_ARG" == "--bundle" ]]; then
         BUNDLE_INSTALL="true"
     fi
 
-    # 6. Execute Jenkins command
+    # 8. Execute Jenkins command
     echo ""
     echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL]..."
     echo ""
 
-    java -jar jenkins-cli.jar -s https://nonprod-jenkins.zoomcartest.com/ \
+    java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
         -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" \
         build "$JOB_NAME" \
         -p ENVIRONMENT="$ENV" \
