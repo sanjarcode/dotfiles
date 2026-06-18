@@ -299,6 +299,7 @@
     selector = "",
     label = "butttton",
     prepend = true,
+    attributes = {},
     onClick = () => { },
     style = "",
   } = {}) {
@@ -313,6 +314,9 @@
     // button.style.margin = "4px";
     button.style = style;
     button.onclick = onClick;
+    for (let attr_key in attributes) {
+      button.setAttribute(attr_key, attributes[attr_key]);
+    }
 
     window.addButtonOrderState ||= {};
     const currentButtonRow = window.addButtonOrderState; // current button row of same selector
