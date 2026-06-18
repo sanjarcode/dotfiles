@@ -76,10 +76,15 @@
     }
   }
 
-  async function processSinglePost(post) {
-    post.classList.add("tm_flash");
-    await window.wait(1000);
-    post.classList.remove("tm_flash");
+  async function processSinglePost(
+    post,
+    DEBUG = JSON.parse(localStorage.getItem("tm_debug") || "false"),
+  ) {
+    if (DEBUG) {
+      post.classList.add("tm_flash");
+      await window.wait(1000);
+      post.classList.remove("tm_flash");
+    }
 
     if (post.getAttribute("tm_processed")) return;
 
