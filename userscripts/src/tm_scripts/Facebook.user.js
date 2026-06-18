@@ -13,7 +13,11 @@
 (function () {
   "use strict";
 
-  const FEED_SELECTOR = `[role="feed"]`;
+  const FEED_SELECTOR = `[data-pagelet="GroupFeed"] [role="feed"] [role="article"]`;
+  const BUTTON_BAR_SELECTOR = `div:has(> * > [aria-label="Send this to friends or post it on your profile."])`;
+  const AUTHOR_NAME_SELECTOR = `div[data-ad-rendering-role="profile_name"] a[role="link"] b > span`;
+  const SEEN_SET_KEY = "TM_SEEN_SET";
+
   const NEGATIVE_FILTERS = [
     "female",
     "varthur",
@@ -86,15 +90,36 @@
       post.classList.remove("tm_flash");
     }
 
+    const postHash =
+      "post:" + post.querySelector(AUTHOR_NAME_SELECTOR).textContent;
+
     if (post.getAttribute("tm_processed")) return;
 
+    // remove if seen
+    if (localStorage.getItem(postHash)) {
+      post.remove();
+      return;
+    }
+
     // expand
-    let moreButton = document
-      .querySelectorAll("[role='button']")
-      .forEach((button) => {
-        if (button.textContent.toLowerCase().includes("see more"))
-          button.click();
-      });
+    post.querySelectorAll("[role='button']").forEach((button) => {
+      if (button.textContent.toLowerCase().includes("see more")) button.click();
+    });
+
+    window.addButton({
+      parent: post,
+      selector: BUTTON_BAR_SELECTOR,
+      label: "👁️",
+      prepend: true,
+      attributes: {},
+      onClick: () => {
+        localStorage.setItem(postHash, true);
+        post.remove();
+      },
+      style: "margin-right: auto; cursor: pointer;",
+    });
+
+    // add seen button
 
     const relevanceObject = await getRelevance(post);
 
@@ -108,9 +133,7 @@
 
   function processAllPosts() {
     window.setInterval(() => {
-      Array.from(document.querySelector(FEED_SELECTOR).children).forEach(
-        processSinglePost,
-      );
+      document.querySelectorAll(FEED_SELECTOR).forEach(processSinglePost);
     }, 1000);
   }
 

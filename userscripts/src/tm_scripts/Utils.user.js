@@ -296,6 +296,7 @@
   }
 
   function addButton({
+    parent = null,
     selector = "",
     label = "butttton",
     prepend = true,
@@ -303,7 +304,7 @@
     onClick = () => { },
     style = "",
   } = {}) {
-    const buttonParent = document.querySelectorAll(selector)[0];
+    const buttonParent = (parent || document).querySelectorAll(selector)[0];
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = typeof label === typeof "" ? label : label();
@@ -1265,15 +1266,15 @@
     return JSON.parse(result);
   }
 
-  function aidemo() {
+  async function aidemo() {
     // Basic usage
     const reply = await ai("What is the capital of France?");
 
     // With a system prompt
-    const reply = await ai("What is the capital of France?", "You are a concise geography tutor.");
+    const reply2 = await ai("What is the capital of France?", "You are a concise geography tutor.");
 
     // With parameters (Chrome Extensions / Origin Trial only)
-    const reply = await ai(
+    const reply3 = await ai(
       "Write a creative story opener.",
       "You are a creative writing assistant.",
       { temperature: 1.5, topK: 8 }
@@ -1281,7 +1282,7 @@
 
     // With structured JSON output
     const schema = { type: "boolean" };
-    const reply = await ai(
+    const reply4 = await ai(
       "Is this about cooking? 'I grilled some salmon tonight.'",
       "",
       { responseConstraint: schema }
@@ -1341,8 +1342,6 @@
   window.attachToSanjarWindow(formatRelativeDate);
   window.attachToSanjarWindow(dateDiff);
   window.attachToSanjarWindow(uploadFile);
-  window.attachToSanjarWindow(setupAI);
-  window.attachToSanjarWindow(useAI);
   window.attachToSanjarWindow(ai);
   window.showNotification("TM: Utils attached", 500);
 
