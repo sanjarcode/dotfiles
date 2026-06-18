@@ -58,7 +58,7 @@
 
   }
 
-  async function postManual(post) {
+  async function processSinglePost(post) {
     post.classList.add("tm_flash");
     await window.wait(1000);
     post.classList.remove("tm_flash");
@@ -84,14 +84,14 @@
     post.setAttribute("tm_processed", true);
   }
 
-  function processPosts() {
+  function processAllPosts() {
     window.setInterval(() => {
-      Array.from(document.querySelector(FEED_SELECTOR).children).forEach(postManual);
+      Array.from(document.querySelector(FEED_SELECTOR).children).forEach(processSinglePost);
     }, 1000);
   }
 
-  window.processPosts = processPosts;
-  processPosts();
+  window.processPosts = processAllPosts;
+  processAllPosts();
 
   // Your code here...
 })();
