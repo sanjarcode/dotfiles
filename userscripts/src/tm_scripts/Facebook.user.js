@@ -14,48 +14,66 @@
   "use strict";
 
   const FEED_SELECTOR = `[role="feed"]`;
-
+  const NEGATIVE_FILTERS = [
+    "female",
+    "varthur",
+    "sarjapur",
+    "aecs",
+    "hsr",
+    "bellandur",
+    "Marathahalli",
+    "Thippasandra",
+    "Tippasandra",
+  ]; // must not be there
+  const POSITIVE_FILTERS = ["indiranagar", "domlur"]; // must be there
 
   async function getRelevance(post, USE_AI = false, MINIMUM_RELEVANCE = 3) {
-    const NEGATIVE_FILTERS = [
-      "female",
-      "varthur",
-      "sarjapur",
-      "aecs",
-      "hsr",
-      "bellandur",
-      "Marathahalli",
-      "Thippasandra",
-      "Tippasandra"
-    ].map((item) => item.toLowerCase()); // must not be there
-    const POSITIVE_FILTERS = ["indiranagar", "domlur"]; // must be there
-
     if (USE_AI) {
-      const SYSTEM_PROMPT = "I am a male working professional looking for a flat to rent for price between 16k to 28k INR. I eat non-veg. The relevance score of a property is a number out of 5 (worst being 0 out of 5 and best being 5 out of 5). The property needs to be in Indiranagar or Domlur.";
-      const relevanceScore = await window.ai(SYSTEM_PROMPT, "Rate this property: " + post.textContent, {}, { type: "number" });
-      return { irrelevant: relevanceScore > MINIMUM_RELEVANCE, score: relevanceScore, ai: USE_AI };
+      const SYSTEM_PROMPT =
+        "I am a male working professional looking for a flat to rent for price between 16k to 28k INR. I eat non-veg. The relevance score of a property is a number out of 5 (worst being 0 out of 5 and best being 5 out of 5). The property needs to be in Indiranagar or Domlur.";
+      const relevanceScore = await window.ai(
+        SYSTEM_PROMPT,
+        "Rate this property: " + post.textContent,
+        {},
+        { type: "number" },
+      );
+      return {
+        irrelevant: relevanceScore > MINIMUM_RELEVANCE,
+        score: relevanceScore,
+        ai: USE_AI,
+      };
     } else {
       const postText = post.textContent.toLowerCase();
-      let isNegative = false;
-      for (let negFilter of NEGATIVE_FILTERS) {
-        if (postText.toLowerCase().includes(negFilter)) {
-          isNegative = true;
-          break;
+
+      let isNegative;
+      if (NEGATIVE_FILTERS.length) {
+        isNegative = false;
+        for (let negFilter of NEGATIVE_FILTERS) {
+          if (postText.toLowerCase().includes(negFilter.toLowerCase())) {
+            isNegative = true;
+            break;
+          }
         }
+      } else {
+        isNegative = false;
       }
 
-      let isPositive = POSITIVE_FILTERS.length == 0;
-      for (let posFilter of POSITIVE_FILTERS) {
-        if (postText.toLowerCase().includes(posFilter)) {
-          isPositive = true;
-          break;
+      let isPositive;
+      if (POSITIVE_FILTERS.length) {
+        isPositive = false;
+        for (let posFilter of POSITIVE_FILTERS) {
+          if (postText.toLowerCase().includes(posFilter.toLowerCase())) {
+            isPositive = true;
+            break;
+          }
         }
+      } else {
+        isPositive = true;
       }
 
-      const isIrrelevant = !isPositive || isNegative;;
+      const isIrrelevant = !isPositive || isNegative;
       return { irrelevant: isIrrelevant, score: null, ai: USE_AI };
     }
-
   }
 
   async function processSinglePost(post) {
@@ -74,7 +92,6 @@
       });
 
     const relevanceObject = await getRelevance(post);
-    console.log({ relevanceObject });
 
     if (relevanceObject.irrelevant) {
       post.setAttribute("tm_irrelevant", true);
@@ -86,7 +103,9 @@
 
   function processAllPosts() {
     window.setInterval(() => {
-      Array.from(document.querySelector(FEED_SELECTOR).children).forEach(processSinglePost);
+      Array.from(document.querySelector(FEED_SELECTOR).children).forEach(
+        processSinglePost,
+      );
     }, 1000);
   }
 
