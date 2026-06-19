@@ -272,7 +272,7 @@ jd() {
 
     ## load java
     if [[ $(command -v sdk) ]]; then
-        sdk
+        sdk > /dev/null 2>&1
     fi
 
     java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
