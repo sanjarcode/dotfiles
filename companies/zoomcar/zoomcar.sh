@@ -270,6 +270,9 @@ jd() {
     echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL]..."
     echo ""
 
+    if [[ $(command -v sdk) ]]; then
+        sdk
+    fi
     java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
         -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" \
         build "$JOB_NAME" \
