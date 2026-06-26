@@ -152,6 +152,28 @@ klog() {
 
 alias kauth="gcloud auth login"
 
+# ZoomCar — create a GitHub PR against a standard base branch
+# Usage:
+#   zcpr qa1     → base: qa1_staging
+#   zcpr qa2     → base: qa2_staging
+#   zcpr master  → base: master
+zcpr() {
+  local target="${1:?Usage: zcpr <qa1|qa2|master>}"
+  local base
+
+  case "$target" in
+    qa1)    base="qa1_staging" ;;
+    qa2)    base="qa2_staging" ;;
+    master) base="master" ;;
+    *)
+      echo "Error: unknown target '$target'. Use qa1, qa2, or master." >&2
+      return 1
+      ;;
+  esac
+
+  gh pr create --base "$base" --repo ZoomCar/admin
+}
+
 jd() {
     # 1. Help message
     if [[ "$1" == "--help" || "$1" == "-h" ]]; then
