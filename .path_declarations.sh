@@ -6,9 +6,24 @@ export PATH="$PATH:/opt/homebrew/lib/ruby/gems/3.0.0/bin"
 
 ## ================== Post install variables
 
-if command -v pyenv &> /dev/null && type pyenv &> /dev/null; then
-    eval "$(pyenv init -)"
-    alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew' # To fix brew doctor's warning ""config" scripts exist outside your system or Homebrew directories" (https://github.com/pyenv/pyenv#:~:text=optional.%20to%20fix%20brew%20doctor's%20warning%20%22%22config)
+if command -v pyenv &> /dev/null; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/shims:$PATH"
+    # Lazy-load: full pyenv init (which runs rehash) only happens on first use.
+    # This avoids a 60-second hang when a stale rehash lock file exists.
+    _pyenv_lazy_load() {
+        unset -f pyenv python python3 pip pip3 _pyenv_lazy_load
+        # Clear any stale rehash lock before init to prevent 60s hangs
+        rm -f "$PYENV_ROOT/shims/.pyenv-shim" 2>/dev/null
+        eval "$(pyenv init -)"
+        alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+        pyenv "$@"
+    }
+    function pyenv()   { _pyenv_lazy_load "$@"; }
+    function python()  { _pyenv_lazy_load version; command python  "$@"; }
+    function python3() { _pyenv_lazy_load version; command python3 "$@"; }
+    function pip()     { _pyenv_lazy_load version; command pip     "$@"; }
+    function pip3()    { _pyenv_lazy_load version; command pip3    "$@"; }
 fi
 
 if command -v rbenv &> /dev/null && type rbenv &> /dev/null; then
