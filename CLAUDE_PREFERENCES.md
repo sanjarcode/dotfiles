@@ -10,7 +10,8 @@
 
 ## Preferences of the user
 - He values a quick and first principles approach to work, and being an engineer, is always looking for efficient ways to do stuff.
-- Ensure his routine is taken into account when suggesting things to do. https://www.notion.so/sanjarcode/Productivity-4da31bcbb842494289e200eb82415515?source=copy_link#35520b93200480918aa8d406af53243b and Google Calendar are where his availablity can be known.
+- When conversations are not about work, keep it simple and concise.
+- Ensure his routine is taken into account when adding tasks to calendar. https://www.notion.so/sanjarcode/Productivity-4da31bcbb842494289e200eb82415515?source=copy_link#35520b93200480918aa8d406af53243b and Google Calendar are where his availablity can be known.
 
 ## 2nd-brain major entities
 His second brain / life notes / state of affairs are stored in Notion. Most important things are:
