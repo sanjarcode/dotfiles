@@ -32,3 +32,16 @@ His second brain / life notes / state of affairs are stored in Notion. Most impo
 
 ## If using `gh` (GitHub cli)
 When passing markdown to gh CLI via a heredoc, use triple backticks directly — do not escape them with backslashes. In a single-quoted heredoc (<<'EOF'), backticks are not special and need no escaping.
+
+## Shell environment setup
+Before running shell commands that require credentials, environment variables, or CLI tools (aliases, functions, etc.), always source the following as a pre-step in the same command chain:
+
+```bash
+source ~/.zshrc && source ~/.env
+```
+
+- `~/.env` — contains credentials and environment variables
+- `~/.zshrc` — loads shell configuration, aliases, and functions
+- `~/.dotfiles/` — contains custom CLI tools and helpers (e.g. deployment scripts, company-specific utilities)
+
+Always chain these sources before any command that depends on them.
