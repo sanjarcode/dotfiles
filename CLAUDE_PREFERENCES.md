@@ -33,6 +33,9 @@ His second brain / life notes / state of affairs are stored in Notion. Most impo
 ## If using `gh` (GitHub cli)
 When passing markdown to gh CLI via a heredoc, use triple backticks directly — do not escape them with backslashes. In a single-quoted heredoc (<<'EOF'), backticks are not special and need no escaping.
 
+## Git worktrees
+When starting work on a codebase, always ask for a branch name and default to working via a git worktree. Set up the worktree at a predictable path (e.g. `<repo-parent>/<repo-name>-worktrees/<branch-name>`). All edits, commits, and pushes should happen from the worktree directory, leaving the main working directory untouched. To create a worktree from an existing branch: `git worktree add <path> <branch-name>`.
+
 ## Shell environment setup
 Before running shell commands that require credentials, environment variables, or CLI tools (aliases, functions, etc.), always source the following as a pre-step in the same command chain:
 
