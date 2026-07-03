@@ -180,11 +180,12 @@ jd() {
         echo "Jenkins Deployer (jd) CLI Helper"
         echo "==============================="
         echo "Usage (Interactive): jd"
-        echo "Usage (Short Form):  jd <service> <environment> [--bundle]"
-        echo "Usage (Long Form):   jd <service> <environment> <env_repeat> <branch> [--bundle]"
+        echo "Usage (Short Form):  jd <service> <environment> [--bundle] [--follow]"
+        echo "Usage (Long Form):   jd <service> <environment> <env_repeat> <branch> [--bundle] [--follow]"
         echo ""
         echo "Services: api, admin, solomon, console"
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
+        echo "          --follow (Block until build completes, streaming console output live)"
         return 0
     fi
 
@@ -214,6 +215,18 @@ jd() {
     local ENVIRONMENTS="qa1\nqa2\nqa3\nstaging"
     local BRANCHES="qa1_staging\nqa2_staging\nqa3_staging\nmaster\ndevelop"
 
+    # Strip --follow from args before positional parsing
+    local FOLLOW_MODE="false"
+    local CLEANED_ARGS=()
+    for arg in "$@"; do
+        if [[ "$arg" == "--follow" ]]; then
+            FOLLOW_MODE="true"
+        else
+            CLEANED_ARGS+=("$arg")
+        fi
+    done
+    set -- "${CLEANED_ARGS[@]}"
+
     local SERVICE_KEY="$1"
     local ENV="$2"
     local BRANCH=""
@@ -241,6 +254,11 @@ jd() {
         local CHOSE_BUNDLE=$(echo -e "No\nYes" | fzf --prompt="Require Bundle Install? > " --height=8% --layout=reverse)
         if [[ "$CHOSE_BUNDLE" == "Yes" ]]; then
             BUNDLE_ARG="--bundle"
+        fi
+
+        local CHOSE_FOLLOW=$(echo -e "No\nYes" | fzf --prompt="Follow build output? > " --height=8% --layout=reverse)
+        if [[ "$CHOSE_FOLLOW" == "Yes" ]]; then
+            FOLLOW_MODE="true"
         fi
     else
         # 5. Route Positional Arguments Explicitly
@@ -289,7 +307,11 @@ jd() {
 
     # 8. Execute Jenkins command
     echo ""
-    echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL]..."
+    if [[ "$FOLLOW_MODE" == "true" ]]; then
+        echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL] — following output..."
+    else
+        echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL]..."
+    fi
     echo ""
 
     ## load java
@@ -297,10 +319,16 @@ jd() {
         sdk > /dev/null 2>&1
     fi
 
+    local FOLLOW_FLAGS=""
+    if [[ "$FOLLOW_MODE" == "true" ]]; then
+        FOLLOW_FLAGS="-f -v"
+    fi
+
     java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
         -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" \
         build "$JOB_NAME" \
         -p ENVIRONMENT="$ENV" \
         -p BRANCH="$BRANCH" \
-        -p REQUIRE_BUNDLE_INSTALL="$BUNDLE_INSTALL"
+        -p REQUIRE_BUNDLE_INSTALL="$BUNDLE_INSTALL" \
+        $FOLLOW_FLAGS
 }
