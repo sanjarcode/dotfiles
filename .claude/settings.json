@@ -3,20 +3,13 @@
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "claude-mem@thedotmack": true,
-    "webwright@webwright": true
+    "claude-mem@thedotmack": true
   },
   "extraKnownMarketplaces": {
     "thedotmack": {
       "source": {
         "source": "github",
         "repo": "thedotmack/claude-mem"
-      }
-    },
-    "webwright": {
-      "source": {
-        "source": "github",
-        "repo": "microsoft/Webwright"
       }
     }
   },
@@ -55,7 +48,12 @@
       "Bash(tr *)",
       "Bash(cut *)",
       "Bash(xargs *)",
-      "Bash(git *)",
+      "Bash(git add *)",
+      "Bash(git commit -m '*)",
+      "Bash(git pull *)",
+      "Bash(git rm *)",
+      "Bash(git stash *)",
+      "Bash(git push *)",
       "Bash(ruby --version)",
       "Bash(bundle update *)",
       "Bash(docker history *)",
@@ -66,6 +64,7 @@
       "Bash(docker buildx *)",
       "Bash(docker rmi *)",
       "Bash(gcloud artifacts *)",
+      "Bash(curl *)",
       "WebSearch",
       "WebFetch",
       "Write(~/.claude/settings.json)",
