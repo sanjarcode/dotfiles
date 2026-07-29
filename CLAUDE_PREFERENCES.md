@@ -4,8 +4,8 @@
 
 ## Personal info of the user
 - occupation: Senior Software Engineer at Zoomcar
-- email: $EMAIL_ADDRESS (please use it for all Google Workspace things, viz tasks, calendar etc).
-- phone number is $PHONE_NUMBER
+- email: $PERSONAL_EMAIL_ADDRESS (please use it for all Google Workspace things, viz tasks, calendar etc).
+- phone number is $PHONE_NUMBER (same as WhatsApp)
 - address: $HOME_ADDRESS
 
 ## Preferences of the user
@@ -21,6 +21,10 @@ His second brain / life notes / state of affairs are stored in Notion. Most impo
 4. Startup ideas - these are a subset of feedback, that are worth pursuing as companies of themes (new sectors). URL: https://www.notion.so/sanjarcode/32199b4ef1794b01a791d032cc679f1b?v=23f20b932004801e8640000c84596486&source=copy_link
 5. Current living situation/location/setup - https://www.notion.so/sanjarcode/Living-Solved-35320b93200481deb9e2dfbc1885f7a2?source=copy_link
 
+## Work/job preferences
+1. Zoomcar (Job 1) tasks - https://app.notion.com/p/sanjarcode/Current-job-Zoomcar-37420b9320048038b377f56a8378463e?source=copy_link. They have Tag `zoomcar`. Email is $ZOOMCAR_WORK_EMAIL
+2. Houzed.ai (Job 2) tasks - https://app.notion.com/p/sanjarcode/Current-job-Houzed-3ac20b93200480da8f47ff2b55cdc347?source=copy_link. They have Tag `houzed`. Email is $HOUZED_WORK_EMAIL
+
 ## 2nd brain hygiene
 - When fetching pages or documents, especially from Notion. always include discussions and comments from the start. If a page body is blank, proactively check comments, linked pages, and related properties before concluding there's no answer.
 - When something important has been discussed or researched, offer to save it at a proper place in Notion.
@@ -34,7 +38,7 @@ His second brain / life notes / state of affairs are stored in Notion. Most impo
 When passing markdown to gh CLI via a heredoc, use triple backticks directly — do not escape them with backslashes. In a single-quoted heredoc (<<'EOF'), backticks are not special and need no escaping.
 
 ## Git worktrees
-When starting work on a codebase, always ask for a branch name and default to working via a git worktree. Set up the worktree at a predictable path (e.g. `<repo-parent>/<repo-name>-worktrees/<branch-name>`). All edits, commits, and pushes should happen from the worktree directory, leaving the main working directory untouched. To create a worktree from an existing branch: `git worktree add <path> <branch-name>`.
+When starting work on a codebase, always ask for a branch name and default to working via a git worktree. Set up the worktree at a predictable path (e.g. `<repo-parent>/.worktrees/<branch-name>`). All edits, commits, and pushes should happen from the worktree directory, leaving the main working directory untouched. To create a worktree from an existing branch: `git worktree add <path> <branch-name>`.
 
 ## Shell environment setup
 Before running shell commands that require credentials, environment variables, or CLI tools (aliases, functions, etc.), always source the following as a pre-step in the same command chain:
