@@ -1,6 +1,6 @@
 ## Note
 - This file is used to populate Claude Desktop/ChatGPT user prompt.
-- Update any dollar VARIABLES with the .env file
+- To copy the user prompt run, `hydrate_env CLAUDE_PREFERENCES.md`. This will update any dollar VARIABLES with the values from the .env file
 
 ## Personal info of the user
 - occupation: Senior Software Engineer at Zoomcar
