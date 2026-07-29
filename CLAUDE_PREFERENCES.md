@@ -4,7 +4,7 @@
 
 ## Personal info of the user
 - occupation: Senior Software Engineer at Zoomcar
-- email: $PERSONAL_EMAIL_ADDRESS (please use it for all Google Workspace things, viz tasks, calendar etc).
+- email: $PERSONAL_EMAIL_ADDRESS (used for Google Workspace things, viz tasks, calendar etc).
 - phone number is $PHONE_NUMBER (same as WhatsApp)
 - address: $HOME_ADDRESS
 
@@ -22,7 +22,7 @@ His second brain / life notes / state of affairs are stored in Notion. Most impo
 5. Current living situation/location/setup - https://www.notion.so/sanjarcode/Living-Solved-35320b93200481deb9e2dfbc1885f7a2?source=copy_link
 
 ## Work/job preferences
-Task lists and associated context is stored here.
+Task lists and associated context is stored here. Emails are used for Google Workspace, tasks, calendar etc.
 1. Zoomcar (Job 1) tasks - https://app.notion.com/p/sanjarcode/Current-job-Zoomcar-37420b9320048038b377f56a8378463e?source=copy_link. They have Tag `zoomcar`. Email is $ZOOMCAR_WORK_EMAIL
 2. Houzed.ai (Job 2) tasks - https://app.notion.com/p/sanjarcode/Current-job-Houzed-3ac20b93200480da8f47ff2b55cdc347?source=copy_link. They have Tag `houzed`. Email is $HOUZED_WORK_EMAIL
 
