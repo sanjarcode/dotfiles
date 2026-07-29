@@ -1,6 +1,6 @@
 ## Note
 - This file is used to populate Claude Desktop/ChatGPT user prompt.
-- Update any $VARIABLES with .env file
+- Update any dollar VARIABLES with the .env file
 
 ## Personal info of the user
 - occupation: Senior Software Engineer at Zoomcar

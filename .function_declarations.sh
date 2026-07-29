@@ -387,3 +387,101 @@ env_openrouter() {
   export CLAUDE_CODE_SUBAGENT_MODEL=deepseek/deepseek-v4-flash
   export CLAUDE_CODE_EFFORT_LEVEL=max
 }
+
+# ==============================================================================
+# Function: hydrate_env
+# Description: Hydrates variable placeholders ($VAR or ${VAR}) in a template file
+#              using key-value pairs from an .env file.
+#
+# Features:
+#   - Isolates environment using `env -i` so pre-existing shell variables do NOT
+#     pollute or override values from the selected .env file.
+#   - Outputs hydrated template first, then reports any unmapped template variables
+#     to stderr and exits with status code 1 (failing pipe/script operations).
+#   - Leaves no side effects or stray variables in your current shell session.
+#
+# Usage:
+#   hydrate_env <template_file> [--env <env_file>]
+#
+# Examples:
+#   hydrate_env CLAUDE_PREFERENCES.md
+#   hydrate_env prompt.template.md --env .env.local > prompt.md
+#   hydrate_env template.txt --env=.env.example || echo "Hydration failed!"
+# ==============================================================================
+hydrate_env() {
+  local template_file=""
+  local env_file=".env"
+
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --env)
+        if [[ -n "$2" && "$2" != --* ]]; then
+          env_file="$2"
+          shift 2
+        else
+          echo "Error: --env requires a non-empty file path argument." >&2
+          return 1
+        fi
+        ;;
+      --env=*)
+        env_file="${1#*=}"
+        shift
+        ;;
+      -*)
+        echo "Error: Unknown option '$1'" >&2
+        return 1
+        ;;
+      *)
+        if [[ -z "$template_file" ]]; then
+          template_file="$1"
+        else
+          echo "Error: Multiple positional template files provided ('$1')." >&2
+          return 1
+        fi
+        shift
+        ;;
+    esac
+  done
+
+  # Validation checks
+  if [[ -z "$template_file" ]]; then
+    echo "Usage: hydrate_env <template_file> [--env <env_file>]" >&2
+    return 1
+  fi
+
+  if [[ ! -f "$template_file" ]]; then
+    echo "Error: Template file '$template_file' not found." >&2
+    return 1
+  fi
+
+  if [[ ! -f "$env_file" ]]; then
+    echo "Error: Env file '$env_file' not found." >&2
+    return 1
+  fi
+
+  # Execute inside an isolated, empty environment (env -i)
+  env -i PATH="$PATH" bash -c '
+    set -a
+    source "$1"
+    set +a
+
+    # 1. Perform hydration first
+    output=$(envsubst < "$2")
+    echo "$output"
+
+    # 2. Extract variables required by template safely
+    req_vars=$(envsubst -v "" < "$2" 2>/dev/null | sort -u)
+
+    # 3. Check for missing template variables after hydration
+    if [[ -n "$req_vars" ]]; then
+      missing=$(comm -23 <(echo "$req_vars") <(compgen -v | sort -u))
+
+      if [[ -n "$missing" ]]; then
+        echo "[Error] The following template variables were not found in $1:" >&2
+        echo "$missing" | sed "s/^/  - /" >&2
+        exit 1
+      fi
+    fi
+  ' _ "$env_file" "$template_file"
+}
