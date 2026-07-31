@@ -186,6 +186,11 @@ jd() {
         echo "Services: api, admin, solomon, console"
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
         echo "          --follow (Block until build completes, streaming console output live)"
+        echo ""
+        echo "Examples:"
+        echo "  jd admin qa1"
+        echo "  jd admin qa2 --follow"
+        echo "  jd api qa1 --bundle"
         return 0
     fi
 
