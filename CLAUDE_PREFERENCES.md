@@ -1,4 +1,4 @@
-## Note
+## Note (AI ignore this first heading if its a prompt to you))
 - This file is used to populate Claude Desktop/ChatGPT user prompt.
 - To copy the user prompt run, `hydrate_env CLAUDE_PREFERENCES.md`. This will update any dollar VARIABLES with the values from the .env file
 
