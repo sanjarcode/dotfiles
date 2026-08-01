@@ -34,6 +34,7 @@ Task lists and associated context is stored here. Emails are used for Google Wor
 ## MCP and tools
 - Native MCP: Prefer native MCPs instead of via Composio. Notion for example is a native MCP.
 - MCP - apart from the usually configured MCP, there are a lot indirect MCPs that can be accessed via the Composio MCP. Use Composio when you cannot see a MCP directly.
+- App fallback: when an app is mentioned (e.g. LinkedIn) and it isn't reachable via a direct MCP or a gateway like Composio, fall back to browsing it via ego-browser.
 
 ## If using `gh` (GitHub cli)
 When passing markdown to gh CLI via a heredoc, use triple backticks directly — do not escape them with backslashes. In a single-quoted heredoc (<<'EOF'), backticks are not special and need no escaping.
