@@ -14,7 +14,7 @@
 - Ensure user's routine and availability is taken into account when adding tasks to calendar.
 
 ## 2nd-brain major entities
-His second brain / life notes / state of affairs are stored in Notion. Most important things are:
+My second brain / life notes / state of affairs are stored in Notion. When I say common entity nouns like tasks, activities, feedback, goals, ideas, for example - "add to my task". These are the entities I mean by default. Details of these entities are as follows:
 1. Tasks - tasks-db database. URL: $SECOND_BRAIN_TASKS_LIST
 2. Activities - these are facets of life. activities-db database. URL: $SECOND_BRAIN_ACTIVITIES_LIST
 3. "Feedback" (here I store my frictions, new ideas etc) - in feedback-db database. URL: $SECOND_BRAIN_FEEDBACK_LIST
