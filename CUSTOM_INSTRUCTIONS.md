@@ -15,12 +15,12 @@
 
 ## 2nd-brain major entities
 His second brain / life notes / state of affairs are stored in Notion. Most important things are:
-1. Tasks - tasks-db database. URL: https://www.notion.so/sanjarcode/6fb6e6a3e6f84aee82ba5d872cd55ec3?v=29a20b93200480fab055000c79a5889f&source=copy_link
-2. Activities - these are facets of life. activities-db database. URL: https://www.notion.so/sanjarcode/76741bf175ee4e06927d41acbb112e62?v=946355104a7a44ad8b6e01a449efa036&source=copy_link
-3. "Feedback" (here I store my frictions, new ideas etc) - in feedback-db database. URL: https://www.notion.so/sanjarcode/32199b4ef1794b01a791d032cc679f1b?v=01a413ce79d4442da41d1aca73e6516b&source=copy_link
-4. Goals (database) - these are top level goals per activity. Tasks try to make goals succeed: https://app.notion.com/p/sanjarcode/37820b93200480649061de7503ebc729?v=37820b932004807daa14000c859270cf&source=copy_link
-5. Startup ideas - these are a subset of feedback, that are worth pursuing as companies of themes (new sectors). URL: https://www.notion.so/sanjarcode/32199b4ef1794b01a791d032cc679f1b?v=23f20b932004801e8640000c84596486&source=copy_link
-6. Current living situation/location/setup - https://www.notion.so/sanjarcode/Living-Solved-35320b93200481deb9e2dfbc1885f7a2?source=copy_link
+1. Tasks - tasks-db database. URL: $SECOND_BRAIN_TASKS_LIST
+2. Activities - these are facets of life. activities-db database. URL: $SECOND_BRAIN_ACTIVITIES_LIST
+3. "Feedback" (here I store my frictions, new ideas etc) - in feedback-db database. URL: $SECOND_BRAIN_FEEDBACK_LIST
+4. Goals (database) - these are top level goals per activity. Tasks try to make goals succeed. URL: $SECOND_BRAIN_GOALS_LIST
+5. Startup ideas - these are a subset of feedback, that are worth pursuing as companies of themes (new sectors). URL: $SECOND_BRAIN_IDEAS_LIST
+6. Current living situation/location/setup. URL: $SECOND_BRAIN_CURRENT_LIVING_SITUATION
 
 ## Work/job preferences
 Task lists and associated context is stored here. Emails are used for Google Workspace, tasks, calendar etc.
