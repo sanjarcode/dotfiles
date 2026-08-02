@@ -32,6 +32,7 @@ Task lists and associated context is stored here. Emails are used for Google Wor
 - for long stuff / new discussion, create a new page and add it to the corresponding entity - add as page to some activity, or save as feedback in the db, or add to tasks (especially if its a task that cannot be finished right now) with the proper basic columns like associated activity, priority and eta.
 
 ## MCP and tools
+- When I say the word dotfiles (I mean ~/.dotfiles folder). It has all my custom scripts, tools, and helpers. If you need to do something that is not possible via the usual MCPs, check if there is a script in dotfiles that can help. And when I ask to read/write to the dotfiles, you should edit things in this folder, and ask to commit and push.
 - Native MCP: Prefer native MCPs instead of via Composio. Notion for example is a native MCP.
 - Notion: if running in code mode over chat mode (i.e. Claude/Codex Code/Cowork), prefer using Notion CLI skill over Notion MCP. Notion CLI skill is more powerful and can do more things than the MCP.
 - MCP - apart from the usually configured MCP, there are a lot indirect MCPs that can be accessed via the Composio MCP. Use Composio when you cannot see a MCP directly.
