@@ -2,6 +2,8 @@ List of LLM skills
 
 AI agent skills (Claude Code / `ntn` / Notion). Run through this after `2-apps.md` (needs Node/npx, and `uv`).
 
+> **[skills.sh](https://www.skills.sh/) is the preferred way to install skills** — one install works across AI client surfaces (Cursor, Claude, Codex) and it handles the symlinking into each client's skills directory itself, so prefer it over per-client/manual installs where available.
+
 | Rank | Name | Source | Settings/comments/dependencies | Purpose | Install mechanism (differences) | Done |
 | :--: | :--: | :----: | :-----------------------------: | :-----: | :------------------------------: | :--: |
 | 1 | `skills` CLI (bootstrap tool) | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Run on demand via `npx skills add <repo> --skill <name>`; nothing to globally install first. Tracks installs in `~/.agents/.skill-lock.json`. **Checked 2026-08-02: lock file doesn't exist on this machine** — no `skills`-CLI-tracked skills currently installed (see rows 2-3) | Installs/updates agent skill packages from GitHub repos | **npx, on-demand** — not a persistent global install, just a runner | [ ] |
