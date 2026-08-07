@@ -16,6 +16,33 @@ poweroff() {
   osascript -e 'tell app "System Events" to shut down'
 }
 
+# Run gh as the GitHub account that owns the current repo, instead of gh's
+# single global active account. Work repos set github.user via the includeIf
+# rule in ~/.gitconfig; everything else falls back to the global user.github.
+gh() {
+    # `gh auth ...` must see the real global state, and an explicit GH_TOKEN wins.
+    if [[ "$1" == "auth" || -n "$GH_TOKEN" ]]; then
+        command gh "$@"
+        return
+    fi
+
+    local account token
+    account=$(command git config --get github.user 2>/dev/null)
+    if [[ -z "$account" ]]; then
+        account=$(command git config --get user.github 2>/dev/null)
+    fi
+
+    if [[ -n "$account" ]]; then
+        token=$(command gh auth token -u "$account" 2>/dev/null)
+    fi
+
+    if [[ -n "$token" ]]; then
+        GH_TOKEN="$token" command gh "$@"
+    else
+        command gh "$@"
+    fi
+}
+
 # print (-s option) or navigate to Git repo root, current location or specified one
 function groot {
     local show=
