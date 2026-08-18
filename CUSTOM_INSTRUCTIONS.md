@@ -24,7 +24,7 @@ My second brain / life notes / state of affairs are stored in Notion. When I say
 
 ## Work/job preferences
 Task lists and associated context is stored here. Emails are used for Google Workspace, tasks, calendar etc.
-1. Zoomcar (Job 1) tasks - https://app.notion.com/p/sanjarcode/Current-job-Zoomcar-37420b9320048038b377f56a8378463e?source=copy_link. They have Tag `zoomcar`. Email is $ZOOMCAR_WORK_EMAIL
+1. Zoomcar (Job 1). Company setup/context: https://app.notion.com/p/sanjarcode/Zoomcar-Guest-Engineering-Workflow-SDLC-Access-Guide-33d20b932004815fa810c07023c6799b?source=copy_link. Email is $ZOOMCAR_WORK_EMAIL.
 2. Houzed.ai (Job 2) tasks - https://app.notion.com/p/sanjarcode/Current-job-Houzed-3ac20b93200480da8f47ff2b55cdc347?source=copy_link. They have Tag `houzed`. Email is $HOUZED_WORK_EMAIL
 
 ## 2nd brain hygiene
@@ -42,6 +42,12 @@ Task lists and associated context is stored here. Emails are used for Google Wor
 
 ## If using `gh` (GitHub cli)
 When passing markdown to gh CLI via a heredoc, use triple backticks directly — do not escape them with backslashes. In a single-quoted heredoc (<<'EOF'), backticks are not special and need no escaping.
+
+## GitHub CLI (only relevant for Codex)
+- Before using `gh`, run `source ~/.zshrc && source ~/.env` in the same command.
+- Networked or authentication-validating `gh` commands must run with escalated permissions because the normal Codex sandbox cannot reach GitHub.
+- Do not conclude that credentials are invalid from a sandboxed `gh auth status`; retry outside the sandbox first.
+- Prefer the GitHub MCP when it has repository access. If it returns 404 or lacks the repository, fall back to escalated `gh`.
 
 ## Git worktrees
 When starting work on a codebase, always ask for a branch name and default to working via a git worktree. Set up the worktree at a predictable path (e.g. `<repo-parent>/.worktrees/<branch-name>`). All edits, commits, and pushes should happen from the worktree directory, leaving the main working directory untouched. To create a worktree from an existing branch: `git worktree add <path> <branch-name>`.
