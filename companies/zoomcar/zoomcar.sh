@@ -336,4 +336,11 @@ jd() {
         -p BRANCH="$BRANCH" \
         -p REQUIRE_BUNDLE_INSTALL="$BUNDLE_INSTALL" \
         $FOLLOW_FLAGS
+    local build_status=$?
+
+    echo "Opening build status URL"
+    if ! open "$ZOOMCAR_JENKINS_BUILD_STATUS_URL" >/dev/null 2>&1; then
+        echo "Unable to open build status URL"
+    fi
+    return "$build_status"
 }
