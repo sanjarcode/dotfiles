@@ -33,8 +33,19 @@ kpod() {
   service=$(echo "$service" | tr '[:upper:]' '[:lower:]')
   variant=$(echo "$variant" | tr '[:upper:]' '[:lower:]')
 
-  local pods
-  pods=$(kubectl get pods -n "$namespace" --no-headers 2>/dev/null | grep -iE "${service}")
+  local pods kubectl_status
+  pods=$(kubectl get pods -n "$namespace" --no-headers 2>&1)
+  kubectl_status=$?
+  if [ $kubectl_status -ne 0 ]; then
+    case "$pods" in
+      *"Reauthentication failed"*|*"invalid_grant"*|*"You must be logged in"*|*"Unauthorized"*)
+        echo "Google Cloud authentication expired. Run: kauth" >&2
+        ;;
+      *) echo "$pods" >&2 ;;
+    esac
+    return $kubectl_status
+  fi
+  pods=$(echo "$pods" | grep -iE "${service}")
 
   if [ -z "$pods" ]; then
     echo "No pods found for service '$service' in namespace '$namespace'" >&2
@@ -101,8 +112,19 @@ klog() {
   service=$(echo "$service" | tr '[:upper:]' '[:lower:]')
   variant=$(echo "$variant" | tr '[:upper:]' '[:lower:]')
 
-  local pods
-  pods=$(kubectl get pods -n "$namespace" --no-headers 2>/dev/null | grep -iE "${service}")
+  local pods kubectl_status
+  pods=$(kubectl get pods -n "$namespace" --no-headers 2>&1)
+  kubectl_status=$?
+  if [ $kubectl_status -ne 0 ]; then
+    case "$pods" in
+      *"Reauthentication failed"*|*"invalid_grant"*|*"You must be logged in"*|*"Unauthorized"*)
+        echo "Google Cloud authentication expired. Run: kauth" >&2
+        ;;
+      *) echo "$pods" >&2 ;;
+    esac
+    return $kubectl_status
+  fi
+  pods=$(echo "$pods" | grep -iE "${service}")
 
   if [ -z "$pods" ]; then
     echo "No pods found for service '$service' in namespace '$namespace'" >&2
