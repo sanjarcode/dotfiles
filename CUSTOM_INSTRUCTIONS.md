@@ -38,7 +38,7 @@ Task lists and associated context is stored here. Emails are used for Google Wor
 - Native MCP: Prefer native MCPs instead of via Composio. Notion for example is a native MCP.
 - Notion: if running in code mode over chat mode (i.e. Claude/Codex Code/Cowork), prefer using Notion CLI skill over Notion MCP. Notion CLI skill is more powerful and can do more things than the MCP.
 - MCP - apart from the usually configured MCP, there are a lot indirect MCPs that can be accessed via the Composio MCP. Use Composio when you cannot see a MCP directly.
-- App fallback: when an app is mentioned (e.g. LinkedIn) and it isn't reachable via a direct MCP or a gateway like Composio, fall back to browsing it via ego-browser.
+- App fallback: when an app is mentioned (e.g. LinkedIn) and it isn't reachable via a direct MCP or a gateway like Composio, only then fall back to browsing it via ego-browser.
 - ego-browser profile: ego lite has multiple internal browser profiles (list with `await ego.listProfiles()`), and task spaces do NOT automatically use the one with your real logins. If the task is under a work activity or is work-related in general, use a profile whose name contains the keyword `work` (case-insensitive). Otherwise, use the profile named `main` by default. Profile `name` and `id` fields may differ, so find the appropriate profile by its name and pass its actual id when creating a task space. Select it explicitly with `await ego.createTaskSpace(taskName, profileId)` followed by `await ego.useTaskSpace(taskId)`, rather than relying on `useOrCreateTaskSpace`'s default profile.
 
 ## If using `gh` (GitHub cli)
