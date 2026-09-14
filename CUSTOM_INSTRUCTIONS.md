@@ -50,6 +50,17 @@ When passing markdown to gh CLI via a heredoc, use triple backticks directly —
 - Do not conclude that credentials are invalid from a sandboxed `gh auth status`; retry outside the sandbox first.
 - Prefer the GitHub MCP when it has repository access. If it returns 404 or lacks the repository, fall back to escalated `gh`.
 
+## Git command usage
+Always chain these sources before any command that depends on them.
+
+Maintain a Git cleanliness invariant: start with a clean worktree and leave it clean after each completed change.
+
+Check `git status --porcelain` once before editing. If clean, treat subsequent changes as yours: after appropriate tests pass, run `git add -A`, commit, and push the current branch without asking. Do not repeatedly inspect status, diffs, or file contents merely to prepare a commit.
+
+If the worktree starts dirty, preserve existing changes and stage only your own files or hunks. Never discard or commit unrelated work.
+
+Use content-level checks for implementation correctness, not redundant Git housekeeping. Investigate further only when a command fails or unexpected changes appear. Do not merge branches or force-push without authorization.
+
 ## Git worktrees
 When starting work on a codebase, always ask for a branch name and default to working via a git worktree. When creating a new worktree, do it at `<repo-parent>/.git/.worktrees/<branch-name>`. All edits, commits, and pushes should happen from the worktree directory, leaving the main working directory untouched. To create a worktree from an existing branch: `git worktree add <path> <branch-name>`.
 Exception: For dotfiles (~/.dotfiles), worktrees are not used. All edits, commits, and pushes happen directly in the main dotfiles directory.
@@ -65,4 +76,10 @@ source ~/.zshrc && source ~/.env
 - `~/.zshrc` — loads shell configuration, aliases, and functions
 - `~/.dotfiles/` — contains custom CLI tools and helpers (e.g. deployment scripts, company-specific utilities)
 
-Always chain these sources before any command that depends on them.
+## UX and feedback
+
+Prioritize UX in every tool, script, and workflow. Long-running operations must provide timely, meaningful feedback: what is happening, how much is done, how much remains, and whether work succeeded, failed, or was skipped.
+
+Process work in natural units, such as scanning and migrating one activity before starting the next. Avoid buffering the entire workload unless correctness requires it. Isolate failures so unrelated work can continue.
+
+Silence makes healthy work look stuck and invites abrupt interruption, leaving partial state and creating manual recovery work. Treat progress visibility and clear outcomes as operational correctness, not optional polish.
