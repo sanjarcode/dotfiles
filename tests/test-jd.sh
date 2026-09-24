@@ -76,33 +76,40 @@ check() {
         exit 1
     fi
 }
-check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2
-check 0 'MOCK_BUILD nonprd-cmn-admin-CI' admin qa1
-check 0 'MOCK_BUILD nonprod-solomon-CI' solomon qa1
-check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' console qa1
-check 0 'MOCK_BUILD nonprd-cmn-api-CI' nonprd-cmn-api-CI qa1
-check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' api qa1
-check 0 'Choose service or press Esc to quit.' api qa1
+check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2 qa2_staging
+check 0 'MOCK_BUILD nonprd-cmn-admin-CI' admin qa1 qa1_staging
+check 0 'MOCK_BUILD nonprod-solomon-CI' solomon qa1 qa1_staging
+check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' console qa1 qa1_staging
+check 0 'MOCK_BUILD nonprd-cmn-api-CI' nonprd-cmn-api-CI qa1 qa1_staging
+check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' api qa1 qa1_staging
+check 0 'Choose service or press Esc to quit.' api qa1 qa1_staging
 picker_status=130
-check 1 'Cancelled.' api qa1
+check 1 'Cancelled.' api qa1 qa1_staging
 picker_status=0
-check 1 'No Jenkins job matches' missing qa1
-check 1 'No Jenkins job matches' '*' qa1
-check 1 'No Jenkins job matches' disabled-only qa1
-check 1 'No Jenkins job matches' folder-without-status qa1
+check 1 'No Jenkins job matches' missing qa1 qa1_staging
+check 1 'No Jenkins job matches' '*' qa1 qa1_staging
+check 1 'No Jenkins job matches' disabled-only qa1 qa1_staging
+check 1 'No Jenkins job matches' folder-without-status qa1 qa1_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI'
-check 0 'BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 qa2 feature/test --bundle
-check 0 'REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 --bundle --follow
+check 0 'BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 feature/test --bundle
+check 0 'REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 qa2_staging --bundle --follow
+check 0 'ENVIRONMENT=qa2 -p BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2 feature/test
+check 0 'ENVIRONMENT=qa2 -p BRANCH=qa2 -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2 qa2
+check 1 'Invalid argument layout' zap-service qa2
+check 1 'Invalid argument layout' zap-service qa2 --bundle
+check 1 'Invalid argument layout' zap-service qa2 qa2 qa2_staging
+check 1 'Invalid argument layout' zap-service qa2 qa2_staging --unknown
+check 1 'Invalid argument layout' zap-service qa2 ''
 list_status=1
-check 1 'Unable to list Jenkins jobs' admin qa1
+check 1 'Unable to list Jenkins jobs' admin qa1 qa1_staging
 list_status=0
 invalid_json=1
-check 1 'Unable to read Jenkins job status' admin qa1
+check 1 'Unable to read Jenkins job status' admin qa1 qa1_staging
 invalid_json=0
 jobs=''
-check 1 'No Jenkins job matches' admin qa1
+check 1 'No Jenkins job matches' admin qa1 qa1_staging
 jobs='gr-nonprd-cmn-zap-service-CI'
 build_status_mock=7
-check 7 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa1
-check 7 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa1 --follow
+check 7 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa1 qa1_staging
+check 7 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa1 qa1_staging --follow
 echo 'PASS: jd resolution and build arguments'

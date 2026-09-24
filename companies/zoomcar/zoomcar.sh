@@ -202,17 +202,16 @@ jd() {
         echo "Jenkins Deployer (jd) CLI Helper"
         echo "==============================="
         echo "Usage (Interactive): jd"
-        echo "Usage (Short Form):  jd <service> <environment> [--bundle] [--follow]"
-        echo "Usage (Long Form):   jd <service> <environment> <env_repeat> <branch> [--bundle] [--follow]"
+        echo "Usage: jd <service> <environment> <branch> [--bundle] [--follow]"
         echo ""
         echo "Service: literal, case-sensitive substring of an enabled Jenkins job name; choose if ambiguous."
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
         echo "          --follow (Block until build completes, streaming console output live)"
         echo ""
         echo "Examples:"
-        echo "  jd admin qa1"
-        echo "  jd admin qa2 --follow"
-        echo "  jd zap-service qa1 --bundle"
+        echo "  jd admin qa1 qa1_staging"
+        echo "  jd admin qa2 qa2_staging --follow"
+        echo "  jd zap-service qa1 qa1_staging --bundle"
         return 0
     fi
 
@@ -259,6 +258,17 @@ jd() {
     local BRANCH=""
     local BUNDLE_ARG=""
 
+    # Explicit environment and branch; --follow has already been removed.
+    if [ "$#" -gt 0 ]; then
+        if [[ "$#" -lt 3 || "$#" -gt 4 || -z "$SERVICE_KEY" || -z "$ENV" || -z "$3" || "$ENV" == --* || "$3" == --* ]] ||
+           { [ "$#" -eq 4 ] && [ "$4" != "--bundle" ]; }; then
+            echo "Error: Invalid argument layout. Usage: jd <service> <environment> <branch> [--bundle] [--follow]" >&2
+            return 1
+        fi
+        BRANCH="$3"
+        BUNDLE_ARG="$4"
+    fi
+
     # Fetch enabled jobs once, before either matching or interactive selection.
     if command -v sdk >/dev/null 2>&1; then
         sdk >/dev/null 2>&1
@@ -283,7 +293,7 @@ jd() {
     if [ -z "$SERVICE_KEY" ]; then
         if ! command -v fzf &> /dev/null; then
             echo "Error: 'fzf' is not installed. Provide arguments manually or install fzf." >&2
-            echo "Usage: jd <service> <environment> [--bundle]" >&2
+            echo "Usage: jd <service> <environment> <branch> [--bundle] [--follow]" >&2
             return 1
         fi
 
@@ -307,30 +317,6 @@ jd() {
         local CHOSE_FOLLOW=$(echo -e "No\nYes" | fzf --prompt="Follow build output? > " --height=8% --layout=reverse)
         if [[ "$CHOSE_FOLLOW" == "Yes" ]]; then
             FOLLOW_MODE="true"
-        fi
-    else
-        # 5. Route Positional Arguments Explicitly
-        if [ -z "$ENV" ]; then
-            echo "Error: Missing environment. Usage: jd <service> <environment> [--bundle]" >&2
-            return 1
-        fi
-
-        if [ -z "$3" ]; then
-            # E.g., jd api qa1
-            BRANCH="${ENV}_staging"
-        elif [[ "$3" == "--bundle" ]]; then
-            # E.g., jd api qa1 --bundle
-            BRANCH="${ENV}_staging"
-            BUNDLE_ARG="--bundle"
-        elif [ -n "$3" ] && [ -n "$4" ]; then
-            # E.g., jd api qa1 qa1 qa1_staging
-            # $3 is the repeated env name, $4 is the explicit branch target
-            BRANCH="$4"
-            BUNDLE_ARG="$5"
-        else
-            echo "Error: Invalid argument layout." >&2
-            echo "Use 'jd api qa1', 'jd api qa1 --bundle', or 'jd api qa1 qa1 qa1_staging'" >&2
-            return 1
         fi
     fi
 
