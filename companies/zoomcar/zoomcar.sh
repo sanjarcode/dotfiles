@@ -205,14 +205,14 @@ jd() {
         echo "Usage (Short Form):  jd <service> <environment> [--bundle] [--follow]"
         echo "Usage (Long Form):   jd <service> <environment> <env_repeat> <branch> [--bundle] [--follow]"
         echo ""
-        echo "Services: api, admin, solomon, console"
+        echo "Service: literal, case-sensitive substring of a Jenkins job name; must match exactly one job."
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
         echo "          --follow (Block until build completes, streaming console output live)"
         echo ""
         echo "Examples:"
         echo "  jd admin qa1"
         echo "  jd admin qa2 --follow"
-        echo "  jd api qa1 --bundle"
+        echo "  jd zap-service qa1 --bundle"
         return 0
     fi
 
@@ -238,7 +238,7 @@ jd() {
     fi
 
     # Define menu options for the interactive mode
-    local SERVICES="api\nadmin\nsolomon\nconsole"
+    local SERVICES JOB_NAME=""
     local ENVIRONMENTS="qa1\nqa2\nqa3\nstaging"
     local BRANCHES="qa1_staging\nqa2_staging\nqa3_staging\nmaster\ndevelop"
 
@@ -259,6 +259,16 @@ jd() {
     local BRANCH=""
     local BUNDLE_ARG=""
 
+    # Discover jobs using the same Jenkins connection as the build command.
+    if command -v sdk >/dev/null 2>&1; then
+        sdk >/dev/null 2>&1
+    fi
+    SERVICES=$(java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
+        -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" list-jobs) || {
+        echo "Error: Unable to list Jenkins jobs." >&2
+        return 1
+    }
+
     # 4. Interactive Mode (invoked if absolutely no arguments are passed)
     if [ -z "$SERVICE_KEY" ]; then
         if ! command -v fzf &> /dev/null; then
@@ -269,8 +279,9 @@ jd() {
 
         echo "--- Interactive Deployment Configurator ---"
 
-        SERVICE_KEY=$(echo -e "$SERVICES" | fzf --prompt="Select Service > " --height=10% --layout=reverse)
+        SERVICE_KEY=$(printf '%s\n' "$SERVICES" | fzf --prompt="Select Service > " --height=10% --layout=reverse)
         [ -z "$SERVICE_KEY" ] && { echo "Cancelled."; return 0; }
+        JOB_NAME="$SERVICE_KEY"
 
         ENV=$(echo -e "$ENVIRONMENTS" | fzf --prompt="Select Environment > " --height=10% --layout=reverse)
         [ -z "$ENV" ] && { echo "Cancelled."; return 0; }
@@ -313,18 +324,23 @@ jd() {
         fi
     fi
 
-    # 6. Map the service shortcut to the actual Jenkins Job Name
-    local JOB_NAME=""
-    case "$SERVICE_KEY" in
-        api)     JOB_NAME="nonprd-cmn-api-CI" ;;
-        admin)   JOB_NAME="nonprd-cmn-admin-CI" ;;
-        solomon) JOB_NAME="nonprod-solomon-CI" ;;
-        console) JOB_NAME="nonprd-cmn-api-console-CI" ;;
-        *)
-            echo "Error: Unknown service '$SERVICE_KEY'. Run 'jd --help' for options." >&2
+    # 6. Resolve literal substrings without preferring aliases or exact matches.
+    if [ -z "$JOB_NAME" ]; then
+        local candidate matches=0
+        while IFS= read -r candidate; do
+            if [[ -n "$candidate" && "$candidate" == *"$SERVICE_KEY"* ]]; then
+                JOB_NAME="$candidate"
+                matches=$((matches + 1))
+            fi
+        done <<< "$SERVICES"
+        if [ "$matches" -eq 0 ]; then
+            echo "Error: No Jenkins job matches shorthand '$SERVICE_KEY'." >&2
             return 1
-            ;;
-    esac
+        elif [ "$matches" -gt 1 ]; then
+            echo "Error: ambiguous shorthand '$SERVICE_KEY' ($matches matching Jenkins jobs)." >&2
+            return 1
+        fi
+    fi
 
     # 7. Parse the bundle option
     local BUNDLE_INSTALL="false"
@@ -340,11 +356,6 @@ jd() {
         echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL]..."
     fi
     echo ""
-
-    ## load java
-    if [[ $(command -v sdk) ]]; then
-        sdk > /dev/null 2>&1
-    fi
 
     local FOLLOW_FLAGS=""
     if [[ "$FOLLOW_MODE" == "true" ]]; then
