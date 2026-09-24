@@ -7,10 +7,22 @@ nonprd-cmn-api-console-CI
 nonprd-cmn-admin-CI
 nonprod-solomon-CI
 gr-nonprd-cmn-zap-service-CI'
+curl() {
+    [ "${list_status:-0}" -eq 0 ] || return "$list_status"
+    if [ "${invalid_json:-0}" -eq 1 ]; then
+        echo 'not JSON'
+        return
+    fi
+    printf '%s\n' "$jobs" | jq -Rs '{jobs: (split("\n") | map(select(length > 0) | {name: ., disabled: false})) + [
+        {name: "nonprd-cmn-api", disabled: true},
+        {name: "disabled-zap-service", disabled: true},
+        {name: "disabled-only", disabled: true},
+        {name: "folder-without-status"}
+    ]}'
+}
 java() {
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            list-jobs) printf '%s\n' "$jobs"; return "${list_status:-0}" ;;
             build) shift; printf 'MOCK_BUILD %s\n' "$*"; return "${build_status_mock:-0}" ;;
         esac
         shift
@@ -22,6 +34,16 @@ sdk() { :; }
 fzf() {
     local choices
     choices=$(cat)
+    if [ "$1" = '--prompt=Select Service > ' ]; then
+        [ "$choices" = "$jobs" ] || { echo 'FAIL: interactive list includes disabled jobs' >&2; return 2; }
+        echo 'nonprd-cmn-admin-CI'
+        return
+    fi
+    case "$1" in
+        '--prompt=Select Environment > ') echo qa1; return ;;
+        '--prompt=Select Branch > ') echo qa1_staging; return ;;
+        '--prompt=Require Bundle Install? > '|'--prompt=Follow build output? > ') echo No; return ;;
+    esac
     if [ "$choices" != "$(printf '1.\tnonprd-cmn-api-CI\n2.\tnonprd-cmn-api-console-CI')" ]; then
         echo "FAIL: unexpected picker choices: $choices" >&2
         return 2
@@ -55,11 +77,17 @@ check 1 'Cancelled.' api qa1
 picker_status=0
 check 1 'No Jenkins job matches' missing qa1
 check 1 'No Jenkins job matches' '*' qa1
+check 1 'No Jenkins job matches' disabled-only qa1
+check 1 'No Jenkins job matches' folder-without-status qa1
+check 0 'MOCK_BUILD nonprd-cmn-admin-CI'
 check 0 'BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 qa2 feature/test --bundle
 check 0 'REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 --bundle --follow
 list_status=1
 check 1 'Unable to list Jenkins jobs' admin qa1
 list_status=0
+invalid_json=1
+check 1 'Unable to read Jenkins job status' admin qa1
+invalid_json=0
 jobs=''
 check 1 'No Jenkins job matches' admin qa1
 jobs='gr-nonprd-cmn-zap-service-CI'

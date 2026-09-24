@@ -205,7 +205,7 @@ jd() {
         echo "Usage (Short Form):  jd <service> <environment> [--bundle] [--follow]"
         echo "Usage (Long Form):   jd <service> <environment> <env_repeat> <branch> [--bundle] [--follow]"
         echo ""
-        echo "Service: literal, case-sensitive substring of a Jenkins job name; must match exactly one job."
+        echo "Service: literal, case-sensitive substring of an enabled Jenkins job name; choose if ambiguous."
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
         echo "          --follow (Block until build completes, streaming console output live)"
         echo ""
@@ -259,13 +259,23 @@ jd() {
     local BRANCH=""
     local BUNDLE_ARG=""
 
-    # Discover jobs using the same Jenkins connection as the build command.
+    # Fetch enabled jobs once, before either matching or interactive selection.
     if command -v sdk >/dev/null 2>&1; then
         sdk >/dev/null 2>&1
     fi
-    SERVICES=$(java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
-        -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" list-jobs) || {
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "Error: 'jq' is required to read Jenkins job status." >&2
+        return 1
+    fi
+    local JOBS_JSON
+    JOBS_JSON=$(curl --fail --silent --show-error --globoff \
+        --user "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" \
+        'https://nonprod-jenkins.zoomcartest.com/api/json?tree=jobs[name,disabled]') || {
         echo "Error: Unable to list Jenkins jobs." >&2
+        return 1
+    }
+    SERVICES=$(printf '%s\n' "$JOBS_JSON" | jq -r '.jobs[] | select(.disabled == false) | .name') || {
+        echo "Error: Unable to read Jenkins job status." >&2
         return 1
     }
 
