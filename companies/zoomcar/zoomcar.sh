@@ -393,6 +393,7 @@ jd() {
         -p REQUIRE_BUNDLE_INSTALL="$BUNDLE_INSTALL" \
         $FOLLOW_FLAGS
     local build_status=$?
+    [ "$build_status" -eq 0 ] || return "$build_status"
 
     echo "Opening build status URL"
     if ! open "$ZOOMCAR_JENKINS_BUILD_STATUS_URL" >/dev/null 2>&1; then

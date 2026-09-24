@@ -29,7 +29,7 @@ java() {
     done
     return 1
 }
-open() { :; }
+open() { browser_opened=true; }
 sdk() { :; }
 fzf() {
     local choices
@@ -54,7 +54,13 @@ fzf() {
 check() {
     local expected_status="$1" expected_text="$2" result rc
     shift 2
-    result=$(jd "$@" 2>&1)
+    result=$(
+        browser_opened=false
+        jd "$@" 2>&1
+        rc=$?
+        [ "$browser_opened" = false ] || echo MOCK_BROWSER_OPENED
+        exit "$rc"
+    )
     rc=$?
     if [ "$rc" -ne "$expected_status" ] || [[ "$result" != *"$expected_text"* ]]; then
         printf 'FAIL: jd %s (exit %s)\n%s\n' "$*" "$rc" "$result"
@@ -62,6 +68,11 @@ check() {
     fi
     if [ "$expected_status" -ne 0 ] && [[ "$result" == *MOCK_BUILD* ]] && [ "${build_status_mock:-0}" -eq 0 ]; then
         echo 'FAIL: build triggered after resolution failure'
+        exit 1
+    fi
+    if { [ "$expected_status" -ne 0 ] && [[ "$result" == *MOCK_BROWSER_OPENED* ]]; } ||
+       { [ "$expected_status" -eq 0 ] && [[ "$result" == *MOCK_BUILD* && "$result" != *MOCK_BROWSER_OPENED* ]]; }; then
+        echo 'FAIL: browser should open only after a successful Jenkins command'
         exit 1
     fi
 }
@@ -93,4 +104,5 @@ check 1 'No Jenkins job matches' admin qa1
 jobs='gr-nonprd-cmn-zap-service-CI'
 build_status_mock=7
 check 7 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa1
+check 7 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa1 --follow
 echo 'PASS: jd resolution and build arguments'
