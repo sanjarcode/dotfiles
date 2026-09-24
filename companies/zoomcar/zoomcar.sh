@@ -206,6 +206,8 @@ jd() {
         echo "Usage (Long Form):   jd <service> <environment> <env_repeat> <branch> [--bundle] [--follow]"
         echo ""
         echo "Service: literal, case-sensitive substring of an enabled Jenkins job name; choose if ambiguous."
+        echo "Short form uses <environment> as the exact branch name too (no suffix added)."
+        echo "Use long form when environment and branch differ."
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
         echo "          --follow (Block until build completes, streaming console output live)"
         echo ""
@@ -317,10 +319,10 @@ jd() {
 
         if [ -z "$3" ]; then
             # E.g., jd api qa1
-            BRANCH="${ENV}_staging"
+            BRANCH="$ENV"
         elif [[ "$3" == "--bundle" ]]; then
             # E.g., jd api qa1 --bundle
-            BRANCH="${ENV}_staging"
+            BRANCH="$ENV"
             BUNDLE_ARG="--bundle"
         elif [ -n "$3" ] && [ -n "$4" ]; then
             # E.g., jd api qa1 qa1 qa1_staging

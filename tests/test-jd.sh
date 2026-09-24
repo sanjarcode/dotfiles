@@ -76,7 +76,9 @@ check() {
         exit 1
     fi
 }
-check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2
+check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2 -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2
+check 0 'BRANCH=qa2_staging -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2_staging
+check 0 'BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=true' zap-service feature/test --bundle
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI' admin qa1
 check 0 'MOCK_BUILD nonprod-solomon-CI' solomon qa1
 check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' console qa1
