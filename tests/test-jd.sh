@@ -19,6 +19,16 @@ java() {
 }
 open() { :; }
 sdk() { :; }
+fzf() {
+    local choices
+    choices=$(cat)
+    if [ "$choices" != "$(printf '1.\tnonprd-cmn-api-CI\n2.\tnonprd-cmn-api-console-CI')" ]; then
+        echo "FAIL: unexpected picker choices: $choices" >&2
+        return 2
+    fi
+    [ "${picker_status:-0}" -eq 0 ] || return "$picker_status"
+    printf '%s\n' "$choices" | sed -n '2p'
+}
 check() {
     local expected_status="$1" expected_text="$2" result rc
     shift 2
@@ -38,7 +48,11 @@ check 0 'MOCK_BUILD nonprd-cmn-admin-CI' admin qa1
 check 0 'MOCK_BUILD nonprod-solomon-CI' solomon qa1
 check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' console qa1
 check 0 'MOCK_BUILD nonprd-cmn-api-CI' nonprd-cmn-api-CI qa1
-check 1 'ambiguous shorthand' api qa1
+check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' api qa1
+check 0 'Choose service or press Esc to quit.' api qa1
+picker_status=130
+check 1 'Cancelled.' api qa1
+picker_status=0
 check 1 'No Jenkins job matches' missing qa1
 check 1 'No Jenkins job matches' '*' qa1
 check 0 'BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 qa2 feature/test --bundle

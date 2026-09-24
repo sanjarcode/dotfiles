@@ -326,19 +326,32 @@ jd() {
 
     # 6. Resolve literal substrings without preferring aliases or exact matches.
     if [ -z "$JOB_NAME" ]; then
-        local candidate matches=0
+        local candidate matches=0 selection
+        local matched_jobs=()
         while IFS= read -r candidate; do
             if [[ -n "$candidate" && "$candidate" == *"$SERVICE_KEY"* ]]; then
                 JOB_NAME="$candidate"
                 matches=$((matches + 1))
+                matched_jobs+=("$candidate")
             fi
         done <<< "$SERVICES"
         if [ "$matches" -eq 0 ]; then
             echo "Error: No Jenkins job matches shorthand '$SERVICE_KEY'." >&2
             return 1
         elif [ "$matches" -gt 1 ]; then
-            echo "Error: ambiguous shorthand '$SERVICE_KEY' ($matches matching Jenkins jobs)." >&2
-            return 1
+            echo "ambiguous shorthand '$SERVICE_KEY' ($matches matching Jenkins jobs). Choose service or press Esc to quit." >&2
+            if ! command -v fzf >/dev/null 2>&1; then
+                printf '%s\n' "${matched_jobs[@]}" | awk '{ printf "%d.\t%s\n", NR, $0 }' >&2
+                echo "Error: 'fzf' is not installed. Install it or provide a more specific shorthand." >&2
+                return 1
+            fi
+            selection=$(printf '%s\n' "${matched_jobs[@]}" | awk '{ printf "%d.\t%s\n", NR, $0 }' |
+                fzf --height=40% --layout=reverse --no-multi --prompt="Choose service > ") || {
+                echo "Cancelled."
+                return 1
+            }
+            [ -z "$selection" ] && { echo "Cancelled."; return 1; }
+            JOB_NAME="${selection#*$'\t'}"
         fi
     fi
 
