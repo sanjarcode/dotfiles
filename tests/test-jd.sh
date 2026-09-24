@@ -78,6 +78,9 @@ check() {
 }
 check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2 qa2_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI' admin qa1 qa1_staging
+check 0 'MOCK_BUILD nonprd-cmn-admin-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging' admin-ci qa2 qa2_staging
+check 0 'MOCK_BUILD nonprd-cmn-admin-CI' AdMiN-Ci qa2 qa2_staging
+check 0 'Choose service or press Esc to quit.' API qa1 qa1_staging
 check 0 'MOCK_BUILD nonprod-solomon-CI' solomon qa1 qa1_staging
 check 0 'MOCK_BUILD nonprd-cmn-api-console-CI' console qa1 qa1_staging
 check 0 'MOCK_BUILD nonprd-cmn-api-CI' nonprd-cmn-api-CI qa1 qa1_staging

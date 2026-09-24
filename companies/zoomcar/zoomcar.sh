@@ -204,7 +204,7 @@ jd() {
         echo "Usage (Interactive): jd"
         echo "Usage: jd <service> <environment> <branch> [--bundle] [--follow]"
         echo ""
-        echo "Service: literal, case-sensitive substring of an enabled Jenkins job name; choose if ambiguous."
+        echo "Service: literal, case-insensitive substring of an enabled Jenkins job name; choose if ambiguous."
         echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
         echo "          --follow (Block until build completes, streaming console output live)"
         echo ""
@@ -322,10 +322,12 @@ jd() {
 
     # 6. Resolve literal substrings without preferring aliases or exact matches.
     if [ -z "$JOB_NAME" ]; then
-        local candidate matches=0 selection
+        local candidate matches=0 selection service_lower candidate_lower
+        service_lower=$(printf '%s' "$SERVICE_KEY" | tr '[:upper:]' '[:lower:]')
         local matched_jobs=()
         while IFS= read -r candidate; do
-            if [[ -n "$candidate" && "$candidate" == *"$SERVICE_KEY"* ]]; then
+            candidate_lower=$(printf '%s' "$candidate" | tr '[:upper:]' '[:lower:]')
+            if [[ -n "$candidate" && "$candidate_lower" == *"$service_lower"* ]]; then
                 JOB_NAME="$candidate"
                 matches=$((matches + 1))
                 matched_jobs+=("$candidate")
