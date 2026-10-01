@@ -42,7 +42,7 @@ fzf() {
     case "$1" in
         '--prompt=Select Environment > ') echo qa1; return ;;
         '--prompt=Select Branch > ') echo qa1_staging; return ;;
-        '--prompt=Require Bundle Install? > '|'--prompt=Follow build output? > ') echo No; return ;;
+        '--prompt=Follow build output? > ') echo No; return ;;
     esac
     if [ "$choices" != "$(printf '1.\tnonprd-cmn-api-CI\n2.\tnonprd-cmn-api-console-CI')" ]; then
         echo "FAIL: unexpected picker choices: $choices" >&2
@@ -76,7 +76,7 @@ check() {
         exit 1
     fi
 }
-check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2 qa2_staging
+check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging' zap-service qa2 qa2_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI' admin qa1 qa1_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging' admin-ci qa2 qa2_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI' AdMiN-Ci qa2 qa2_staging
@@ -94,12 +94,10 @@ check 1 'No Jenkins job matches' '*' qa1 qa1_staging
 check 1 'No Jenkins job matches' disabled-only qa1 qa1_staging
 check 1 'No Jenkins job matches' folder-without-status qa1 qa1_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI'
-check 0 'BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 feature/test --bundle
-check 0 'REQUIRE_BUNDLE_INSTALL=true' zap-service qa2 qa2_staging --bundle --follow
-check 0 'ENVIRONMENT=qa2 -p BRANCH=feature/test -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2 feature/test
-check 0 'ENVIRONMENT=qa2 -p BRANCH=qa2 -p REQUIRE_BUNDLE_INSTALL=false' zap-service qa2 qa2
+check 0 'ENVIRONMENT=qa2 -p BRANCH=feature/test' zap-service qa2 feature/test
+check 0 'ENVIRONMENT=qa2 -p BRANCH=qa2' zap-service qa2 qa2
 check 1 'Invalid argument layout' zap-service qa2
-check 1 'Invalid argument layout' zap-service qa2 --bundle
+check 1 'Invalid argument layout' zap-service qa2 --follow
 check 1 'Invalid argument layout' zap-service qa2 qa2 qa2_staging
 check 1 'Invalid argument layout' zap-service qa2 qa2_staging --unknown
 check 1 'Invalid argument layout' zap-service qa2 ''

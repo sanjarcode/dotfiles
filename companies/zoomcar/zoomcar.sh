@@ -202,16 +202,15 @@ jd() {
         echo "Jenkins Deployer (jd) CLI Helper"
         echo "==============================="
         echo "Usage (Interactive): jd"
-        echo "Usage: jd <service> <environment> <branch> [--bundle] [--follow]"
+        echo "Usage: jd <service> <environment> <branch> [--follow]"
         echo ""
         echo "Service: literal, case-insensitive substring of an enabled Jenkins job name; choose if ambiguous."
-        echo "Options:  --bundle (Sets REQUIRE_BUNDLE_INSTALL=true)"
-        echo "          --follow (Block until build completes, streaming console output live)"
+        echo "Options:  --follow (Block until build completes, streaming console output live)"
         echo ""
         echo "Examples:"
         echo "  jd admin qa1 qa1_staging"
         echo "  jd admin qa2 qa2_staging --follow"
-        echo "  jd zap-service qa1 qa1_staging --bundle"
+        echo "  jd zap-service qa1 qa1_staging"
         return 0
     fi
 
@@ -256,17 +255,14 @@ jd() {
     local SERVICE_KEY="$1"
     local ENV="$2"
     local BRANCH=""
-    local BUNDLE_ARG=""
 
     # Explicit environment and branch; --follow has already been removed.
     if [ "$#" -gt 0 ]; then
-        if [[ "$#" -lt 3 || "$#" -gt 4 || -z "$SERVICE_KEY" || -z "$ENV" || -z "$3" || "$ENV" == --* || "$3" == --* ]] ||
-           { [ "$#" -eq 4 ] && [ "$4" != "--bundle" ]; }; then
-            echo "Error: Invalid argument layout. Usage: jd <service> <environment> <branch> [--bundle] [--follow]" >&2
+        if [[ "$#" -ne 3 || -z "$SERVICE_KEY" || -z "$ENV" || -z "$3" || "$ENV" == --* || "$3" == --* ]]; then
+            echo "Error: Invalid argument layout. Usage: jd <service> <environment> <branch> [--follow]" >&2
             return 1
         fi
         BRANCH="$3"
-        BUNDLE_ARG="$4"
     fi
 
     # Fetch enabled jobs once, before either matching or interactive selection.
@@ -293,7 +289,7 @@ jd() {
     if [ -z "$SERVICE_KEY" ]; then
         if ! command -v fzf &> /dev/null; then
             echo "Error: 'fzf' is not installed. Provide arguments manually or install fzf." >&2
-            echo "Usage: jd <service> <environment> <branch> [--bundle] [--follow]" >&2
+            echo "Usage: jd <service> <environment> <branch> [--follow]" >&2
             return 1
         fi
 
@@ -308,11 +304,6 @@ jd() {
 
         BRANCH=$(echo -e "$BRANCHES" | fzf --prompt="Select Branch > " --height=12% --layout=reverse)
         [ -z "$BRANCH" ] && { echo "Cancelled."; return 0; }
-
-        local CHOSE_BUNDLE=$(echo -e "No\nYes" | fzf --prompt="Require Bundle Install? > " --height=8% --layout=reverse)
-        if [[ "$CHOSE_BUNDLE" == "Yes" ]]; then
-            BUNDLE_ARG="--bundle"
-        fi
 
         local CHOSE_FOLLOW=$(echo -e "No\nYes" | fzf --prompt="Follow build output? > " --height=8% --layout=reverse)
         if [[ "$CHOSE_FOLLOW" == "Yes" ]]; then
@@ -353,18 +344,12 @@ jd() {
         fi
     fi
 
-    # 7. Parse the bundle option
-    local BUNDLE_INSTALL="false"
-    if [[ "$BUNDLE_ARG" == "--bundle" ]]; then
-        BUNDLE_INSTALL="true"
-    fi
-
-    # 8. Execute Jenkins command
+    # 7. Execute Jenkins command
     echo ""
     if [[ "$FOLLOW_MODE" == "true" ]]; then
-        echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL] — following output..."
+        echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) — following output..."
     else
-        echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH) [Bundle Install: $BUNDLE_INSTALL]..."
+        echo "🚀 Triggering build for $JOB_NAME ($ENV / $BRANCH)..."
     fi
     echo ""
 
@@ -378,7 +363,6 @@ jd() {
         build "$JOB_NAME" \
         -p ENVIRONMENT="$ENV" \
         -p BRANCH="$BRANCH" \
-        -p REQUIRE_BUNDLE_INSTALL="$BUNDLE_INSTALL" \
         $FOLLOW_FLAGS
     local build_status=$?
     [ "$build_status" -eq 0 ] || return "$build_status"
