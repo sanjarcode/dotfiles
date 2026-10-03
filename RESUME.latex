@@ -1,0 +1,123 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Medium Length Professional CV
+% LaTeX Template
+% Version 2.0 (8/5/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Trey Hunner (http://www.treyhunner.com/)
+%
+% Important note:
+% This template requires the resume.cls file to be in the same directory as the
+% .tex file. The resume.cls file provides the resume style used for structuring the
+% document.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{resume} % Use the custom resume.cls style
+
+\usepackage[left=0.4 in,top=0.4in,right=0.4 in,bottom=0.4in]{geometry} % Document margins
+\usepackage[hidelinks]{hyperref}
+\newcommand{\tab}[1]{\hspace{.2667\textwidth}\rlap{#1}}
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\name{Sanjar Afaq} % Your name
+\address{Bangalore, India \\ \href{tel:+918668952748}{+91 8668952748} \\ \href{mailto:sanjarcode@gmail.com}{sanjarcode@gmail.com}}
+\address{\href{https://linkedin.com/in/sanjar-afaq}{linkedin.com/in/sanjar-afaq} \\ \href{https://github.com/sanjarcode}{github.com/sanjarcode}}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVE
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{OBJECTIVE}
+
+{Engineer looking to improve their craft by innovating in an AI first organization}
+
+
+\end{rSection}
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Education}
+
+{\bf Bachelor of Technology in Computer Science and Engineering} \hfill {August 2017 - May 2021}
+\\
+Veermata Jijabai Technological Institute, Mumbai
+
+\end{rSection}
+%----------------------------------------------------------------------------------------
+%	TECHNICAL STRENGTHS SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Skills}
+
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+Languages & Python, Golang, Ruby \\
+Backend & FastAPI, Gin, Ruby on Rails, REST, GraphQL \\
+Data & PostgreSQL, MongoDB, Qdrant, ChromaDB, Redis, Kafka \\
+AI / NLP & RAG (LlamaIndex), LangGraph, DSPy \\
+Infrastructure & Docker, Kubernetes, AWS, Pulumi \\
+Tools & Git, Bash \\
+
+\end{tabular}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+
+%	OBJECTIVE
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+%	WORK EXPERIENCE SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{EXPERIENCE}
+
+\begin{rSubsection}{Zoomcar}{March 2026 -- Present}{Senior Software Engineer}{}
+\item Built Zoomie, a WhatsApp AI assistant to create bookings. Coded the workflow in LangGraph, used LlamaIndex for storing product information and tuned prompts using DSPy. Increased booking conversions by 0.65\%
+\item Modernized the main microservice from Ruby to Go using spec-driven development with SpecKitty, reducing deployment time from 30 to 5 minutes, and 30\% reduced token usage using AST based editing with ast-grep.
+\end{rSubsection}
+
+%------------------------------------------------
+
+\begin{rSubsection}{Fleek}{March 2025 -- February 2026}{Software Engineer 2}{}
+\item Built the ratings and reviews feature, including AI spam filtering and translations of review text. Increased user conversion from 0.6\% to 1\% within a month.
+\item Built seller optimization assistant (chatbot), that helps write better product descriptions and provides feedback on uploaded images. Improved sales by 5\% on average (as measured for similar sellers who did/didn't use the assistant).
+\item Built a translation pipeline for multi-lingual sale banner copy, cutting manual marketing effort by 7x.
+\end{rSubsection}
+
+%------------------------------------------------
+
+\begin{rSubsection}{Volopay}{August 2022 -- March 2025}{Full Stack Engineer}{}
+\item Owned the accounting and bill pay modules of the app, end to end.
+\item Built OCR for billpay receipts, and auto-suggestion of bill descriptions (for requester) and approval responses (for reviewer) according to organization policy.
+
+\end{rSubsection}
+
+%------------------------------------------------
+
+\begin{rSubsection}{Volopay}{}{Junior Full Stack Engineer}{}
+\item Built the Volopay 2.0 Ruby on Rails app from scratch in a team of 5 engineers.
+\item Maintained the existing platform and shipped the Payroll module in a week.
+\end{rSubsection}
+
+%------------------------------------------------
+
+\begin{rSubsection}{Vimeo}{Dec 2021 -- June 2022}{Software Engineer Intern}{}
+\item Developed video-on-demand features for vimeo.com/ott using Rails, SQL, and RSpec.
+\end{rSubsection}
+
+\end{rSection}
+
+
+\end{document}
+
