@@ -1,3 +1,4 @@
+## Custom MCPs
 - argocd_staging
   ![alt text](image.png)
 - atlassian
@@ -7,7 +8,6 @@
 - iterm-mcp
 - mobile-mcp
 - neobrowser
-- Skill: Ego Browser
 - new_relic
   ![alt text](image-1.png)
 - node_repl
@@ -16,10 +16,17 @@
     ![alt text](image-2.png)
 - tablepro_mcp
   Command: `/Applications/TablePro.app/Contents/MacOS/tablepro-mcp`
+
+## App MCPs
 - Atlassian Rovo (Legacy)
 - Google Drive
 - Google Calendar
 - Gmail
 - Slack
 - Notion
-- Skill: Ponytail
+- GitHub
+
+## Skills
+- Ponytail
+- Ego Browser (install Ego browser from https://lite.ego.app/)
+- 
