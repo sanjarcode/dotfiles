@@ -14,13 +14,13 @@
 - Ensure user's routine and availability is taken into account when adding tasks to calendar.
 
 ## 2nd-brain major entities
-My second brain / life notes / state of affairs are stored in Notion. When I say common entity nouns like tasks, activities, feedback, goals, ideas, for example - "add to my task". These are the entities I mean by default. Details of these entities are as follows:
-1. Tasks - tasks-db database. URL: $SECOND_BRAIN_TASKS_LIST
-2. Activities - these are facets of life. activities-db database. URL: $SECOND_BRAIN_ACTIVITIES_LIST
+My second brain / life notes / state of affairs are stored in Notion. When I say common entity nouns like tasks, activities, feedback, goals, ideas, for example - "add to my task". These are the entities I mean by default.
+1. "Tasks" - tasks-db database. URL: $SECOND_BRAIN_TASKS_LIST
+2. "Activities" - these are facets of life. activities-db database. URL: $SECOND_BRAIN_ACTIVITIES_LIST
 3. "Feedback" (here I store my frictions, new ideas etc) - in feedback-db database. URL: $SECOND_BRAIN_FEEDBACK_LIST
-4. Goals (database) - these are top level goals per activity. Tasks try to make goals succeed. URL: $SECOND_BRAIN_GOALS_LIST
-5. Startup ideas - these are a subset of feedback, that are worth pursuing as companies of themes (new sectors). URL: $SECOND_BRAIN_IDEAS_LIST
-6. Current living situation/location/setup. URL: $SECOND_BRAIN_CURRENT_LIVING_SITUATION
+4. "Goals" (database) - these are top level goals per activity. Tasks try to make goals succeed. URL: $SECOND_BRAIN_GOALS_LIST
+5. "Startup ideas" - these are a subset of feedback, that are worth pursuing as companies of themes (new sectors). URL: $SECOND_BRAIN_IDEAS_LIST
+6. "Current living situation/location/setup". URL: $SECOND_BRAIN_CURRENT_LIVING_SITUATION
 
 ## Work/job preferences
 Task lists and associated context is stored here. Emails are used for Google Workspace, tasks, calendar etc.
@@ -38,7 +38,7 @@ Task lists and associated context is stored here. Emails are used for Google Wor
 - Native MCP: Prefer native MCPs instead of via Composio. Notion for example is a native MCP.
 - Notion: if running in code mode over chat mode (i.e. Claude/Codex Code/Cowork), prefer using Notion CLI skill over Notion MCP. Notion CLI skill is more powerful and can do more things than the MCP.
 - MCP - apart from the usually configured MCP, there are a lot indirect MCPs that can be accessed via the Composio MCP. Use Composio when you cannot see a MCP directly.
-- App fallback: when an app is mentioned (e.g. LinkedIn) and it isn't reachable via a direct MCP or a gateway like Composio, only then fall back to browsing it via ego-browser.
+****- App fallback: when an app is mentioned (e.g. LinkedIn) and it isn't reachable via a direct MCP or a gateway like Composio, only then fall back to browsing it via ego-browser.
 - ego-browser profile: ego lite has multiple internal browser profiles (list with `await ego.listProfiles()`), and task spaces do NOT automatically use the one with your real logins. If the task is under a work activity or is work-related in general, use a profile whose name contains the keyword `work` (case-insensitive). Otherwise, use the profile named `main` by default. Profile `name` and `id` fields may differ, so find the appropriate profile by its name and pass its actual id when creating a task space. Select it explicitly with `await ego.createTaskSpace(taskName, profileId)` followed by `await ego.useTaskSpace(taskId)`, rather than relying on `useOrCreateTaskSpace`'s default profile.
 
 ## If using `gh` (GitHub cli)
