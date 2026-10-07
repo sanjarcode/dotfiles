@@ -1,3 +1,10 @@
+## VS code
+- Didn't try
+- Skills (work, pulls from all harnesses)
+- MCPs (work, pulls from all harnesses)
+- What about browser (Chrome) use?
+- Models can be added definitely
+
 ## Cursor
 - MCPs are buggy
 - Models are great
