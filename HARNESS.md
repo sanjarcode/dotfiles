@@ -25,6 +25,7 @@
 - Need to install MCP manager by running `dsh plugin --profile web add github:hyqhyq3/dsh-mcp-manager`. Has outh click.
 - Need to install skills plugin using `dsh plugin --profile web add github:zh0uhx/dsh-skills`. Skills search exists.
 - All plugins: https://dsh-plugin.org
+- GitHub MCP, needs URL, add headers (Authorization: Bearer github_xxx). Select auth as "No auth".
 
 ## Pi (not tried)
 ## Antigravity (didn't try)
