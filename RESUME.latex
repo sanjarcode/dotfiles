@@ -38,7 +38,7 @@
 
 \begin{rSection}{OBJECTIVE}
 
-{Mid/senior level engineer (5+ years of experience in application development) looking to improve their craft.}
+{Mid/senior level engineer (5+ years application development) interested in distributed systems and gen AI}
 
 
 \end{rSection}
@@ -61,7 +61,7 @@ Veermata Jijabai Technological Institute, Mumbai
 
 \begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
 Languages & Python, TypeScript, JavaScript, Golang, Ruby  \\
-Backend & FastAPI, Ruby on Rails, REST APIs, GraphQL, PostgreSQL, MongoDB, Redis, Kafka \\
+Backend & FastAPI, Django, Ruby on Rails, REST APIs, PostgreSQL, MongoDB, Redis, Kafka \\
 Frontend & React, Redux, Vue, React Native \\
 AI / LLM & RAG (LlamaIndex), LangGraph, FastMCP, Qdrant, ChromaDB \\
 Tools and infra & Claude Code, Cursor, Git, Docker, Kubernetes, AWS, GCP, Terraform, Jenkins CI/CD \\
@@ -82,15 +82,15 @@ Tools and infra & Claude Code, Cursor, Git, Docker, Kubernetes, AWS, GCP, Terraf
 \begin{rSection}{WORK EXPERIENCE}
 
 \begin{rSubsection}{Zoomcar}{Mar 2026 - Present}{Senior Software Engineer}{}
-\item Increased booking conversions by 0.65\%, by building Zoomie, a WhatsApp AI assistant to create bookings. Coded the workflow in LangGraph, used LlamaIndex for storing product information and tuned prompts using DSPy.
-\item Reduced deployment time from 30 to 5 minutes, by modernizing the main microservice from Ruby to Go using spec-driven development with SpecKitty, .
+\item Increased booking conversions by 0.65\%, by building Zoomie, a WhatsApp AI booking assistant. Coded the workflow in LangGraph, used LlamaIndex RAG for storing product information.
+\item Reduced deployment time from 30 to 5 minutes, by modernizing the main microservice from Ruby to Go using spec-driven development with SpecKitty.
 \end{rSubsection}
 
 %------------------------------------------------
 
 \begin{rSubsection}{Fleek}{Mar 2025 - Feb 2026}{Software Engineer 2}{}
 \item Increased user conversion from 0.6\% to 1\% by building the ratings and reviews feature end to end, from system architecture to programming, including AI spam filtering and translations.
-\item Improved sales by 5\% on average (as measured for similar sellers who did/didn't use the assistant), using seller optimization assistant (chatbot), that helps write better product descriptions and provides feedback on uploaded images.
+\item Improved sales by 5\% on average (as measured for similar sellers who did/didn't use the assistant), by creating seller assistant agent, that helps write better product descriptions and provides feedback on uploaded images.
 \item Reduced manual effort by 7x, by creating a translation pipeline for multi-lingual sale banner copy.
 \end{rSubsection}
 
@@ -105,7 +105,7 @@ Tools and infra & Claude Code, Cursor, Git, Docker, Kubernetes, AWS, GCP, Terraf
 %------------------------------------------------
 
 \begin{rSubsection}{}{Aug 2022 - July 2024}{Junior Full Stack Engineer}{}
-\item Built the Volopay 2.0 (Rails, React, React Native) app from scratch in a team of 5 engineers.
+\item Built the Volopay 2.0 (Rails, React, React Native) app from scratch in a team of 5 engineers, including software design and implementation.
 \item Retained our largest client, by shipping the Payroll module in a week, on the existing platform (Vue, Rails).
 \end{rSubsection}
 
