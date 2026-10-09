@@ -27,7 +27,7 @@
 \newcommand{\tab}[1]{\hspace{.2667\textwidth}\rlap{#1}}
 \newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
 \name{Sanjar Afaq} % Your name
-\address{Bangalore, India \\ \href{tel:+918668952748}{+91 8668952748} \\ \href{mailto:sanjarcode@gmail.com}{sanjarcode@gmail.com}}
+\address{Bangalore (Indiranagar), India \\ \href{tel:+918668952748}{+91 8668952748} \\ \href{mailto:sanjarcode@gmail.com}{sanjarcode@gmail.com}}
 \address{\href{https://linkedin.com/in/sanjar-afaq}{linkedin.com/in/sanjar-afaq} \\ \href{https://github.com/sanjarcode}{github.com/sanjarcode}}
 
 \begin{document}
@@ -38,7 +38,7 @@
 
 \begin{rSection}{OBJECTIVE}
 
-{Engineer looking to improve their craft by innovating in an AI first organization}
+{Mid/senior level engineer (5+ years of experience in application development) looking to improve their craft.}
 
 
 \end{rSection}
@@ -60,12 +60,11 @@ Veermata Jijabai Technological Institute, Mumbai
 \begin{rSection}{Skills}
 
 \begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
-Languages & Python, Golang, Ruby \\
-Backend & FastAPI, Gin, Ruby on Rails, REST, GraphQL \\
-Data & PostgreSQL, MongoDB, Qdrant, ChromaDB, Redis, Kafka \\
-AI / NLP & RAG (LlamaIndex), LangGraph, DSPy \\
-Infrastructure & Docker, Kubernetes, AWS, Pulumi \\
-Tools & Git, Bash \\
+Languages & Python, TypeScript, JavaScript, Golang, Ruby  \\
+Backend & FastAPI, Ruby on Rails, REST APIs, GraphQL, PostgreSQL, MongoDB, Redis, Kafka \\
+Frontend & React, Redux, Vue, React Native \\
+AI / LLM & RAG (LlamaIndex), LangGraph, FastMCP, Qdrant, ChromaDB \\
+Tools and infra & Claude Code, Cursor, Git, Docker, Kubernetes, AWS, GCP, Terraform, Jenkins CI/CD \\
 
 \end{tabular}
 
@@ -80,44 +79,44 @@ Tools & Git, Bash \\
 %	WORK EXPERIENCE SECTION
 %----------------------------------------------------------------------------------------
 
-\begin{rSection}{EXPERIENCE}
+\begin{rSection}{WORK EXPERIENCE}
 
-\begin{rSubsection}{Zoomcar}{March 2026 -- Present}{Senior Software Engineer}{}
-\item Built Zoomie, a WhatsApp AI assistant to create bookings. Coded the workflow in LangGraph, used LlamaIndex for storing product information and tuned prompts using DSPy. Increased booking conversions by 0.65\%
-\item Modernized the main microservice from Ruby to Go using spec-driven development with SpecKitty, reducing deployment time from 30 to 5 minutes, and 30\% reduced token usage using AST based editing with ast-grep.
+\begin{rSubsection}{Zoomcar}{Mar 2026 - Present}{Senior Software Engineer}{}
+\item Increased booking conversions by 0.65\%, by building Zoomie, a WhatsApp AI assistant to create bookings. Coded the workflow in LangGraph, used LlamaIndex for storing product information and tuned prompts using DSPy.
+\item Reduced deployment time from 30 to 5 minutes, by modernizing the main microservice from Ruby to Go using spec-driven development with SpecKitty, .
 \end{rSubsection}
 
 %------------------------------------------------
 
-\begin{rSubsection}{Fleek}{March 2025 -- February 2026}{Software Engineer 2}{}
-\item Built the ratings and reviews feature, including AI spam filtering and translations of review text. Increased user conversion from 0.6\% to 1\% within a month.
-\item Built seller optimization assistant (chatbot), that helps write better product descriptions and provides feedback on uploaded images. Improved sales by 5\% on average (as measured for similar sellers who did/didn't use the assistant).
-\item Built a translation pipeline for multi-lingual sale banner copy, cutting manual marketing effort by 7x.
+\begin{rSubsection}{Fleek}{Mar 2025 - Feb 2026}{Software Engineer 2}{}
+\item Increased user conversion from 0.6\% to 1\% by building the ratings and reviews feature end to end, from system architecture to programming, including AI spam filtering and translations.
+\item Improved sales by 5\% on average (as measured for similar sellers who did/didn't use the assistant), using seller optimization assistant (chatbot), that helps write better product descriptions and provides feedback on uploaded images.
+\item Reduced manual effort by 7x, by creating a translation pipeline for multi-lingual sale banner copy.
 \end{rSubsection}
 
 %------------------------------------------------
 
-\begin{rSubsection}{Volopay}{August 2022 -- March 2025}{Full Stack Engineer}{}
-\item Owned the accounting and bill pay modules of the app, end to end.
-\item Built OCR for billpay receipts, and auto-suggestion of bill descriptions (for requester) and approval responses (for reviewer) according to organization policy.
+\begin{rSubsection}{Volopay}{Aug 2024 - Mar 2025}{Full Stack Engineer}{}
+\item Launched Volopay 2.0 platform for 5 markets, including final debugging/troubleshooting and performance testing. Owned the accounting and bill pay modules of the app, end to end.
+\item Built OCR for receipts, auto-generating of bill descriptions and approval responses as per department policies.
 
 \end{rSubsection}
 
 %------------------------------------------------
 
-\begin{rSubsection}{Volopay}{}{Junior Full Stack Engineer}{}
-\item Built the Volopay 2.0 Ruby on Rails app from scratch in a team of 5 engineers.
-\item Maintained the existing platform and shipped the Payroll module in a week.
+\begin{rSubsection}{}{Aug 2022 - July 2024}{Junior Full Stack Engineer}{}
+\item Built the Volopay 2.0 (Rails, React, React Native) app from scratch in a team of 5 engineers.
+\item Retained our largest client, by shipping the Payroll module in a week, on the existing platform (Vue, Rails).
 \end{rSubsection}
 
 %------------------------------------------------
 
-\begin{rSubsection}{Vimeo}{Dec 2021 -- June 2022}{Software Engineer Intern}{}
-\item Developed video-on-demand features for vimeo.com/ott using Rails, SQL, and RSpec.
+\begin{rSubsection}{Vimeo}{Dec 2021 - June 2022}{Software Engineer Intern}{}
+\item Developed video-on-demand features for vimeo.com/ott using Rails and React.
+\item Presented high level design and low level design discussions for the Live Later feature. Learnt design patterns.
 \end{rSubsection}
 
 \end{rSection}
 
 
 \end{document}
-
