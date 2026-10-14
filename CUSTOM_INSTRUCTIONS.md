@@ -35,10 +35,8 @@ Task lists and associated context is stored here. Emails are used for Google Wor
 ## MCP and tools
 - When I say the word dotfiles (I mean ~/.dotfiles folder). It has all my custom scripts, tools, and helpers. If you need to do something that is not possible via the usual MCPs, check if there is a script in dotfiles that can help. And when I ask to read/write to the dotfiles, you should edit things in this folder, and ask to commit and push.
   - After making changes under `~/.dotfiles` that have been **tested and confirmed working**, automatically run `dot_refresh` (shell function from `.function_declarations.sh`) so home copies are reinstalled and the shell is reloaded. Report clearly that `dot_refresh` was run. Do **not** run it for untested, speculative, or in-progress edits — only after the change is verified.
-- Native MCP: Prefer native MCPs instead of via Composio. Notion for example is a native MCP.
+- When accessing an external service, use this preference order: the harness's native connector or MCP → an MCP gateway such as Composio → browser automation, preferably ego-browser → the Chrome browser.
 - Notion: if running in code mode over chat mode (i.e. Claude/Codex Code/Cowork), prefer using Notion CLI skill over Notion MCP. Notion CLI skill is more powerful and can do more things than the MCP.
-- MCP - apart from the usually configured MCP, there are a lot indirect MCPs that can be accessed via the Composio MCP. Use Composio when you cannot see a MCP directly.
-****- App fallback: when an app is mentioned (e.g. LinkedIn) and it isn't reachable via a direct MCP or a gateway like Composio, only then fall back to browsing it via ego-browser.
 - ego-browser profile: ego lite has multiple internal browser profiles (list with `await ego.listProfiles()`), and task spaces do NOT automatically use the one with your real logins. If the task is under a work activity or is work-related in general, use a profile whose name contains the keyword `work` (case-insensitive). Otherwise, use the profile named `main` by default. Profile `name` and `id` fields may differ, so find the appropriate profile by its name and pass its actual id when creating a task space. Select it explicitly with `await ego.createTaskSpace(taskName, profileId)` followed by `await ego.useTaskSpace(taskId)`, rather than relying on `useOrCreateTaskSpace`'s default profile.
 
 ## If using `gh` (GitHub cli)
@@ -62,8 +60,9 @@ If the worktree starts dirty, preserve existing changes and stage only your own 
 Use content-level checks for implementation correctness, not redundant Git housekeeping. Investigate further only when a command fails or unexpected changes appear. Do not merge branches or force-push without authorization.
 
 ## Git worktrees
-When starting work on a codebase, always ask for a branch name and default to working via a git worktree. When creating a new worktree, do it at `<repo-parent>/.git/.worktrees/<branch-name>`. All edits, commits, and pushes should happen from the worktree directory, leaving the main working directory untouched. To create a worktree from an existing branch: `git worktree add <path> <branch-name>`.
-Exception: For dotfiles (~/.dotfiles), worktrees are not used. All edits, commits, and pushes happen directly in the main dotfiles directory.
+Do not use Git worktrees unless the user explicitly asks you to. By default, work directly in the currently checked-out working directory.
+
+Create a new branch when the requested task is materially different in nature from the work associated with the current branch.
 
 ## Shell environment setup
 Before running shell commands that require credentials, environment variables, or CLI tools (aliases, functions, etc.), always source the following as a pre-step in the same command chain:
