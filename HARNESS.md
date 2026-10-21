@@ -24,6 +24,7 @@
 - Desktop and cli are separate. CLI using `npm install -g @deepseek-ai/dsh`
 - Need to install MCP manager by running `dsh plugin --profile web add github:hyqhyq3/dsh-mcp-manager`. Has outh click.
 - Need to install skills plugin using `dsh plugin --profile web add github:zh0uhx/dsh-skills`. Skills search exists.
+- Install chat import plugin: https://github.com/Nwflower/dsh-chat-import `dsh plugin --profile web add dsh-chat-import`
 - All plugins: https://dsh-plugin.org
 - GitHub MCP, needs URL (https://api.githubcopilot.com/mcp/), select auth as "No auth", add headers (Authorization: Bearer github_xxx).
 
