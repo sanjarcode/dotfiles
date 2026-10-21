@@ -23,6 +23,7 @@
 ## DeepSeek
 - Desktop and cli are separate. Only CLI is needed. Install CLI using `npm install -g @deepseek-ai/dsh`. To see UI, run `dsh web`
 - Install plugins:
+  - Plugin manager: `dsh plugin --profile web add dsh-plugin`, includes marketplace.
   - MCP manager: `dsh plugin --profile web add github:hyqhyq3/dsh-mcp-manager`. Has outh click.
   - Skills: `dsh plugin --profile web add github:zh0uhx/dsh-skills`. Skills search exists.
   - Chat import: https://github.com/Nwflower/dsh-chat-import `dsh plugin --profile web add dsh-chat-import`
