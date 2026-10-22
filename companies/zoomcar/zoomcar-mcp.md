@@ -2,6 +2,7 @@
 - argocd_staging
   ![alt text](image.png)
 - atlassian
+  - Atlassian MCP. URL: https://mcp.atlassian.com/v1/mcp/authv2, auth: oauth (browser)
 - codebase-memory-mcp
 - computer-use
 - figma
@@ -29,4 +30,4 @@
 ## Skills
 - Ponytail
 - Ego Browser (install Ego browser from https://lite.ego.app/)
-- 
+-
