@@ -6,7 +6,7 @@
 
 \begin{rSection}{OBJECTIVE}
 
-{Mid/senior level engineer (5+ years application development) interested in distributed systems and gen AI}
+{Full-stack engineer (5+ years) interested in distributed systems and gen AI}
 
 
 \end{rSection}
@@ -49,14 +49,14 @@ Tools and infra & Claude Code, Cursor, Git, Docker, Kubernetes, AWS, GCP, Terraf
 
 \begin{rSection}{WORK EXPERIENCE}
 
-\begin{rSubsection}{Zoomcar}{Mar 2026 - Present}{Senior Software Engineer}{}
+\begin{rSubsection}{Zoomcar}{17 Mar 2026 - Present}{Senior Software Engineer}{}
 \item Increased booking conversions by 0.65\%, by building Zoomie, a WhatsApp AI booking assistant. Coded the workflow in LangGraph, used LlamaIndex RAG for storing product information.
 \item Reduced deployment time from 30 to 5 minutes, by modernizing the main microservice from Ruby to Go using spec-driven development with SpecKitty.
 \end{rSubsection}
 
 %------------------------------------------------
 
-\begin{rSubsection}{Fleek}{Mar 2025 - Feb 2026}{Software Engineer 2}{}
+\begin{rSubsection}{Fleek}{1 Apr 2025 - 10 Mar 2026}{Software Engineer 2}{}
 \item Increased user conversion from 0.6\% to 1\% by building the ratings and reviews feature end to end, from system architecture to programming, including AI spam filtering and translations.
 \item Improved sales by 5\% on average (as measured for similar sellers who did/didn't use the assistant), by creating seller assistant agent, that helps write better product descriptions and provides feedback on uploaded images.
 \item Reduced manual effort by 7x, by creating a translation pipeline for multi-lingual sale banner copy.
@@ -64,7 +64,7 @@ Tools and infra & Claude Code, Cursor, Git, Docker, Kubernetes, AWS, GCP, Terraf
 
 %------------------------------------------------
 
-\begin{rSubsection}{Volopay}{Aug 2024 - Mar 2025}{Full Stack Engineer}{}
+\begin{rSubsection}{Volopay}{1 Aug 2024 - 8 Mar 2025}{Full Stack Engineer}{}
 \item Launched Volopay 2.0 platform for 5 markets, including final debugging/troubleshooting and performance testing. Owned the accounting and bill pay modules of the app, end to end.
 \item Built OCR for receipts, auto-generating of bill descriptions and approval responses as per department policies.
 
@@ -72,14 +72,14 @@ Tools and infra & Claude Code, Cursor, Git, Docker, Kubernetes, AWS, GCP, Terraf
 
 %------------------------------------------------
 
-\begin{rSubsection}{}{Aug 2022 - July 2024}{Junior Full Stack Engineer}{}
+\begin{rSubsection}{}{1 Aug 2022 - 31 July 2024}{Junior Full Stack Engineer}{}
 \item Built the Volopay 2.0 (Rails, React, React Native) app from scratch in a team of 5 engineers, including software design and implementation.
 \item Retained our largest client, by shipping the Payroll module in a week, on the existing platform (Vue, Rails).
 \end{rSubsection}
 
 %------------------------------------------------
 
-\begin{rSubsection}{Vimeo}{Dec 2021 - June 2022}{Software Engineer Intern}{}
+\begin{rSubsection}{Vimeo}{6 Dec 2021 - 6 June 2022}{Software Engineer Intern}{}
 \item Developed video-on-demand features for vimeo.com/ott using Rails and React.
 \item Presented high level design and low level design discussions for the Live Later feature. Learnt design patterns.
 \end{rSubsection}
