@@ -2,6 +2,13 @@ List of MCP servers & connectors
 
 MCP servers and connectors configured across agents on this machine (Claude Code, Claude Desktop, Cursor) plus the account-level connectors available to the hosted Claude Code/Cowork session. Source task: Notion `TASK-1324` — "Collect MCP + connectors from all agents like Claude Code Desktop, etc."
 
+There are two kinds of MCP integrations:
+
+1. **Harness-native MCPs** — configured directly in an agent harness such as Codex, Claude, DeepSeek, or Cursor.
+2. **Gateway MCPs** — accessed through an MCP gateway; currently, this setup uses Composio. The gateway integration list is maintained in [Composio Life Automation Stack Gaps](https://app.notion.com/p/sanjarcode/Composio-Life-Automation-Stack-Gaps-35f20b9320048149b5b8cccf6bc4d545?source=copy_link).
+
+During setup, first install the harness-native MCPs, then connect the Composio MCP gateway.
+
 ## MCPs & Connectors
 
 Live config: `~/Library/Application Support/Claude/claude_desktop_config.json`.
@@ -15,6 +22,7 @@ Live config: `~/Library/Application Support/Claude/claude_desktop_config.json`.
 |                       `tablepro`                        |  Yes  | `/Applications/TablePro.app/Contents/MacOS/tablepro-mcp` |          TablePro DB manager and store MCP (Redis, Kafka too)           | 2026-08-04 |
 |                      `markitdown`                       |  Yes  |            `docker run markitdown-mcp:latest`            |                     Document → Markdown conversion                      | 2026-08-04 |
 |                         `kite`                          |  Yes  |       `npx mcp-remote https://mcp.kite.trade/mcp`        |                   Zerodha Kite trading/portfolio API                    | 2026-08-04 |
+|                      `INDmoney`                         |  Yes  |              `https://mcp.indmoney.com/mcp`              |                   INDmoney investing and portfolio API                  | 2026-10-23 |
 |                     Google Calendar                     |  No   |                            —                             |                           Events, scheduling                            | 2026-08-04 |
 |                          Gmail                          |  No   |                            —                             |                      Drafts, labels, thread search                      | 2026-08-04 |
 |                        Composio                         |  No   |                            —                             |        Meta-tool: search/execute other Composio-integrated tools        | 2026-08-04 |
