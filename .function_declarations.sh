@@ -514,9 +514,9 @@ hydrate_env() {
 }
 
 
-# Safe .env <-> .env.age workflow.
+# Safe .env <-> encrypted_env workflow.
 # .env is the editable plaintext source of truth and should be gitignored.
-# .env.age is the encrypted artifact that can be committed.
+# encrypted_env is the encrypted artifact that can be committed.
 _env_age_require_age() {
   if command -v age >/dev/null 2>&1; then
     return 0
@@ -533,127 +533,137 @@ _env_age_require_age() {
   return 1
 }
 
-_env_age_hash() {
-  if command -v shasum >/dev/null 2>&1; then
-    shasum -a 256 "$1" | awk '{print $1}'
-  elif command -v sha256sum >/dev/null 2>&1; then
-    sha256sum "$1" | awk '{print $1}'
-  else
-    echo "Error: no SHA-256 utility found (need shasum or sha256sum)." >&2
+_env_age_run_with_password() {
+  # age only accepts passphrases from a terminal, so automate that terminal exchange.
+  local mode password output input
+  mode="$1"
+  password="$2"
+  output="$3"
+  input="$4"
+
+  if ! command -v expect >/dev/null 2>&1; then
+    echo "Error: 'expect' is required to pass the age password non-interactively." >&2
     return 1
   fi
-}
 
-_env_age_state_file() {
-  local git_dir
-  git_dir=$(git rev-parse --git-dir 2>/dev/null)
-  if [ -n "$git_dir" ]; then
-    printf '%s/env-age.state\n' "$git_dir"
-  else
-    printf '%s\n' ".env.age.state"
-  fi
-}
+  DOTFILES_ENV_AGE_MODE="$mode" \
+    DOTFILES_ENV_AGE_PASSWORD="$password" \
+    DOTFILES_ENV_AGE_OUTPUT="$output" \
+    DOTFILES_ENV_AGE_INPUT="$input" \
+    expect -c '
+      log_user 0
+      set timeout -1
+      set mode $env(DOTFILES_ENV_AGE_MODE)
+      set password $env(DOTFILES_ENV_AGE_PASSWORD)
+      set output $env(DOTFILES_ENV_AGE_OUTPUT)
+      set input $env(DOTFILES_ENV_AGE_INPUT)
+      unset env(DOTFILES_ENV_AGE_MODE)
+      unset env(DOTFILES_ENV_AGE_PASSWORD)
+      unset env(DOTFILES_ENV_AGE_OUTPUT)
+      unset env(DOTFILES_ENV_AGE_INPUT)
 
-_env_age_write_state() {
-  local state_file plain_hash cipher_hash
-  state_file=$(_env_age_state_file) || return 1
-  plain_hash=$(_env_age_hash .env) || return 1
-  cipher_hash=$(_env_age_hash .env.age) || return 1
-  printf '%s %s\n' "$plain_hash" "$cipher_hash" > "$state_file"
+      if {$mode eq "encrypt"} {
+        spawn age -p -o $output $input
+        expect -re {Enter passphrase.*:}
+        send -- "$password\r"
+        expect -re {Confirm passphrase:}
+        send -- "$password\r"
+      } else {
+        spawn age -d -o $output $input
+        expect -re {Enter passphrase.*:}
+        send -- "$password\r"
+      }
+
+      expect eof
+      set result [wait]
+      exit [lindex $result 3]
+    '
 }
 
 encrypt_env() {
   _env_age_require_age || return 1
+
+  if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+    echo "Usage: encrypt_env PASSWORD" >&2
+    return 1
+  fi
 
   if [ ! -f .env ]; then
     echo "Error: .env not found. Nothing to encrypt." >&2
     return 1
   fi
 
-  local state_file current_plain current_cipher previous_plain previous_cipher tmp
-  state_file=$(_env_age_state_file) || return 1
-  current_plain=$(_env_age_hash .env) || return 1
-  current_cipher=""
-  [ -f .env.age ] && current_cipher=$(_env_age_hash .env.age)
+  local password existing_plain_tmp encrypted_tmp
+  password="$1"
+  existing_plain_tmp="encrypted_env.plain.tmp.$$"
+  encrypted_tmp="encrypted_env.tmp.$$"
+  rm -f "$existing_plain_tmp" "$encrypted_tmp"
 
-  if [ -f "$state_file" ]; then
-    read -r previous_plain previous_cipher < "$state_file"
+  if [ -f encrypted_env ]; then
+    if ! _env_age_run_with_password decrypt "$password" "$existing_plain_tmp" encrypted_env; then
+      rm -f "$existing_plain_tmp"
+      echo "Could not decrypt existing encrypted_env; it was left unchanged." >&2
+      return 1
+    fi
 
-    if [ "$current_plain" = "$previous_plain" ] && [ -n "$current_cipher" ] && [ "$current_cipher" = "$previous_cipher" ]; then
-      echo "No changes detected in .env; .env.age is already up to date."
+    if cmp -s .env "$existing_plain_tmp"; then
+      rm -f "$existing_plain_tmp"
+      echo "No changes detected in .env; encrypted_env is already up to date."
       return 0
     fi
 
-    if [ "$current_plain" != "$previous_plain" ]; then
-      echo "Detected changes in .env. Encrypting the latest contents..."
-    elif [ -n "$current_cipher" ] && [ "$current_cipher" != "$previous_cipher" ]; then
-      echo ".env.age changed since the last local run. Re-encrypting current .env as the source of truth..."
-    fi
-  elif [ -f .env.age ]; then
-    echo "No local encryption baseline found. Encrypting current .env as the source of truth..."
+    rm -f "$existing_plain_tmp"
+    echo "Detected changes in .env. Encrypting the latest contents..."
   else
-    echo "Creating .env.age from current .env..."
+    echo "Creating encrypted_env from current .env..."
   fi
 
-  tmp=".env.age.tmp.$$"
-  rm -f "$tmp"
-  if ! age -p -o "$tmp" .env; then
-    rm -f "$tmp"
-    echo "Encryption failed; existing .env.age was left unchanged." >&2
+  if ! _env_age_run_with_password encrypt "$password" "$encrypted_tmp" .env; then
+    rm -f "$encrypted_tmp"
+    echo "Encryption failed; existing encrypted_env was left unchanged." >&2
     return 1
   fi
 
-  mv "$tmp" .env.age
-  _env_age_write_state || return 1
-  echo "Encrypted latest .env -> .env.age."
-  echo "Any detected .env changes are now included in .env.age."
+  mv "$encrypted_tmp" encrypted_env
+  echo "Encrypted latest .env -> encrypted_env."
 }
 
 decrypt_env() {
   _env_age_require_age || return 1
 
-  if [ ! -f .env.age ]; then
-    echo "Error: .env.age not found. Nothing to decrypt." >&2
+  if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+    echo "Usage: decrypt_env PASSWORD" >&2
     return 1
   fi
 
-  local tmp decrypted_hash current_hash answer
+  if [ ! -f encrypted_env ]; then
+    echo "Error: encrypted_env not found. Nothing to decrypt." >&2
+    return 1
+  fi
+
+  local password tmp
+  password="$1"
   tmp=".env.tmp.$$"
   rm -f "$tmp"
 
-  if ! age -d -o "$tmp" .env.age; then
+  if ! _env_age_run_with_password decrypt "$password" "$tmp" encrypted_env; then
     rm -f "$tmp"
-    echo "Decryption failed; existing .env was left unchanged." >&2
+    echo "Decryption failed / password wrong; existing .env was left unchanged." >&2
     return 1
   fi
 
   if [ -f .env ]; then
-    decrypted_hash=$(_env_age_hash "$tmp") || { rm -f "$tmp"; return 1; }
-    current_hash=$(_env_age_hash .env) || { rm -f "$tmp"; return 1; }
-
-    if [ "$decrypted_hash" = "$current_hash" ]; then
+    if cmp -s "$tmp" .env; then
       rm -f "$tmp"
-      _env_age_write_state || return 1
-      echo ".env already matches .env.age; nothing changed."
+      echo ".env already matches encrypted_env; nothing changed."
       return 0
     fi
 
-    echo "Warning: decrypted .env.age differs from your current .env."
-    printf 'Overwrite local .env? [y/N] '
-    read -r answer
-    case "$answer" in
-      y|Y|yes|YES) ;;
-      *)
-        rm -f "$tmp"
-        echo "Cancelled; local .env was left unchanged."
-        return 1
-        ;;
-    esac
+    echo "Decrypted encrypted_env differs from the current .env; overwriting .env."
   else
-    echo "Creating .env from .env.age..."
+    echo "Creating .env from encrypted_env..."
   fi
 
   mv "$tmp" .env
-  _env_age_write_state || return 1
-  echo "Decrypted .env.age -> .env."
+  echo "Decrypted encrypted_env -> .env."
 }
