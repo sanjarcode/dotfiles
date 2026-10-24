@@ -236,7 +236,7 @@ function dot_test {
         echo "FAIL: jump command not found (jp alias target)"
         return 1
     fi
-    echo "OK: jump command is available"
+    echo "OK: jump is available"
 
     echo "dot_test passed"
 }
@@ -511,4 +511,159 @@ hydrate_env() {
       fi
     fi
   ' _ "$env_file" "$template_file"
+}
+
+
+# Safe .env <-> encrypted_env workflow.
+# .env is the editable plaintext source of truth and should be gitignored.
+# encrypted_env is the encrypted artifact that can be committed.
+_env_age_require_age() {
+  if command -v age >/dev/null 2>&1; then
+    return 0
+  fi
+
+  echo "Error: 'age' is not installed." >&2
+  if command -v brew >/dev/null 2>&1; then
+    echo "Install it with: brew install age" >&2
+  elif command -v apt >/dev/null 2>&1; then
+    echo "Install it with: sudo apt install age" >&2
+  else
+    echo "Install age from: https://age-encryption.org" >&2
+  fi
+  return 1
+}
+
+_env_age_run_with_password() {
+  # age only accepts passphrases from a terminal, so automate that terminal exchange.
+  local mode password output input
+  mode="$1"
+  password="$2"
+  output="$3"
+  input="$4"
+
+  if ! command -v expect >/dev/null 2>&1; then
+    echo "Error: 'expect' is required to pass the age password non-interactively." >&2
+    return 1
+  fi
+
+  DOTFILES_ENV_AGE_MODE="$mode" \
+    DOTFILES_ENV_AGE_PASSWORD="$password" \
+    DOTFILES_ENV_AGE_OUTPUT="$output" \
+    DOTFILES_ENV_AGE_INPUT="$input" \
+    expect -c '
+      log_user 0
+      set timeout -1
+      set mode $env(DOTFILES_ENV_AGE_MODE)
+      set password $env(DOTFILES_ENV_AGE_PASSWORD)
+      set output $env(DOTFILES_ENV_AGE_OUTPUT)
+      set input $env(DOTFILES_ENV_AGE_INPUT)
+      unset env(DOTFILES_ENV_AGE_MODE)
+      unset env(DOTFILES_ENV_AGE_PASSWORD)
+      unset env(DOTFILES_ENV_AGE_OUTPUT)
+      unset env(DOTFILES_ENV_AGE_INPUT)
+
+      if {$mode eq "encrypt"} {
+        spawn age -p -o $output $input
+        expect -re {Enter passphrase.*:}
+        send -- "$password\r"
+        expect -re {Confirm passphrase:}
+        send -- "$password\r"
+      } else {
+        spawn age -d -o $output $input
+        expect -re {Enter passphrase.*:}
+        send -- "$password\r"
+      }
+
+      expect eof
+      set result [wait]
+      exit [lindex $result 3]
+    '
+}
+
+encrypt_env() {
+  _env_age_require_age || return 1
+
+  if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+    echo "Usage: encrypt_env PASSWORD" >&2
+    return 1
+  fi
+
+  if [ ! -f .env ]; then
+    echo "Error: .env not found. Nothing to encrypt." >&2
+    return 1
+  fi
+
+  local password existing_plain_tmp encrypted_tmp
+  password="$1"
+  existing_plain_tmp="encrypted_env.plain.tmp.$$"
+  encrypted_tmp="encrypted_env.tmp.$$"
+  rm -f "$existing_plain_tmp" "$encrypted_tmp"
+
+  if [ -f encrypted_env ]; then
+    if ! _env_age_run_with_password decrypt "$password" "$existing_plain_tmp" encrypted_env; then
+      rm -f "$existing_plain_tmp"
+      echo "Could not decrypt existing encrypted_env; it was left unchanged." >&2
+      return 1
+    fi
+
+    if cmp -s .env "$existing_plain_tmp"; then
+      rm -f "$existing_plain_tmp"
+      echo "No changes detected in .env; encrypted_env is already up to date."
+      return 0
+    fi
+
+    rm -f "$existing_plain_tmp"
+    echo "Detected changes in .env. Encrypting the latest contents..."
+  else
+    echo "Creating encrypted_env from current .env..."
+  fi
+
+  if ! _env_age_run_with_password encrypt "$password" "$encrypted_tmp" .env; then
+    rm -f "$encrypted_tmp"
+    echo "Encryption failed; existing encrypted_env was left unchanged." >&2
+    return 1
+  fi
+
+  mv "$encrypted_tmp" encrypted_env
+  echo "Encrypted latest .env -> encrypted_env."
+}
+
+decrypt_env() {
+  _env_age_require_age || return 1
+
+  if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+    echo "Usage: decrypt_env PASSWORD" >&2
+    return 1
+  fi
+
+  if [ ! -f encrypted_env ]; then
+    echo "Error: encrypted_env not found. Nothing to decrypt." >&2
+    return 1
+  fi
+
+  local password tmp
+  password="$1"
+  tmp=".env.tmp.$$"
+  rm -f "$tmp"
+
+  if ! _env_age_run_with_password decrypt "$password" "$tmp" encrypted_env; then
+    rm -f "$tmp"
+    echo "Decryption failed / password wrong; existing .env was left unchanged." >&2
+    return 1
+  fi
+
+  if [ -f .env ]; then
+    if cmp -s "$tmp" .env; then
+      rm -f "$tmp"
+      echo ".env already matches encrypted_env; nothing changed."
+      return 0
+    fi
+
+    echo "Decrypted encrypted_env differs from the current .env; overwriting .env."
+  else
+    echo "Creating .env from encrypted_env..."
+  fi
+
+  mv "$tmp" .env
+  echo "Decrypted encrypted_env -> .env."
 }
