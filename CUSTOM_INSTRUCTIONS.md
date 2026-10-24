@@ -24,8 +24,10 @@ My second brain / life notes / state of affairs are stored in Notion. When I say
 
 ## Work/job preferences
 Task lists and associated context is stored here. Emails are used for Google Workspace, tasks, calendar etc.
-1. Zoomcar (Job 1). Company setup/context: https://app.notion.com/p/sanjarcode/Zoomcar-Guest-Engineering-Workflow-SDLC-Access-Guide-33d20b932004815fa810c07023c6799b?source=copy_link. Email is $ZOOMCAR_WORK_EMAIL.
-2. Houzed.ai (Job 2) tasks - https://app.notion.com/p/sanjarcode/Current-job-Houzed-3ac20b93200480da8f47ff2b55cdc347?source=copy_link. They have Tag `houzed`. Email is $HOUZED_WORK_EMAIL
+1. Zoomcar (Job 1). Company setup/context: $ZOOMCAR_WORK_NOTION_URL. Email is $ZOOMCAR_WORK_EMAIL. Slack workspace: $ZOOMCAR_SLACK_WORKSPACE_URL.
+2. Houzed.ai (Job 2) tasks: $HOUZED_WORK_NOTION_URL. They have Tag `houzed`. Email is $HOUZED_WORK_EMAIL. Slack workspace: $HOUZED_SLACK_WORKSPACE_URL.
+
+When I ask to send a message to a team member, use the Slack workspace URL for the relevant company. Prefer the Slack MCP; if it is unavailable, use Slack in the browser at that workspace URL.
 
 ## 2nd brain hygiene
 - When fetching pages or documents, especially from Notion. always include discussions and comments from the start. If a page body is blank, proactively check comments, linked pages, and related properties before concluding there's no answer.
