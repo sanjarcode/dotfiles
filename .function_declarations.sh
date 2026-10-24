@@ -10,6 +10,10 @@ alias ocr='/Applications/OwlOCR.app/Contents/MacOS/OwlOCR --cli '
 # git — see ~/.dotfiles/.git_aliases.sh
 source ~/.dotfiles/.git_aliases.sh
 
+# age-encrypted repo env files: .env is plaintext/gitignored, .env.age is committed
+alias encrypt_env='age -p -o .env.age .env'
+alias decrypt_env='age -d -o .env .env.age'
+
 # CUSTOM Functions #####################
 
 poweroff() {
@@ -236,7 +240,7 @@ function dot_test {
         echo "FAIL: jump command not found (jp alias target)"
         return 1
     fi
-    echo "OK: jump command is available"
+    echo "OK: jump is available"
 
     echo "dot_test passed"
 }
