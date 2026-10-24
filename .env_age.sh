@@ -4,6 +4,11 @@
 # .env is the editable plaintext source of truth and should be gitignored.
 # .env.age is the encrypted artifact that can be committed.
 
+# These names are initially aliases in .function_declarations.sh. Remove them
+# before defining functions so zsh does not expand the alias names while parsing.
+unalias encrypt_env 2>/dev/null || true
+unalias decrypt_env 2>/dev/null || true
+
 _env_age_require_age() {
   if command -v age >/dev/null 2>&1; then
     return 0
@@ -148,8 +153,3 @@ decrypt_env() {
   _env_age_write_state || return 1
   echo "Decrypted .env.age -> .env."
 }
-
-# These names were previously aliases in .function_declarations.sh.
-# Functions provide validation and safer UX, so remove the aliases after sourcing.
-unalias encrypt_env 2>/dev/null || true
-unalias decrypt_env 2>/dev/null || true
