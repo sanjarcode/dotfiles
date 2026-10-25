@@ -514,9 +514,9 @@ hydrate_env() {
 }
 
 
-# Safe .env <-> encrypted_env workflow.
+# Safe .env <-> env_encrypted workflow.
 # .env is the editable plaintext source of truth and should be gitignored.
-# encrypted_env is the encrypted artifact that can be committed.
+# env_encrypted is the encrypted artifact that can be committed.
 _env_age_require_age() {
   if command -v age >/dev/null 2>&1; then
     return 0
@@ -595,37 +595,37 @@ encrypt_env() {
 
   local password existing_plain_tmp encrypted_tmp
   password="$1"
-  existing_plain_tmp="encrypted_env.plain.tmp.$$"
-  encrypted_tmp="encrypted_env.tmp.$$"
+  existing_plain_tmp="env_encrypted.plain.tmp.$$"
+  encrypted_tmp="env_encrypted.tmp.$$"
   rm -f "$existing_plain_tmp" "$encrypted_tmp"
 
-  if [ -f encrypted_env ]; then
-    if ! _env_age_run_with_password decrypt "$password" "$existing_plain_tmp" encrypted_env; then
+  if [ -f env_encrypted ]; then
+    if ! _env_age_run_with_password decrypt "$password" "$existing_plain_tmp" env_encrypted; then
       rm -f "$existing_plain_tmp"
-      echo "Could not decrypt existing encrypted_env; it was left unchanged." >&2
+      echo "Could not decrypt existing env_encrypted; it was left unchanged." >&2
       return 1
     fi
 
     if cmp -s .env "$existing_plain_tmp"; then
       rm -f "$existing_plain_tmp"
-      echo "No changes detected in .env; encrypted_env is already up to date."
+      echo "No changes detected in .env; env_encrypted is already up to date."
       return 0
     fi
 
     rm -f "$existing_plain_tmp"
     echo "Detected changes in .env. Encrypting the latest contents..."
   else
-    echo "Creating encrypted_env from current .env..."
+    echo "Creating env_encrypted from current .env..."
   fi
 
   if ! _env_age_run_with_password encrypt "$password" "$encrypted_tmp" .env; then
     rm -f "$encrypted_tmp"
-    echo "Encryption failed; existing encrypted_env was left unchanged." >&2
+    echo "Encryption failed; existing env_encrypted was left unchanged." >&2
     return 1
   fi
 
-  mv "$encrypted_tmp" encrypted_env
-  echo "Encrypted latest .env -> encrypted_env."
+  mv "$encrypted_tmp" env_encrypted
+  echo "Encrypted latest .env -> env_encrypted."
 }
 
 decrypt_env() {
@@ -636,8 +636,8 @@ decrypt_env() {
     return 1
   fi
 
-  if [ ! -f encrypted_env ]; then
-    echo "Error: encrypted_env not found. Nothing to decrypt." >&2
+  if [ ! -f env_encrypted ]; then
+    echo "Error: env_encrypted not found. Nothing to decrypt." >&2
     return 1
   fi
 
@@ -646,7 +646,7 @@ decrypt_env() {
   tmp=".env.tmp.$$"
   rm -f "$tmp"
 
-  if ! _env_age_run_with_password decrypt "$password" "$tmp" encrypted_env; then
+  if ! _env_age_run_with_password decrypt "$password" "$tmp" env_encrypted; then
     rm -f "$tmp"
     echo "Decryption failed / password wrong; existing .env was left unchanged." >&2
     return 1
@@ -655,15 +655,15 @@ decrypt_env() {
   if [ -f .env ]; then
     if cmp -s "$tmp" .env; then
       rm -f "$tmp"
-      echo ".env already matches encrypted_env; nothing changed."
+      echo ".env already matches env_encrypted; nothing changed."
       return 0
     fi
 
-    echo "Decrypted encrypted_env differs from the current .env; overwriting .env."
+    echo "Decrypted env_encrypted differs from the current .env; overwriting .env."
   else
-    echo "Creating .env from encrypted_env..."
+    echo "Creating .env from env_encrypted..."
   fi
 
   mv "$tmp" .env
-  echo "Decrypted encrypted_env -> .env."
+  echo "Decrypted env_encrypted -> .env."
 }
