@@ -19,7 +19,7 @@ My second brain / life notes / state of affairs are stored in Notion. When I say
 2. "Activities" - these are facets of life. activities-db database. URL: $SECOND_BRAIN_ACTIVITIES_LIST
 3. "Feedback" (here I store my frictions, new ideas etc) - in feedback-db database. URL: $SECOND_BRAIN_FEEDBACK_LIST
 4. "Goals" (database) - these are top level goals per activity. Tasks try to make goals succeed. URL: $SECOND_BRAIN_GOALS_LIST
-5. "Content" - content-db database. URL: $SECOND_BRAIN_CONTENT_LIST
+5. "Content" - content-db database. This is videos/blogs/articles collected from the internet. URL: $SECOND_BRAIN_CONTENT_LIST
 6. "Startup ideas" - these are a subset of feedback, that are worth pursuing as companies of themes (new sectors). URL: $SECOND_BRAIN_IDEAS_LIST
 7. "Current living situation/location/setup". URL: $SECOND_BRAIN_CURRENT_LIVING_SITUATION
 
