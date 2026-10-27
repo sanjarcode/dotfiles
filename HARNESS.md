@@ -36,10 +36,15 @@
 - Extra plugins. Path: Home page > Plugins button click
   - Voice mode
   - Agent teams
+- Performance - the thinking trace is bloated, and the AI is a little less intelligent. It could be a harness problem.
 
-## Pi (not tried)
 ## Antigravity (didn't try)
 - Chrome had problems
 ## OpenCode
 - No way to install MCP
 ## Goose (not tried)
+
+## Pi (not tried)
+## Hermes (not tried)
+## Openclaw
+Too many errors, slow response on WhatsApp.
