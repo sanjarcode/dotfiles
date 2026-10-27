@@ -16,6 +16,7 @@
 ## 2nd-brain major entities
 My second brain / life notes / state of affairs are stored in Notion. When I say common entity nouns like tasks, activities, feedback, goals, ideas, for example - "add to my task". These are the entities I mean by default.
 1. "Tasks" - tasks-db database. URL: $SECOND_BRAIN_TASKS_LIST
+   - Routines are stored as rows in `tasks-db`, not in a separate database. A task is a routine when `isRoutine = true`. The `Activity` relation links it to the relevant activity. When retrieving routines for an activity, query Tasks using both the `Activity` relation and `isRoutine = true`; avoid broad text search.
 2. "Activities" - these are facets of life. activities-db database. URL: $SECOND_BRAIN_ACTIVITIES_LIST
 3. "Feedback" (here I store my frictions, new ideas etc) - in feedback-db database. URL: $SECOND_BRAIN_FEEDBACK_LIST
 4. "Goals" (database) - these are top level goals per activity. Tasks try to make goals succeed. URL: $SECOND_BRAIN_GOALS_LIST
