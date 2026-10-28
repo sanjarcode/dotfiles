@@ -667,3 +667,16 @@ decrypt_env() {
   mv "$tmp" .env
   echo "Decrypted env_encrypted -> .env."
 }
+
+time_taken_info() {
+  time (
+    zmodload zsh/zprof || return 1
+    zprof -c
+
+    source ~/.dotfiles/.zshrc
+    local source_status=$?
+
+    zprof
+    return "$source_status"
+  )
+}
