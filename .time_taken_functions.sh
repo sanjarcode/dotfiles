@@ -1,46 +1,58 @@
 #!/usr/bin/env zsh
 
-_time_taken_prepare_or_restore() {
+_time_taken_paths() {
   emulate -L zsh
 
-  local command_name="$1"
-  local zshrc="$HOME/.zshrc"
-  local backup="${zshrc}.time_taken_backup"
-  local minimal="${zshrc}.time_taken_minimal.$$"
-  local marker="# time_taken benchmark shell"
+  typeset -g TIME_TAKEN_ZSHRC="$HOME/.zshrc"
+  typeset -g TIME_TAKEN_BACKUP="${TIME_TAKEN_ZSHRC}.time_taken_backup"
+  typeset -g TIME_TAKEN_MARKER="# time_taken benchmark shell"
+}
+
+_time_taken_require_active() {
+  emulate -L zsh
+
+  _time_taken_paths
+
+  if [[ ! -f "$TIME_TAKEN_BACKUP" ]]; then
+    echo "Shell startup benchmarking is not active. Run time_taken_start first." >&2
+    return 1
+  fi
+
+  local first_line
+  if [[ ! -f "$TIME_TAKEN_ZSHRC" ]] || ! IFS= read -r first_line < "$TIME_TAKEN_ZSHRC" || [[ "$first_line" != "$TIME_TAKEN_MARKER" ]]; then
+    echo "Benchmark backup exists, but $TIME_TAKEN_ZSHRC is not the expected minimal file." >&2
+    echo "Resolve $TIME_TAKEN_ZSHRC and $TIME_TAKEN_BACKUP manually before continuing." >&2
+    return 1
+  fi
+}
+
+time_taken_start() {
+  emulate -L zsh
+
+  _time_taken_paths
+
+  local minimal="${TIME_TAKEN_ZSHRC}.time_taken_minimal.$$"
   local first_line
 
-  if [[ -e "$backup" ]]; then
-    if [[ "${TIME_TAKEN_SETUP_SHELL_PID:-}" == "$$" ]]; then
-      echo "The benchmark is ready, but it must run in a new terminal." >&2
-      echo "Open a new terminal and run ${command_name} there." >&2
-      return 1
-    fi
-
-    if [[ ! -f "$zshrc" ]] || ! IFS= read -r first_line < "$zshrc" || [[ "$first_line" != "$marker" ]]; then
-      echo "Refusing to overwrite $zshrc because $backup already exists and the active .zshrc is not the benchmark file." >&2
+  if [[ -e "$TIME_TAKEN_BACKUP" ]]; then
+    if [[ ! -f "$TIME_TAKEN_ZSHRC" ]] || ! IFS= read -r first_line < "$TIME_TAKEN_ZSHRC" || [[ "$first_line" != "$TIME_TAKEN_MARKER" ]]; then
+      echo "Refusing to overwrite $TIME_TAKEN_ZSHRC because $TIME_TAKEN_BACKUP already exists and the active .zshrc is not the benchmark file." >&2
       echo "Resolve the two files manually, then retry." >&2
       return 1
     fi
 
-    if ! command mv "$backup" "$zshrc"; then
-      echo "Could not restore $zshrc; benchmark aborted." >&2
-      return 1
-    fi
-
-    unset TIME_TAKEN_SETUP_SHELL_PID
-    echo "Restored $zshrc. Measuring it from this clean terminal..."
+    echo "Shell startup benchmarking is already active."
+    echo "Run time_taken or time_taken_info as often as needed, then run time_taken_end."
     return 0
   fi
 
-  if [[ ! -f "$zshrc" ]]; then
-    echo "Cannot prepare benchmark: $zshrc does not exist." >&2
+  if [[ ! -f "$TIME_TAKEN_ZSHRC" ]]; then
+    echo "Cannot prepare benchmark: $TIME_TAKEN_ZSHRC does not exist." >&2
     return 1
   fi
 
   if ! {
-    print -r -- "$marker"
-    print -r -- "typeset -g TIME_TAKEN_SETUP_SHELL_PID=$$"
+    print -r -- "$TIME_TAKEN_MARKER"
     print -r -- 'source "$HOME/.dotfiles/.time_taken_functions.sh"'
   } > "$minimal"; then
     command rm -f "$minimal"
@@ -48,51 +60,56 @@ _time_taken_prepare_or_restore() {
     return 1
   fi
 
-  if ! command mv "$zshrc" "$backup"; then
+  if ! command mv "$TIME_TAKEN_ZSHRC" "$TIME_TAKEN_BACKUP"; then
     command rm -f "$minimal"
-    echo "Could not rename $zshrc; benchmark setup aborted." >&2
+    echo "Could not rename $TIME_TAKEN_ZSHRC; benchmark setup aborted." >&2
     return 1
   fi
 
-  if ! command mv "$minimal" "$zshrc"; then
-    command mv "$backup" "$zshrc"
+  if ! command mv "$minimal" "$TIME_TAKEN_ZSHRC"; then
+    command mv "$TIME_TAKEN_BACKUP" "$TIME_TAKEN_ZSHRC"
     command rm -f "$minimal"
     echo "Could not install the minimal .zshrc; the original was restored." >&2
     return 1
   fi
 
-  typeset -g TIME_TAKEN_SETUP_SHELL_PID=$$
-  echo "Renamed $zshrc to $backup."
-  echo "Installed a minimal $zshrc that only loads time_taken and time_taken_info."
-  echo "Open a new terminal and run ${command_name} there. The original .zshrc will be restored before it is measured."
-  return 2
+  echo "Renamed $TIME_TAKEN_ZSHRC to $TIME_TAKEN_BACKUP."
+  echo "Installed a minimal $TIME_TAKEN_ZSHRC containing only the benchmark commands."
+  echo "Open a new terminal, then run time_taken or time_taken_info as often as needed."
+  echo "Run time_taken_end when finished to restore the original .zshrc."
 }
 
 time_taken() {
-  _time_taken_prepare_or_restore time_taken
-  local prepare_status=$?
+  _time_taken_require_active || return 1
 
-  (( prepare_status == 2 )) && return 0
-  (( prepare_status == 0 )) || return "$prepare_status"
-
-  time (source "$HOME/.zshrc")
+  time (source "$TIME_TAKEN_BACKUP")
 }
 
 time_taken_info() {
-  _time_taken_prepare_or_restore time_taken_info
-  local prepare_status=$?
-
-  (( prepare_status == 2 )) && return 0
-  (( prepare_status == 0 )) || return "$prepare_status"
+  _time_taken_require_active || return 1
 
   time (
     zmodload zsh/zprof || return 1
     zprof -c
 
-    source "$HOME/.zshrc"
+    source "$TIME_TAKEN_BACKUP"
     local source_status=$?
 
     zprof
     return "$source_status"
   )
+}
+
+time_taken_end() {
+  emulate -L zsh
+
+  _time_taken_require_active || return 1
+
+  if ! command mv "$TIME_TAKEN_BACKUP" "$TIME_TAKEN_ZSHRC"; then
+    echo "Could not restore $TIME_TAKEN_ZSHRC." >&2
+    return 1
+  fi
+
+  echo "Restored $TIME_TAKEN_ZSHRC."
+  echo "Open a new terminal, or run: source $TIME_TAKEN_ZSHRC"
 }
