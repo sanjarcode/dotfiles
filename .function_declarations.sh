@@ -668,6 +668,7 @@ decrypt_env() {
   echo "Decrypted env_encrypted -> .env."
 }
 
+## TIME_TAKEN start
 _time_taken_paths() {
   emulate -L zsh
 
@@ -793,3 +794,5 @@ time_taken_end() {
   echo "Restored $TIME_TAKEN_ZSHRC."
   echo "Open a new terminal, or run: source $TIME_TAKEN_ZSHRC"
 }
+
+## TIME_TAKEN end
