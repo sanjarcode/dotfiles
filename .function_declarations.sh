@@ -668,15 +668,4 @@ decrypt_env() {
   echo "Decrypted env_encrypted -> .env."
 }
 
-time_taken_info() {
-  time (
-    zmodload zsh/zprof || return 1
-    zprof -c
-
-    source ~/.dotfiles/.zshrc
-    local source_status=$?
-
-    zprof
-    return "$source_status"
-  )
-}
+source ~/.dotfiles/.time_taken_functions.sh
