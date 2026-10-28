@@ -673,6 +673,7 @@ _time_taken_paths() {
 
   typeset -g TIME_TAKEN_ZSHRC="$HOME/.zshrc"
   typeset -g TIME_TAKEN_BACKUP="${TIME_TAKEN_ZSHRC}.time_taken_backup"
+  typeset -g TIME_TAKEN_TARGET="$HOME/.dotfiles/.zshrc"
   typeset -g TIME_TAKEN_MARKER="# time_taken benchmark shell"
 }
 
@@ -683,6 +684,11 @@ _time_taken_require_active() {
 
   if [[ ! -f "$TIME_TAKEN_BACKUP" ]]; then
     echo "Shell startup benchmarking is not active. Run time_taken_start first." >&2
+    return 1
+  fi
+
+  if [[ ! -f "$TIME_TAKEN_TARGET" ]]; then
+    echo "Benchmark target does not exist: $TIME_TAKEN_TARGET" >&2
     return 1
   fi
 
@@ -756,7 +762,7 @@ time_taken_start() {
 time_taken() {
   _time_taken_require_active || return 1
 
-  time (source "$TIME_TAKEN_BACKUP")
+  time (source "$TIME_TAKEN_TARGET")
 }
 
 time_taken_info() {
@@ -766,7 +772,7 @@ time_taken_info() {
     zmodload zsh/zprof || return 1
     zprof -c
 
-    source "$TIME_TAKEN_BACKUP"
+    source "$TIME_TAKEN_TARGET"
     local source_status=$?
 
     zprof
