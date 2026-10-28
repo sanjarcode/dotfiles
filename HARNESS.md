@@ -24,6 +24,7 @@
 - Desktop and cli are separate. Only CLI is needed. Install CLI using `npm install -g @deepseek-ai/dsh`. To see UI, run `dsh web`
 - Upgrade: `npm install -g @deepseek-ai/dsh@latest`
 - Install important plugins:
+  - Settings back up: `dsh plugin --profile web add dsh-config-manager`, then add the backup private repo (https://github.com/sanjarcode/deepseek-settings-backup) and set the token (saved in password manager), and hit "Sync". Hopefully none of the other things would then be needed.
   - Plugin manager: `dsh plugin --profile web add dsh-plugin`, includes marketplace. All plugins marketplace: https://dsh-plugin.org
   - MCP manager: `dsh plugin --profile web add github:hyqhyq3/dsh-mcp-manager`. Has outh click.
     - GitHub MCP, needs URL (https://api.githubcopilot.com/mcp/), select auth as "No auth", add headers (Authorization: Bearer github_xxx).
