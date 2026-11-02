@@ -2,6 +2,9 @@
 
 # git aliases
 alias gst="git status"
+if command -v wt >/dev/null 2>&1; then
+  alias gco='wt switch'
+fi
 alias ga="git add"
 alias gcm="git commit -m"
 alias gcan="git commit --amend --no-edit"
