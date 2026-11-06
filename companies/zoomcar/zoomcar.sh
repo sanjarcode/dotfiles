@@ -215,17 +215,12 @@ jd() {
     fi
 
     # 2. Check for the Jenkins CLI jar dependency
-    local JAR_PATH="$HOME/.dotfiles/companies/zoomcar/jenkins-cli.jar"
-    if [ ! -f "$JAR_PATH" ]; then
-        echo "Error: jenkins-cli.jar missing at $JAR_PATH" >&2
-        echo "--------------------------------------------------------" >&2
-        echo "To fix this:"
-        echo "1. Log in to your Jenkins dashboard in the browser."
-        echo "2. Head over to: https://nonprod-jenkins.zoomcartest.com/cli"
-        echo "3. Download the 'jenkins-cli.jar' file."
-        echo "4. Create the target directory and move it there:"
-        echo "   mkdir -p ~/.dotfiles/companies/zoomcar/ && mv jenkins-cli.jar $JAR_PATH"
-        echo "--------------------------------------------------------" >&2
+    if [ -z "$ZOOMCAR_JENKINS_CLI_PATH" ]; then
+        echo "Error: ZOOMCAR_JENKINS_CLI_PATH is not set." >&2
+        return 1
+    fi
+    if [ ! -f "$ZOOMCAR_JENKINS_CLI_PATH" ]; then
+        echo "Error: jar file not found at $ZOOMCAR_JENKINS_CLI_PATH" >&2
         return 1
     fi
 
@@ -358,7 +353,7 @@ jd() {
         FOLLOW_FLAGS="-f -v"
     fi
 
-    java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
+    java -jar "$ZOOMCAR_JENKINS_CLI_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
         -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" \
         build "$JOB_NAME" \
         -p ENVIRONMENT="$ENV" \
