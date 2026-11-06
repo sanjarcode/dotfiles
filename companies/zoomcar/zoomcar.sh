@@ -215,16 +215,25 @@ jd() {
     fi
 
     # 2. Check for the Jenkins CLI jar dependency
-    local JAR_PATH="$HOME/.dotfiles/companies/zoomcar/jenkins-cli.jar"
+    if [ -z "$ZOOMCAR_JENKINS_CLI_PATH" ]; then
+        echo "Error: ZOOMCAR_JENKINS_CLI_PATH is not set." >&2
+        return 1
+    fi
+    local JAR_PATH="$ZOOMCAR_JENKINS_CLI_PATH"
+    # Tilde expansion does not happen when a path comes from an environment variable.
+    case "$JAR_PATH" in
+        "~") JAR_PATH="$HOME" ;;
+        "~/"*) JAR_PATH="$HOME/${JAR_PATH#\~/}" ;;
+    esac
     if [ ! -f "$JAR_PATH" ]; then
-        echo "Error: jenkins-cli.jar missing at $JAR_PATH" >&2
+        echo "Error: jar file not found at $JAR_PATH" >&2
         echo "--------------------------------------------------------" >&2
-        echo "To fix this:"
-        echo "1. Log in to your Jenkins dashboard in the browser."
-        echo "2. Head over to: https://nonprod-jenkins.zoomcartest.com/cli"
-        echo "3. Download the 'jenkins-cli.jar' file."
-        echo "4. Create the target directory and move it there:"
-        echo "   mkdir -p ~/.dotfiles/companies/zoomcar/ && mv jenkins-cli.jar $JAR_PATH"
+        echo "To fix this:" >&2
+        echo "1. Log in to your Jenkins dashboard in the browser." >&2
+        echo "2. Head over to: https://nonprod-jenkins.zoomcartest.com/cli" >&2
+        echo "3. Download the 'jenkins-cli.jar' file." >&2
+        echo "4. Store the JAR wherever you prefer." >&2
+        echo "5. Set ZOOMCAR_JENKINS_CLI_PATH to the full path of that JAR file." >&2
         echo "--------------------------------------------------------" >&2
         return 1
     fi

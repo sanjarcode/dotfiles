@@ -2,6 +2,9 @@
 # Run with bash or zsh; Jenkins builds and browser opening are mocked.
 source "$(dirname "$0")/../companies/zoomcar/zoomcar.sh"
 export ZOOMCAR_JENKINS_USERNAME=test ZOOMCAR_JENKINS_PASSWORD=test
+JENKINS_TEST_JAR=$(mktemp)
+trap 'rm -f "$JENKINS_TEST_JAR"' EXIT
+export ZOOMCAR_JENKINS_CLI_PATH="$JENKINS_TEST_JAR"
 jobs='nonprd-cmn-api-CI
 nonprd-cmn-api-console-CI
 nonprd-cmn-admin-CI
@@ -21,6 +24,10 @@ curl() {
     ]}'
 }
 java() {
+    if [ "$1" = "-jar" ] && [ "$2" != "$JENKINS_TEST_JAR" ]; then
+        echo "FAIL: unexpected JAR path: $2" >&2
+        return 1
+    fi
     while [ "$#" -gt 0 ]; do
         case "$1" in
             build) shift; printf 'MOCK_BUILD %s\n' "$*"; return "${build_status_mock:-0}" ;;
@@ -76,6 +83,18 @@ check() {
         exit 1
     fi
 }
+unset ZOOMCAR_JENKINS_CLI_PATH
+check 1 'ZOOMCAR_JENKINS_CLI_PATH is not set' zap-service qa2 qa2_staging
+export ZOOMCAR_JENKINS_CLI_PATH="$JENKINS_TEST_JAR.missing"
+check 1 'jar file not found' zap-service qa2 qa2_staging
+export ZOOMCAR_JENKINS_CLI_PATH="$JENKINS_TEST_JAR"
+check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa2 qa2_staging
+ORIGINAL_HOME="$HOME"
+HOME="$(dirname "$JENKINS_TEST_JAR")"
+export ZOOMCAR_JENKINS_CLI_PATH="~/$(basename "$JENKINS_TEST_JAR")"
+check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI' zap-service qa2 qa2_staging
+HOME="$ORIGINAL_HOME"
+export ZOOMCAR_JENKINS_CLI_PATH="$JENKINS_TEST_JAR"
 check 0 'MOCK_BUILD gr-nonprd-cmn-zap-service-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging' zap-service qa2 qa2_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI' admin qa1 qa1_staging
 check 0 'MOCK_BUILD nonprd-cmn-admin-CI -p ENVIRONMENT=qa2 -p BRANCH=qa2_staging' admin-ci qa2 qa2_staging
