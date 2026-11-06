@@ -219,8 +219,14 @@ jd() {
         echo "Error: ZOOMCAR_JENKINS_CLI_PATH is not set." >&2
         return 1
     fi
-    if [ ! -f "$ZOOMCAR_JENKINS_CLI_PATH" ]; then
-        echo "Error: jar file not found at $ZOOMCAR_JENKINS_CLI_PATH" >&2
+    local JAR_PATH="$ZOOMCAR_JENKINS_CLI_PATH"
+    # Tilde expansion does not happen when a path comes from an environment variable.
+    case "$JAR_PATH" in
+        "~") JAR_PATH="$HOME" ;;
+        "~/"*) JAR_PATH="$HOME/${JAR_PATH#\~/}" ;;
+    esac
+    if [ ! -f "$JAR_PATH" ]; then
+        echo "Error: jar file not found at $JAR_PATH" >&2
         echo "--------------------------------------------------------" >&2
         echo "To fix this:" >&2
         echo "1. Log in to your Jenkins dashboard in the browser." >&2
@@ -361,7 +367,7 @@ jd() {
         FOLLOW_FLAGS="-f -v"
     fi
 
-    java -jar "$ZOOMCAR_JENKINS_CLI_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
+    java -jar "$JAR_PATH" -s https://nonprod-jenkins.zoomcartest.com/ \
         -auth "${ZOOMCAR_JENKINS_USERNAME}:${ZOOMCAR_JENKINS_PASSWORD}" \
         build "$JOB_NAME" \
         -p ENVIRONMENT="$ENV" \
