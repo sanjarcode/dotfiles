@@ -221,6 +221,14 @@ jd() {
     fi
     if [ ! -f "$ZOOMCAR_JENKINS_CLI_PATH" ]; then
         echo "Error: jar file not found at $ZOOMCAR_JENKINS_CLI_PATH" >&2
+        echo "--------------------------------------------------------" >&2
+        echo "To fix this:" >&2
+        echo "1. Log in to your Jenkins dashboard in the browser." >&2
+        echo "2. Head over to: https://nonprod-jenkins.zoomcartest.com/cli" >&2
+        echo "3. Download the 'jenkins-cli.jar' file." >&2
+        echo "4. Create the target directory and move it there:" >&2
+        echo "   mkdir -p \"$(dirname \"$ZOOMCAR_JENKINS_CLI_PATH\")\" && mv jenkins-cli.jar \"$ZOOMCAR_JENKINS_CLI_PATH\"" >&2
+        echo "--------------------------------------------------------" >&2
         return 1
     fi
 
