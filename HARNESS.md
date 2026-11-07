@@ -1,3 +1,30 @@
+# Harness requirements and switching policy
+
+## Required functionality (evaluate the entire toolchain, not just one harness)
+
+| Requirement | Acceptance criterion | Current baseline / evidence |
+| --- | --- | --- |
+| GUI-first UX | Mature, discoverable desktop/web UI; routine setup and management should not require JSON editing or complicated terminal workflows. | Codex has the best UI in these notes. |
+| MCP management | Add, authenticate (including OAuth), enable/disable, inspect, and troubleshoot MCP servers easily; failures should have useful logs. | Codex/Claude MCPs work, but failure diagnostics are limited; OpenCode desktop lacks a visible add-MCP flow. |
+| Skills and plugins | Install, discover, manage, and reuse skills/plugins without extensive manual setup. | Already supported by existing harness workflows; see comparisons below. |
+| Browser automation | Let the agent work with authenticated websites and existing browser sessions, with reliable human handoff. | **Already solved at toolchain level via ego-lite**, even if a harness lacks native browser control. |
+| Model access | Use capable models without unnecessary lock-in; alternative model routing is a bonus, not a reason alone to migrate. | Models already available in existing tools. |
+| Reliability and speed | Predictable execution, intelligible error messages, reasonable latency, and few integration/installation failures. | Reliability matters more than having a larger feature list. |
+| Configuration portability | Prefer easy backup/restore and syncing of MCPs, skills, plugins, and preferences across machines; don't leak credentials. | Desirable convenience, not necessarily a blocker. |
+| Usage economics | Sufficient rate/token limits for regular work, at acceptable cost. | Codex 5-hour usage limit is a documented friction below. |
+
+## Stop rule: avoid harness hopping
+
+- **A requirement counts as solved if the current *combined setup* solves it**, including external tools (e.g., Codex + ego-lite for browser control). Native integration is not automatically new functionality.
+- **Do not switch for parity or marginal polish.** A new browser integration, plugin catalog, or UI improvement is insufficient when the current workflow already works.
+- Consider switching only if the candidate **(a)** reliably solves an important currently unsolved requirement, **or (b)** yields a substantial, measurable improvement in a frequent workflow, **and** that benefit exceeds installation, migration, learning, reliability, and maintenance costs.
+- Prefer fixing a single gap with a small interoperable tool rather than migrating the entire harness.
+- Apply a short pre-install check: *What exact job cannot I do today? How often does this block me? What measurable improvement would the new harness deliver? Can my existing setup achieve the same result?*
+- **Default decision: stay with the current stable setup.** Don't browse or trial new harnesses without a concrete unmet need. If a trial is justified, time-box it and abort quickly when setup becomes complex or unstable.
+- Example: OpenCode Browse duplicates the browser control already available through ego-lite. OpenCode Manager's difficult/failed installation increases switching cost without providing a new capability. **No migration justified solely for browsing.**
+
+---
+
 ## VS code
 - Didn't try
 - Skills (work, pulls from all harnesses)
