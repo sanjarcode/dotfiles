@@ -1,5 +1,25 @@
 Mac, linux
 
+## Homebrew automatic updates (macOS)
+
+[Guide](https://dev.to/dev_neil_a/how-to-auto-update-and-upgrade-homebrew-1kpe) · [Official autoupdate README](https://github.com/DomT4/homebrew-autoupdate)
+
+On a new Mac, after installing Homebrew, run:
+
+```sh
+brew update
+brew tap domt4/autoupdate
+brew trust --command domt4/autoupdate/autoupdate
+brew install pinentry-mac
+brew autoupdate start 1d --ac-only --cleanup --immediate --sudo --upgrade
+brew autoupdate status
+```
+
+- Uses macOS `launchd` to update and upgrade Homebrew formulae/casks daily, only on AC power; cleans up old versions and checks immediately/on login.
+- `--sudo` uses `pinentry-mac` to prompt for admin credentials when a cask upgrade needs them. Casks with built-in auto-updaters are skipped by default.
+- Inspect runs with `brew autoupdate logs`. To change settings, run `brew autoupdate delete` and then rerun the `start` command.
+- Automatic upgrades can introduce breaking version changes (e.g. development runtimes). To only refresh Homebrew metadata, omit `--upgrade`.
+
 ## Basic
 
 - #### _Necessities_
@@ -65,6 +85,7 @@ Mac, linux
 |  57  |   Notion + Notion Calendar (mac)   |                                                   [LookAway](https://tryradix.app/)                                                   |                                                                                                                          2nd brain + menu bar calendar                                                                                                                          |                                                                                 Only on macOS                                                                                  | [ ]  |
 |  58  |          CC switch (mac)           |                                             [CC Switch](https://ccswitch.io/en/download)                                              |                                                                            In-place model router for all harnesses (Codex, Claude, Cursor). Used to utilize good harnesses with a little bad models.                                                                            |                                                                                 Only on macOS                                                                                  | [ ]  |
 |  59  |             Worktrunk              |                                                  [Worktrunk](https://worktrunk.dev/)                                                  |                                                 Worktrunk is a CLI for Git worktree management, designed for parallel AI agent workflows. (Install using brew, then install the skill using `wt config plugins codex install`)                                                  |                                                                                                                                                                                | [ ]  |
+|  60  |       brew autoupdate (mac)       | [Homebrew autoupdate](https://github.com/DomT4/homebrew-autoupdate) | [New laptop setup commands](#homebrew-automatic-updates-macos) | Automatically upgrade Homebrew packages daily | [ ]  |
 
 - #### _Extras_
   | Rank |  Name   | Source | Settings/comments |            Purpose            | Done |
