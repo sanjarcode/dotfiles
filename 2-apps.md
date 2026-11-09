@@ -1,5 +1,25 @@
 Mac, linux
 
+## Homebrew automatic updates (macOS)
+
+[Guide](https://dev.to/dev_neil_a/how-to-auto-update-and-upgrade-homebrew-1kpe) · [Official autoupdate README](https://github.com/DomT4/homebrew-autoupdate)
+
+On a new Mac, after installing Homebrew, run:
+
+```sh
+brew update
+brew tap domt4/autoupdate
+brew trust --command domt4/autoupdate/autoupdate
+brew install pinentry-mac
+brew autoupdate start 1d --ac-only --cleanup --immediate --sudo --upgrade
+brew autoupdate status
+```
+
+- Uses macOS `launchd` to update and upgrade Homebrew formulae/casks daily, only on AC power; cleans up old versions and checks immediately/on login.
+- `--sudo` uses `pinentry-mac` to prompt for admin credentials when a cask upgrade needs them. Casks with built-in auto-updaters are skipped by default.
+- Inspect runs with `brew autoupdate logs`. To change settings, run `brew autoupdate delete` and then rerun the `start` command.
+- Automatic upgrades can introduce breaking version changes (e.g. development runtimes). To only refresh Homebrew metadata, omit `--upgrade`.
+
 ## Basic
 
 - #### _Necessities_
