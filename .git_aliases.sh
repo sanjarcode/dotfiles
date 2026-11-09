@@ -12,6 +12,7 @@ alias gunadd="git restore --staged" # Unstage path1 path2...
 alias gpl="git pull"
 alias gps="git push"
 alias gls="git branch --sort=-committerdate" # git branch ls
+alias ghb="gh repo view --web" # open repo in github
 
 function gplo() {
     # `git pull other` branch
